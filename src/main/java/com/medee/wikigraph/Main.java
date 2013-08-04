@@ -8,9 +8,9 @@ public class Main {
       System.out.println("Specify a single article");
       return;
     }
-    String wikiPage = args[0];
+    Article article = new Article(args[0]);
     WikipediaReader wikipediaReader = new WikipediaReader();
-    for (String link : wikipediaReader.linksOnArticle(wikiPage)) {
+    for (String link : wikipediaReader.linksOnArticle(article)) {
       System.out.println(link);
     }
 
