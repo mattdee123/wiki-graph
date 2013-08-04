@@ -1,18 +1,47 @@
 package com.medee.wikigraph;
 
-/** This is the main class. */
+import org.json.JSONArray;
+import spark.Request;
+import spark.Response;
+import spark.Route;
+import spark.template.freemarker.FreeMarkerRoute;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static spark.Spark.get;
+import static spark.Spark.staticFileLocation;
+
+/**
+ * This is the main class.
+ */
 public class Main {
 
   public static void main(String[] args) {
-    if (args.length != 1) {
-      System.out.println("Specify a single article");
-      return;
-    }
-    String wikiPage = args[0];
-    WikipediaReader wikipediaReader = new WikipediaReader();
-    for (String link : wikipediaReader.linksOnArticle(wikiPage)) {
-      System.out.println(link);
-    }
+    staticFileLocation("static");
+
+    get(new FreeMarkerRoute("/") {
+      @Override
+      public Object handle(Request request, Response response) {
+        Map<String, Object> templateValues = new HashMap<String, Object>();
+
+        return modelAndView(templateValues, "index.ftl");
+      }
+    });
+
+    get(new Route("/page") {
+      @Override
+      public Object handle(Request request, Response response) {
+        String wikiPage = (String) request.queryParams("page");
+        WikipediaReader wikipediaReader = new WikipediaReader();
+        List<String> links = wikipediaReader.linksOnArticle(wikiPage);
+
+        JSONArray linksJson = new JSONArray(links);
+
+        return linksJson.toString();
+      }
+    });
 
   }
 }
