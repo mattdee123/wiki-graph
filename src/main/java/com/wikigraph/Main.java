@@ -1,4 +1,4 @@
-package com.medee.wikigraph;
+package com.wikigraph;
 
 import org.json.JSONArray;
 import spark.Request;
@@ -33,15 +33,14 @@ public class Main {
     get(new Route("/page") {
       @Override
       public Object handle(Request request, Response response) {
-        String wikiPage = (String) request.queryParams("page");
+        String pageName = (String) request.queryParams("page");
         WikipediaReader wikipediaReader = new WikipediaReader();
-        List<String> links = wikipediaReader.linksOnArticle(wikiPage);
+        List<String> links = wikipediaReader.linksOnArticle(new Article(pageName));
 
         JSONArray linksJson = new JSONArray(links);
 
         return linksJson.toString();
       }
     });
-
   }
 }

@@ -1,4 +1,4 @@
-package com.medee.wikigraph;
+package com.wikigraph;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
@@ -10,44 +10,30 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.List;
-import javax.validation.constraints.NotNull;
 
-/** Class responsible for reading from Wikipedia and returning links. */
-public class WikipediaReader {
+/** Class responsible for reading data from Wikipedia. */
+public class WikipediaReader implements ArticleReader {
 
-  public static final String URL_FORMAT =
+  private static final String URL_FORMAT =
       "http://en.wikipedia.org/w/index.php?title=%s&action=raw";
-  public static final String LINK_FRONT = "[[";
-  public static final String LINK_END = "]]";
+  private static final String LINK_FRONT = "[[";
+  private static final String LINK_END = "]]";
 
-  public List<String> linksOnArticle(String articleTitle) {
-    URL url = getUrl(articleTitle);
+  @Override public List<String> linksOnArticle(Article article) {
+    URL url = urlOf(article);
+    System.out.printf("Fetching article %s from %s%n", article.getTitle(), url);
     String input;
     try {
       Readable reader = new InputStreamReader(url.openStream());
       input = CharStreams.toString(reader);
     } catch (IOException e) {
-      System.err.printf("Error fetching site from URL=%s%n", url);
+      System.err.printf("Error fetching article from URL=%s%n", url);
       throw Throwables.propagate(e);
     }
     return linksFromMarkup(input);
   }
 
-  private URL getUrl(String articleTitle) {
-    URL url = null;
-    try {
-      String encodedTitle = URLEncoder.encode(articleTitle, "UTF-8");
-      String urlString = String.format(URL_FORMAT, encodedTitle);
-      url = new URL(urlString);
-    } catch (MalformedURLException e) {
-      e.printStackTrace();
-    } catch (UnsupportedEncodingException e) {
-      e.printStackTrace();
-    }
-    return url;
-  }
-
-  private List<String> linksFromMarkup(@NotNull String markup) {
+  private List<String> linksFromMarkup(String markup) {
     int currentIndex = 0;
     int length = markup.length();
     ImmutableList.Builder<String> listBuilder = ImmutableList.builder();
@@ -65,5 +51,19 @@ public class WikipediaReader {
       currentIndex = endIndex + LINK_END.length();
     }
     return listBuilder.build();
+  }
+
+  private URL urlOf(Article article) {
+    URL url = null;
+    try {
+      String encodedTitle = URLEncoder.encode(article.getTitle(), "UTF-8");
+      String urlString = String.format(URL_FORMAT, encodedTitle);
+      url = new URL(urlString);
+    } catch (MalformedURLException e) {
+      e.printStackTrace();
+    } catch (UnsupportedEncodingException e) {
+      e.printStackTrace();
+    }
+    return url;
   }
 }
