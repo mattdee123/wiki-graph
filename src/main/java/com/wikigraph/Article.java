@@ -1,4 +1,4 @@
-package com.medee.wikigraph;
+package com.wikigraph;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ public class Article {
 
   private final String title;
   private final String type;
-  private  List<Article> links;
+  private List<Article> links;
 
   public Article(String title) {
     this.title = title;
@@ -34,6 +34,10 @@ public class Article {
 
   public void setLinks(List<Article> links) {
     this.links = links;
+  }
+
+  public boolean hasSetLinks() {
+    return links != null;
   }
 
   public String toString() {

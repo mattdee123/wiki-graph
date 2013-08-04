@@ -1,4 +1,4 @@
-package com.medee.wikigraph;
+package com.wikigraph;
 
 /** This is the main class. */
 public class Main {

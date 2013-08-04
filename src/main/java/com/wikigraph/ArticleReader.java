@@ -1,4 +1,4 @@
-package com.medee.wikigraph;
+package com.wikigraph;
 
 import java.util.List;
 

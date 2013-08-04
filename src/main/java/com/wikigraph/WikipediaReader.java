@@ -1,4 +1,4 @@
-package com.medee.wikigraph;
+package com.wikigraph;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
