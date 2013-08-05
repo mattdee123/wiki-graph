@@ -16,7 +16,7 @@ public class ArticleGraph {
     this.articleReader = articleReader;
   }
 
-  public Article loadArticlesFromName(String articleTitle, int depth) {
+  public Article loadArticleFromName(String articleTitle, int depth) {
     Article article = getArticleOrCreateNew(articleTitle);
     loadConnections(article, depth);
     return article;
