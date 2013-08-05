@@ -20,11 +20,11 @@
       </div>
     </div>
 
-    <div class="panel" id="panel-links">
+    <div class="panel" id="content">
       <div class="panel-heading">
-        <h2>Links on <span id="label-page">page</span> - <span id="count-links">0</span> links found</h2>
+        <h2 id="content-heading">Welcome</h2>
       </div>
-      <div id="links">
+      <div id="content-body">
         <h3>Run a query to see the links.</h3>
       </div>
     </div>

@@ -1,26 +1,37 @@
 function BaseGraph() {}
 
-BaseGraph.prototype.renderLinks = function(content) {
-  $('#links').html(content);
+BaseGraph.prototype.render = function(heading, content) {
+  $('#content-heading').html(heading);
+  $('#content-body').html(content);
 };
 
-BaseGraph.prototype.getDataForPage = function(page) {
-  this.renderLinks('No links found.');
+BaseGraph.prototype.showLoading = function() {
+  this.render('Loading', '<i class="icon-spinner icon-spin icon-4x"></i>');
+};
+
+BaseGraph.prototype.getDataForPage = function() {
+  this.render('<h3>No content loaded</h3>', 'No links found.');
 };
 
 BaseGraph.prototype.reloadHash = function() {
-  var page = decodeURIComponent(window.location.hash.split('#')[1]);
-  $('#input-page').val(page);
-  this.getDataForPage(page);
+  this.page = decodeURIComponent(window.location.hash.split('#')[1]);
+  $('#input-page').val(this.page);
+  this.showDataForPage();
+};
+
+BaseGraph.prototype.loadContent = function() {
+  this.page = $('#input-page').val();
+  window.location.hash = encodeURIComponent(this.page);
+  this.showDataForPage();
 };
 
 BaseGraph.prototype.init = function() {
   var self = this;
+  self.page = '';
+  self.data = {};
 
   $('#btn-refresh').click(function() {
-    var page = $('#input-page').val();
-    window.location.hash = encodeURIComponent(page);
-    self.getDataForPage(page);
+    self.loadContent();
   });
 
   $('#input-page').keypress(function(e) {

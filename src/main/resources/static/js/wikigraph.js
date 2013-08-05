@@ -9,7 +9,21 @@ WikiGraph.prototype.generateWikiLink_ = function(title, raw) {
   return Mustache.render(wikiUrl, context);
 };
 
-WikiGraph.prototype.showWikiLinks_ = function(data, page) {
+WikiGraph.prototype.formatContentHeader_ = function() {
+  var template = '{{ &baseLink }} {{ &baseLinkRaw }} - {{ count }} links found';
+  var baseUrl = this.generateWikiLink_(this.page);
+  var baseUrlRaw = this.generateWikiLink_(this.page, true);
+  var baseLink = Util.generateLink(baseUrl, this.page, true);
+  var baseLinkRaw = Util.generateLink(baseUrlRaw, '[raw]', true);
+  var context = {
+    baseLink: baseLink,
+    baseLinkRaw: baseLinkRaw,
+    count: this.data.length || 0
+  };
+  return Mustache.render(template, context);
+};
+
+WikiGraph.prototype.formatWikiLinks_ = function(data, page) {
   var self = this;
 
   var linkify = function(text) {
@@ -23,29 +37,28 @@ WikiGraph.prototype.showWikiLinks_ = function(data, page) {
     return result;
   };
 
-  result = _.map(data, linkify).join('<br>');
-  self.renderLinks(result);
-  var baseUrl = self.generateWikiLink_(page);
-  var baseUrlRaw = self.generateWikiLink_(page, true);
-  var baseLink = Util.generateLink(baseUrl, page, true);
-  var baseLinkRaw = Util.generateLink(baseUrlRaw, '[raw]', true);
-  $('#count-links').html(data.length);
-  $('#label-page').html(baseLink + ' ' + baseLinkRaw);
+  return _.map(data, linkify).join('<br>');
 };
 
-WikiGraph.prototype.getDataForPage = function(page) {
+WikiGraph.prototype.showDataForPage = function(page) {
   var self = this;
-  $('#links').html('<i class="icon-spinner icon-spin icon-4x"></i>');
+  self.showLoading();
+  var result;
   $.ajax('/page', {
     method: 'get',
-    data: {page: page},
+    data: {page: this.page},
     success: function(data) {
       data = JSON.parse(data);
-      self.showWikiLinks_(data, page);
+      this.data = data;
+      var heading = self.formatContentHeader_();
+      var content = self.formatWikiLinks_(data, page);
+      self.render(heading, content);
     },
     error: function() {
-      $('#links').html('<h3>That page doesn\'t exist.</h3>');
-      $('#count-links').html('0');
+      this.data = '';
+      var heading = 'Page not found';
+      var content = '<h3>That page doesn\'t exist.</h3>';
+      self.render(heading, content);
     }
   });
 };
