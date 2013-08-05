@@ -30,7 +30,9 @@
     </div>
   </div>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+  <script src="/js/underscore.min.js"></script>
   <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/mustache.js"></script>
   <script src="/js/index.js"></script>
 </body>
 </html>
