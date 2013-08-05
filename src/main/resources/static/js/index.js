@@ -1,9 +1,11 @@
 var WikiGraph = {};
 
-WikiGraph.WIKI_URL = 'http://en.wikipedia.org/w/index.php?title={{ title }}' +
-                        '{{#raw}}&action=raw{{/raw}}';
-WikiGraph.LINK_TEMPLATE = '<a {{#blank}}target="_blank"{{/blank}} href="{{ url }}">' +
-                          '{{ text }}</a>';
+WikiGraph.generateWikiLink_ = function(title, raw) {
+  var wikiUrl = 'http://en.wikipedia.org/w/index.php?title={{ title }}' +
+                 '{{#raw}}&action=raw{{/raw}}';
+  var context = {title: encodeURIComponent(title), raw: raw};
+  return Mustache.render(wikiUrl, context);
+};
 
 WikiGraph.getDataForPage = function(page) {
   $('#links').html('<i class="icon-spinner icon-spin icon-4x"></i>');
@@ -13,33 +15,20 @@ WikiGraph.getDataForPage = function(page) {
     success: function(data) {
       data = JSON.parse(data);
       var linkify = function(text) {
-        var encodedUrl = encodeURIComponent(text);
-        var url = Mustache.render(WikiGraph.WIKI_URL,
-                                  {title: encodedUrl});
-        var urlRaw = Mustache.render(WikiGraph.WIKI_URL,
-                                     {title: encodedUrl,
-                                      raw: true});
-        var result = Mustache.render(WikiGraph.LINK_TEMPLATE,
-                                     {url: url,
-                                      text: text,
-                                      blank: true});
+        var url = WikiGraph.generateWikiLink_(text);
+        var urlRaw = WikiGraph.generateWikiLink_(text, true);
+        var result = Util.generateLink(url, text, true);
         result += '-';
-        result += Mustache.render(WikiGraph.LINK_TEMPLATE,
-                                  {url: '#' + encodedUrl,
-                                   text: '[Graph]'});
+        result += Util.generateLink('#' + encodeURIComponent(text), '[Graph]');
         result += ' ';
-        result += Mustache.render(WikiGraph.LINK_TEMPLATE,
-                                  {url: urlRaw, text: '[Raw]', blank: true});
+        result += Util.generateLink(urlRaw, '[Raw]', true);
         return result;
       };
 
       result = _.map(data, linkify).join('<br>');
       $('#links').html(result);
-      var baseUrl = Mustache.render(WikiGraph.WIKI_URL,
-                                    {title: encodeURIComponent(page),
-                                     raw: true});
-      var baseLink = Mustache.render(WikiGraph.LINK_TEMPLATE,
-                                     {url: baseUrl, text: 'page', blank: true});
+      var baseUrl = WikiGraph.generateWikiLink_(page, true);
+      var baseLink = Util.generateLink(baseUrl, 'page', true);
       $('#count-links').html(data.length);
       $('#label-page').html(baseLink);
     },
@@ -75,9 +64,7 @@ WikiGraph.init = function() {
     WikiGraph.reloadHash();
   }
 
-  $(window).bind('hashchange', function() {
-    WikiGraph.reloadHash();
-  });
+  $(window).on('hashchange', WikiGraph.reloadHash);
 };
 
 WikiGraph.init();

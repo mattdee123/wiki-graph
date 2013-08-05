@@ -33,6 +33,8 @@
   <script src="/js/underscore.min.js"></script>
   <script src="/js/bootstrap.min.js"></script>
   <script src="/js/mustache.js"></script>
+
+  <script src="/js/util.js"></script>
   <script src="/js/index.js"></script>
 </body>
 </html>
