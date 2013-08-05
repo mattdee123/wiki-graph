@@ -24,9 +24,10 @@ WikiGraph.getDataForPage = function(page) {
       var baseUrl = Mustache.render(WikiGraph.WIKI_URL_RAW,
                                     {title: encodeURIComponent(page)});
       var baseLink = Mustache.render(WikiGraph.LINK_TEMPLATE,
-                                     {url: baseUrl, text: data.length, blank: true});
+                                     {url: baseUrl, text: 'page', blank: true});
       console.log(baseLink);
-      $('#count-links').html(baseLink);
+      $('#count-links').html(data.length);
+      $('#label-page').html(baseLink);
     },
     error: function() {
       $('#links').html('<h3>That page doesn\'t exist.</h3>');

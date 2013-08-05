@@ -22,7 +22,7 @@
 
     <div class="panel" id="panel-links">
       <div class="panel-heading">
-        <h2>Links on page - <span id="count-links">0</span> links found</h2>
+        <h2>Links on <span id="label-page">page</span> - <span id="count-links">0</span> links found</h2>
       </div>
       <div id="links">
         <h3>Run a query to see the links.</h3>
