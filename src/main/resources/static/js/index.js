@@ -27,10 +27,12 @@ WikiGraph.getDataForPage = function(page) {
 
       result = _.map(data, linkify).join('<br>');
       $('#links').html(result);
-      var baseUrl = WikiGraph.generateWikiLink_(page, true);
-      var baseLink = Util.generateLink(baseUrl, 'page', true);
+      var baseUrl = WikiGraph.generateWikiLink_(page);
+      var baseUrlRaw = WikiGraph.generateWikiLink_(page, true);
+      var baseLink = Util.generateLink(baseUrl, page, true);
+      var baseLinkRaw = Util.generateLink(baseUrlRaw, '[raw]', true);
       $('#count-links').html(data.length);
-      $('#label-page').html(baseLink);
+      $('#label-page').html(baseLink + ' ' + baseLinkRaw);
     },
     error: function() {
       $('#links').html('<h3>That page doesn\'t exist.</h3>');
