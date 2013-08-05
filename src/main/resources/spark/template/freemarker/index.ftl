@@ -35,6 +35,7 @@
   <script src="/js/mustache.js"></script>
 
   <script src="/js/util.js"></script>
-  <script src="/js/index.js"></script>
+  <script src="/js/basegraph.js"></script>
+  <script src="/js/wikigraph.js"></script>
 </body>
 </html>
