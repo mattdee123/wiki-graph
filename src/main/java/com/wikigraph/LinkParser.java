@@ -31,8 +31,8 @@ public class LinkParser implements ConnectionParser {
       if (linkEnd == 0) continue;
       String title = inBrackets.substring(0, linkEnd).trim();
       if (title.length() == 0) continue;
-      if (!Character.isAlphabetic(title.charAt(0))) {
-        System.out.printf("Ignoring %s because of non-alphanumeric character%n", title);
+      if (title.charAt(0) == '{') {
+        System.out.printf("Ignoring %s because of invalid beginning%n", title);
         continue;
       }
       listBuilder.add(title);
