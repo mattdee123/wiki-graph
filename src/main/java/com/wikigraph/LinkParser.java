@@ -19,6 +19,7 @@ public class LinkParser implements ConnectionParser {
       int frontIndex = markup.indexOf(LINK_FRONT, currentIndex);
       if (frontIndex == -1) break;
       int endIndex = markup.indexOf(LINK_END, frontIndex);
+      currentIndex = endIndex + LINK_END.length();
       String inBrackets = markup.substring(frontIndex + LINK_FRONT.length(), endIndex);
       // Both of these are delimiters in the markup which come after the link name
       int pipeIndex = inBrackets.indexOf('|');
@@ -27,8 +28,14 @@ public class LinkParser implements ConnectionParser {
       int linkEnd = inBrackets.length();
       linkEnd = pipeIndex == -1 ? linkEnd : Math.min(linkEnd, pipeIndex);
       linkEnd = poundIndex == -1 ? linkEnd : Math.min(linkEnd, poundIndex);
-      if (linkEnd > 0) listBuilder.add(inBrackets.substring(0, linkEnd).trim());
-      currentIndex = endIndex + LINK_END.length();
+      if (linkEnd == 0) continue;
+      String title = inBrackets.substring(0, linkEnd).trim();
+      if (title.length() == 0) continue;
+      if (title.charAt(0) == '{') {
+        System.out.printf("Ignoring %s because of invalid beginning%n", title);
+        continue;
+      }
+      listBuilder.add(title);
     }
     return listBuilder.build();
   }

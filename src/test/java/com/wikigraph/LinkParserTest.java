@@ -48,4 +48,10 @@ public class LinkParserTest {
     Assert.assertEquals(1, connections.size());
     Assert.assertEquals("test link", connections.get(0));
   }
+
+  @Test
+  public void testGetConnections_braces() throws Exception {
+    List<String> connections = linkParser.getConnections("currency = [[{{#property:p38}}]] ($)");
+    Assert.assertEquals(0, connections.size());
+  }
 }
