@@ -8,7 +8,7 @@ public class Article {
 
   private final String title;
   private final String type;
-  private List<Article> links;
+  private List<Article> connections;
 
   public Article(String title) {
     this.title = title;
@@ -28,16 +28,16 @@ public class Article {
     return type;
   }
 
-  public List<Article> getLinks() {
-    return links;
+  public List<Article> getConnections() {
+    return connections;
   }
 
-  public void setLinks(List<Article> links) {
-    this.links = links;
+  public void setConnections(List<Article> connections) {
+    this.connections = connections;
   }
 
-  public boolean hasSetLinks() {
-    return links != null;
+  public boolean hasSetLConnections() {
+    return connections != null;
   }
 
   public String toString() {

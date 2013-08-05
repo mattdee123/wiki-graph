@@ -18,25 +18,25 @@ public class ArticleGraph {
 
   public Article loadArticlesFromName(String articleTitle, int depth) {
     Article article = getArticleOrCreateNew(articleTitle);
-    loadChildren(article, depth);
+    loadConnections(article, depth);
     return article;
   }
 
-  public Article loadChildren(Article article, int depth) {
+  public Article loadConnections(Article article, int depth) {
     if (depth == 0) return article;
 
-    List<Article> links = article.getLinks();
-    if (links == null) {
+    List<Article> connections = article.getConnections();
+    if (connections == null) {
       ImmutableList.Builder<Article> listBuilder = ImmutableList.builder();
-      for (String title : articleReader.linksOnArticle(article)) {
+      for (String title : articleReader.connectionsOnArticle(article)) {
         listBuilder.add(getArticleOrCreateNew(title));
       }
-      links = listBuilder.build();
-      article.setLinks(links);
+      connections = listBuilder.build();
+      article.setConnections(connections);
     }
 
-    for (Article linkedArticle : links) {
-      loadChildren(linkedArticle, depth - 1);
+    for (Article connectedArticle : connections) {
+      loadConnections(connectedArticle, depth - 1);
     }
     return article;
   }

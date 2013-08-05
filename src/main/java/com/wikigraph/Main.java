@@ -9,8 +9,8 @@ public class Main {
       return;
     }
     Article article = new Article(args[0]);
-    WikipediaReader wikipediaReader = new WikipediaReader();
-    for (String link : wikipediaReader.linksOnArticle(article)) {
+    WikipediaReader wikipediaReader = new WikipediaReader(new LinkParser());
+    for (String link : wikipediaReader.connectionsOnArticle(article)) {
       System.out.println(link);
     }
 

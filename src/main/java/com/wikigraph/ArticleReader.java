@@ -7,6 +7,6 @@ import java.util.List;
  */
 public interface ArticleReader {
 
-  public List<String> linksOnArticle(Article article);
+  public List<String> connectionsOnArticle(Article article);
 
 }
