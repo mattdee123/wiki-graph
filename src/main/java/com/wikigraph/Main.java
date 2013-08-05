@@ -13,9 +13,7 @@ import java.util.Map;
 import static spark.Spark.get;
 import static spark.Spark.staticFileLocation;
 
-/**
- * This is the main class.
- */
+/** This is the main class. */
 public class Main {
 
   public static void main(String[] args) {
@@ -25,7 +23,6 @@ public class Main {
       @Override
       public Object handle(Request request, Response response) {
         Map<String, Object> templateValues = new HashMap<String, Object>();
-
         return modelAndView(templateValues, "index.ftl");
       }
     });
@@ -38,7 +35,6 @@ public class Main {
         List<String> links = wikipediaReader.linksOnArticle(new Article(pageName));
 
         JSONArray linksJson = new JSONArray(links);
-
         return linksJson.toString();
       }
     });

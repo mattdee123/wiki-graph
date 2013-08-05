@@ -24,6 +24,7 @@ WikiGraph.init = function() {
   });
 
   $('#input-page').keypress(function(e) {
+    // Enter key refreshes the links.
     if (e.which === 13) {
       e.preventDefault();
       $('#btn-refresh').click();
