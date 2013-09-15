@@ -36,10 +36,6 @@ public class Article {
     this.connections = connections;
   }
 
-  public boolean hasSetLConnections() {
-    return connections != null;
-  }
-
   public String toString() {
     return String.format("[Article: title=%s, type=%s]", title, type);
   }

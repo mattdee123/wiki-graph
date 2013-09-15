@@ -12,4 +12,9 @@
 # Build Files #
 target/
 
+#Weird mac file
 .DS_Store
+
+#Don't want to check all of wikipedia in
+data/
+out*
