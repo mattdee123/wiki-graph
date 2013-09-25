@@ -37,7 +37,7 @@ public class LinkParser implements ConnectionParser {
       String title = inBrackets.substring(0, linkEnd).trim();
       if (title.length() == 0) continue;
       if (title.charAt(0) == '{') {
-        System.err.printf("Ignoring %s because of invalid beginning%n", title);
+//        System.err.printf("Ignoring %s because of invalid beginning%n", title);
         continue;
       }
       listBuilder.add(title);

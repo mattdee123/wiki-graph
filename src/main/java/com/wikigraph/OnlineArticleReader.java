@@ -12,14 +12,14 @@ import java.net.URLEncoder;
 import java.util.List;
 
 /** Class responsible for reading data from Wikipedia. */
-public class WikipediaArticleReader implements ArticleReader {
+public class OnlineArticleReader implements ArticleReader {
 
   private static final String URL_FORMAT =
       "http://en.wikipedia.org/w/index.php?title=%s&action=raw";
 
   private final ConnectionParser connectionParser;
 
-  public WikipediaArticleReader(ConnectionParser connectionParser) {
+  public OnlineArticleReader(ConnectionParser connectionParser) {
     this.connectionParser = connectionParser;
   }
 

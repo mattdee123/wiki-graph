@@ -20,11 +20,11 @@ public class Main {
     modes.put("site", new RunWebSiteMode());
     modes.put("slice", new WikiDumpSlicerMode());
     modes.put("parse", new ParseMode());
+    modes.put("test", new TestMode());
+    modes.put("connections", new ConnectionsMode());
 
     String[] otherArgs = new String[args.length - 1];
-    for (int i = 1; i < args.length; i++) {
-      otherArgs[i - 1] = args[i];
-    }
+    System.arraycopy(args, 1, otherArgs, 0, args.length - 1);
 
     RunMode runMode = modes.get(args[0]);
     if (runMode != null) {

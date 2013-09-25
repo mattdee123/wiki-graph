@@ -19,8 +19,7 @@ public class WikidumpHandler extends DefaultHandler {
 
   private static final Joiner joiner = Joiner.on('\n');
 
-  private static final int HASHING_MASK = 0x3FF; //1032, chosen based on informal tuning
-  private final String outdir;
+  private final File outdir;
   private int pageNum;
   private long lastElapsed;
   private final LinkParser linkParser;
@@ -29,11 +28,14 @@ public class WikidumpHandler extends DefaultHandler {
   private final BufferedWriter redirectWriter;
   Stopwatch stopwatch = new Stopwatch();
 
-  public WikidumpHandler(String outdir, LinkParser linkParser) {
+  public WikidumpHandler(File outdir, LinkParser linkParser) {
     this.outdir = outdir;
     this.linkParser = linkParser;
     try {
-      this.redirectWriter = new BufferedWriter(new FileWriter(new File(outdir, "redirects")));
+      File redirectFile = new File(outdir, "redirects");
+      redirectFile.getParentFile().mkdirs();
+      redirectFile.createNewFile();
+      this.redirectWriter = new BufferedWriter(new FileWriter(redirectFile));
     } catch (IOException e) {
       throw Throwables.propagate(e);
     }
@@ -50,7 +52,7 @@ public class WikidumpHandler extends DefaultHandler {
     currentString = new StringBuilder();
     if (qName.equals("page")) {
       currentPage = new Page();
-      if ((pageNum & 4095) == 0) {
+      if ((pageNum & 16383) == 0) {
         long thisElapsed = stopwatch.elapsed(TimeUnit.MILLISECONDS);
         System.out.printf("Page %d started, elapsed time = %ds (+%dms)%n", pageNum, thisElapsed / 1000, thisElapsed - lastElapsed);
         lastElapsed = thisElapsed;
@@ -80,18 +82,17 @@ public class WikidumpHandler extends DefaultHandler {
   private void processPage(Page currentPage) {
     if (currentPage.redirect == null) {
       writeText(currentPage.title, outdir, joiner.join(linkParser.getConnections(currentPage.text)) + "\n");
-    }
-    else {
+    } else {
       try {
-        redirectWriter.write(currentPage.text + "|" + currentPage.redirect + "\n");
+        redirectWriter.write(currentPage.title + "|" + currentPage.redirect + "\n");
       } catch (IOException e) {
         throw Throwables.propagate(e);
       }
     }
   }
 
-  private void writeText(String title, String outdir, String output) {
-    File file = getFileForPage(title, outdir);
+  private void writeText(String title, File outdir, String output) {
+    File file = ArticleHasher.getFileForPage(title, outdir);
     try {
       if (!file.exists()) {
         file.getParentFile().mkdirs();
@@ -111,12 +112,14 @@ public class WikidumpHandler extends DefaultHandler {
     }
   }
 
-  private File getFileForPage(String title, String outdir) {
-    String fileName = title.replace("/", "|");
-    File file = new File(outdir, "" + (title.toUpperCase().hashCode() & HASHING_MASK));
-    file = new File(file, "" + (title.toLowerCase().hashCode() & HASHING_MASK));
-    file = new File(file, fileName);
-    return file;
+
+
+  private int positiveMod(int dividend, int divisor) {
+    int result = dividend % divisor;
+    if (result < 0) {
+      result += divisor;
+    }
+    return result;
   }
 
   @Override

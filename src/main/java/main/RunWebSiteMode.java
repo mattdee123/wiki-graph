@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import com.wikigraph.Article;
 import com.wikigraph.ArticleGraph;
 import com.wikigraph.LinkParser;
-import com.wikigraph.WikipediaArticleReader;
+import com.wikigraph.OnlineArticleReader;
 import org.json.JSONArray;
 import spark.Request;
 import spark.Response;
@@ -22,7 +22,7 @@ import static spark.Spark.staticFileLocation;
 public class RunWebSiteMode implements RunMode {
   @Override
   public void run(String[] args) {
-    final ArticleGraph articleGraph = new ArticleGraph(new WikipediaArticleReader(new LinkParser()));
+    final ArticleGraph articleGraph = new ArticleGraph(new OnlineArticleReader(new LinkParser()));
 
     staticFileLocation("static");
 
