@@ -11,10 +11,6 @@ import java.util.Map;
 public class Main {
 
   public static void main(String[] args) {
-    if (args.length < 1) {
-      System.out.println("No run mode given");
-      System.exit(1);
-    }
 
     Map<String, RunMode> modes = new HashMap<String, RunMode>();
     modes.put("site", new RunWebSiteMode());
@@ -22,6 +18,11 @@ public class Main {
     modes.put("parse", new ParseMode());
     modes.put("test", new TestMode());
     modes.put("connections", new ConnectionsMode());
+
+    if (args.length < 1) {
+      System.out.println("No run mode given: possible run modes are:" + modes.keySet());
+      System.exit(1);
+    }
 
     String[] otherArgs = new String[args.length - 1];
     System.arraycopy(args, 1, otherArgs, 0, args.length - 1);

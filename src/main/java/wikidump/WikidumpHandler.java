@@ -92,7 +92,7 @@ public class WikidumpHandler extends DefaultHandler {
   }
 
   private void writeText(String title, File outdir, String output) {
-    File file = ArticleHasher.getFileForPage(title, outdir);
+    File file = ArticleUtils.getFileForPage(title, outdir);
     try {
       if (!file.exists()) {
         file.getParentFile().mkdirs();

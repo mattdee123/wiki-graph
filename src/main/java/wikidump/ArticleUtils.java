@@ -1,10 +1,19 @@
 package wikidump;
 
 import java.io.File;
+import java.util.Map;
 
-public class ArticleHasher {
+public class ArticleUtils {
 
-  public static File getFileForPage(String title, File baseDir) {
+  private final File baseDir;
+  private final Map<String, String> redirects;
+
+  public ArticleUtils(File baseDir, Map<String, String> redirects) {
+    this.baseDir = baseDir;
+    this.redirects = redirects;
+  }
+
+  public File getFileForPage(String title, File baseDir) {
     title = title.replace('/', '|');
     if (title.length() > 255) {
       System.err.printf("Warning: title truncated.  original=%s, after=%s%n", title, title.substring(0, 255));
@@ -18,5 +27,15 @@ public class ArticleHasher {
     file = new File(file, "" + dir2);
     file = new File(file, title);
     return file;
+  }
+
+  public static String resolveRedirect(String title, File baseDir) {
+    File file = getFileForPage(title, baseDir);
+    if (file.exists()) {
+      return title;
+    }
+    if
+
+    return null;
   }
 }

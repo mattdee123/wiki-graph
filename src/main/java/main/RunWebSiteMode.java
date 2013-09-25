@@ -2,16 +2,14 @@ package main;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
-import com.wikigraph.Article;
-import com.wikigraph.ArticleGraph;
-import com.wikigraph.LinkParser;
-import com.wikigraph.OnlineArticleReader;
+import com.wikigraph.*;
 import org.json.JSONArray;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 import spark.template.freemarker.FreeMarkerRoute;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +20,13 @@ import static spark.Spark.staticFileLocation;
 public class RunWebSiteMode implements RunMode {
   @Override
   public void run(String[] args) {
-    final ArticleGraph articleGraph = new ArticleGraph(new OnlineArticleReader(new LinkParser()));
+    if (args.length != 1) {
+      System.out.println("Requires 1 argument: [baseDir]");
+      System.exit(1);
+    }
+    File baseDir = new File(args[0]);
+
+    final ArticleGraph articleGraph = new ArticleGraph(new WikidumpArticleReader(baseDir));
 
     staticFileLocation("static");
 
