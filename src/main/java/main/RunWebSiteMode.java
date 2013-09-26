@@ -8,6 +8,7 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 import spark.template.freemarker.FreeMarkerRoute;
+import wikidump.RedirectsHolder;
 
 import java.io.File;
 import java.util.HashMap;
@@ -24,9 +25,8 @@ public class RunWebSiteMode implements RunMode {
       System.out.println("Requires 1 argument: [baseDir]");
       System.exit(1);
     }
-    File baseDir = new File(args[0]);
-
-    final ArticleGraph articleGraph = new ArticleGraph(new WikidumpArticleReader(baseDir));
+    RedirectsHolder redirects = new RedirectsHolder(new File(args[0]));
+    final ArticleGraph articleGraph = new ArticleGraph(new WikidumpArticleReader(args[0]), redirects);
 
     staticFileLocation("static");
 

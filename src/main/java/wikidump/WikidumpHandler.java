@@ -1,44 +1,26 @@
 package wikidump;
 
-import com.google.common.base.Joiner;
 import com.google.common.base.Stopwatch;
-import com.google.common.base.Throwables;
-import com.wikigraph.LinkParser;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class WikidumpHandler extends DefaultHandler {
 
-  private static final Joiner joiner = Joiner.on('\n');
 
-  private final File outdir;
+
   private int pageNum;
   private long lastElapsed;
-  private final LinkParser linkParser;
   private Page currentPage;
   private StringBuilder currentString;
-  private final BufferedWriter redirectWriter;
-  Stopwatch stopwatch = new Stopwatch();
+  private final Stopwatch stopwatch = new Stopwatch();
+  private final PageProcessor pageProcessor;
 
-  public WikidumpHandler(File outdir, LinkParser linkParser) {
-    this.outdir = outdir;
-    this.linkParser = linkParser;
-    try {
-      File redirectFile = new File(outdir, "redirects");
-      redirectFile.getParentFile().mkdirs();
-      redirectFile.createNewFile();
-      this.redirectWriter = new BufferedWriter(new FileWriter(redirectFile));
-    } catch (IOException e) {
-      throw Throwables.propagate(e);
-    }
+  public WikidumpHandler(PageProcessor pageProcessor) {
+    this.pageProcessor = pageProcessor;
   }
 
   @Override
@@ -75,61 +57,14 @@ public class WikidumpHandler extends DefaultHandler {
     } else if (qName.equals("text")) {
       currentPage.text = currentString.toString();
     } else if (qName.equals("page")) {
-      processPage(currentPage);
+      pageProcessor.processPage(currentPage);
     }
-  }
-
-  private void processPage(Page currentPage) {
-    if (currentPage.redirect == null) {
-      writeText(currentPage.title, outdir, joiner.join(linkParser.getConnections(currentPage.text)) + "\n");
-    } else {
-      try {
-        redirectWriter.write(currentPage.title + "|" + currentPage.redirect + "\n");
-      } catch (IOException e) {
-        throw Throwables.propagate(e);
-      }
-    }
-  }
-
-  private void writeText(String title, File outdir, String output) {
-    File file = ArticleUtils.getFileForPage(title, outdir);
-    try {
-      if (!file.exists()) {
-        file.getParentFile().mkdirs();
-        file.createNewFile();
-      } else {
-        System.err.printf("Warning: File %s already exists%n", file.getAbsolutePath());
-      }
-      FileWriter writer = new FileWriter(file);
-      writer.write(output);
-      writer.close();
-    } catch (IOException e) {
-      e.printStackTrace();
-      System.err.println("file = " + file.getAbsolutePath());
-      System.err.println("currentPage.text = " + currentPage.text);
-      System.err.println("currentPage.title = " + currentPage.title);
-      throw Throwables.propagate(e);
-    }
-  }
-
-
-
-  private int positiveMod(int dividend, int divisor) {
-    int result = dividend % divisor;
-    if (result < 0) {
-      result += divisor;
-    }
-    return result;
   }
 
   @Override
   public void endDocument() throws SAXException {
     super.endDocument();
-    try {
-      redirectWriter.close();
-    } catch (IOException e) {
-      throw Throwables.propagate(e);
-    }
+    pageProcessor.finish();
     System.out.println("Finished!");
   }
 
@@ -148,7 +83,7 @@ public class WikidumpHandler extends DefaultHandler {
     super.fatalError(e);
   }
 
-  private class Page {
+  public static class Page {
     public String title;
     public String redirect;
     public String text;

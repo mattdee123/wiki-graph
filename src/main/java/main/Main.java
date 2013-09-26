@@ -1,5 +1,6 @@
 package main;
 
+import wikidump.TestParseMode;
 import wikidump.WikiDumpSlicerMode;
 
 import java.util.HashMap;
@@ -18,6 +19,7 @@ public class Main {
     modes.put("parse", new ParseMode());
     modes.put("test", new TestMode());
     modes.put("connections", new ConnectionsMode());
+    modes.put("test-parse", new TestParseMode());
 
     if (args.length < 1) {
       System.out.println("No run mode given: possible run modes are:" + modes.keySet());

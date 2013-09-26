@@ -1,6 +1,8 @@
 package com.wikigraph;
 
 import com.google.common.collect.ImmutableList;
+import wikidump.RedirectsHolder;
+
 import java.util.List;
 import java.util.Map;
 
@@ -11,9 +13,11 @@ public class ArticleGraph {
 
   private final Map<String, Article> articleMap = newHashMap();
   private final ArticleReader articleReader;
+  private final RedirectsHolder redirects;
 
-  public ArticleGraph(ArticleReader articleReader) {
+  public ArticleGraph(ArticleReader articleReader, RedirectsHolder redirects) {
     this.articleReader = articleReader;
+    this.redirects = redirects;
   }
 
   public Article loadArticleFromName(String articleTitle, int depth) {
@@ -22,8 +26,8 @@ public class ArticleGraph {
     return article;
   }
 
-  public Article loadConnections(Article article, int depth) {
-    if (depth == 0) return article;
+  public void loadConnections(Article article, int depth) {
+    if (depth == 0) return;
 
     List<Article> connections = article.getConnections();
     if (connections == null) {
@@ -38,10 +42,10 @@ public class ArticleGraph {
     for (Article connectedArticle : connections) {
       loadConnections(connectedArticle, depth - 1);
     }
-    return article;
   }
 
   private Article getArticleOrCreateNew(String title) {
+    title = redirects.resolveRedirect(title);
     Article article = articleMap.get(title);
     if (article == null) {
       article = new Article(title);

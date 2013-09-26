@@ -14,8 +14,7 @@ public class ConnectionsMode implements RunMode {
       System.out.println("Invalid number of arguments.  Takes 2 args: [base dir] [article title]");
       System.exit(1);
     }
-    File baseDir = new File(args[0]);
-    ArticleReader articleReader = new WikidumpArticleReader(baseDir);
+    ArticleReader articleReader = new WikidumpArticleReader(args[0]);
     List<String> connections = articleReader.connectionsOnArticle(new Article(args[1]));
     for (String s : connections) {
       System.out.println(s);
