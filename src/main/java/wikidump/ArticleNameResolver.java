@@ -1,8 +1,6 @@
 package wikidump;
 
-import com.google.common.base.Charsets;
 import com.google.common.base.Throwables;
-import com.google.common.io.Files;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,11 +9,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RedirectsHolder {
+public class ArticleNameResolver {
 
   private Map<String, String> redirects;
 
-  public RedirectsHolder(File baseDir) {
+  public ArticleNameResolver(File baseDir) {
     File redirectsFile = new File(baseDir, "redirects");
     redirects = new HashMap<String, String>();
     try {
@@ -39,6 +37,7 @@ public class RedirectsHolder {
 
   // Takes the REAL NAME of the article, returns the REAL NAME of the redirect
   public String resolveRedirect(String title) {
+    title = capitalizeFirstLetter(title);
     String redirect = redirects.get(title);
     if (redirect != null) {
       System.out.printf("Redirecting %s to %s%n", title, redirect);
@@ -46,6 +45,12 @@ public class RedirectsHolder {
     }
     // It doesn't redirect, return the orignial version
     return title;
+  }
+
+  private String capitalizeFirstLetter(String original){
+    if(original.length() == 0)
+      return original;
+    return original.substring(0, 1).toUpperCase() + original.substring(1);
   }
 
 }

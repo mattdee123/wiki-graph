@@ -25,7 +25,7 @@ public class WikidumpArticleReader implements ArticleReader {
 
   @Override
   public List<String> connectionsOnArticle(Article article) {
-    System.out.printf("Fetching connections for %s%n", article.getTitle());
+    System.out.printf("Fetching connections for %s...%n", article.getTitle());
     File articleFile = fileUtils.getFileForPage(article.getTitle());
     if (!articleFile.exists()) {
       System.err.println("File not found:" + articleFile);
@@ -34,8 +34,8 @@ public class WikidumpArticleReader implements ArticleReader {
       String fileText = Files.toString(articleFile, Charsets.UTF_8);
       return Arrays.asList(fileText.split("\n"));
     } catch (IOException e) {
-      e.printStackTrace();
-      throw Throwables.propagate(e);
+      System.out.println("File not found:" + articleFile.getAbsolutePath());
+      return null;
     }
 
 

@@ -7,6 +7,7 @@ import java.util.List;
  */
 public interface ArticleReader {
 
+  // Returns the list of connections on the article, or null if the article does not exist
   public List<String> connectionsOnArticle(Article article);
 
 }

@@ -1,21 +1,23 @@
 package com.wikigraph;
 
 import com.google.common.collect.ImmutableList;
-import wikidump.RedirectsHolder;
+import wikidump.ArticleNameResolver;
 
 import java.util.List;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.newHashMap;
 
-/** Represents a graph of articles */
+/**
+ * Represents a graph of articles
+ */
 public class ArticleGraph {
 
   private final Map<String, Article> articleMap = newHashMap();
   private final ArticleReader articleReader;
-  private final RedirectsHolder redirects;
+  private final ArticleNameResolver redirects;
 
-  public ArticleGraph(ArticleReader articleReader, RedirectsHolder redirects) {
+  public ArticleGraph(ArticleReader articleReader, ArticleNameResolver redirects) {
     this.articleReader = articleReader;
     this.redirects = redirects;
   }
@@ -32,15 +34,22 @@ public class ArticleGraph {
     List<Article> connections = article.getConnections();
     if (connections == null) {
       ImmutableList.Builder<Article> listBuilder = ImmutableList.builder();
-      for (String title : articleReader.connectionsOnArticle(article)) {
-        listBuilder.add(getArticleOrCreateNew(title));
+      List<String> connectionTitles = articleReader.connectionsOnArticle(article);
+      if (connectionTitles == null) {
+        System.out.println("Setting connections to null: title = " + article.getTitle());
+        article.setConnections(null);
+      } else {
+        for (String title : connectionTitles) {
+          listBuilder.add(getArticleOrCreateNew(title));
+        }
+        connections = listBuilder.build();
+        article.setConnections(connections);
       }
-      connections = listBuilder.build();
-      article.setConnections(connections);
     }
-
-    for (Article connectedArticle : connections) {
-      loadConnections(connectedArticle, depth - 1);
+    if (connections != null) {
+      for (Article connectedArticle : connections) {
+        loadConnections(connectedArticle, depth - 1);
+      }
     }
   }
 
