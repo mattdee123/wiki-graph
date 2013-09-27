@@ -1,7 +1,7 @@
 package com.wikigraph;
 
 import com.google.common.collect.ImmutableList;
-import wikidump.ArticleNameResolver;
+import com.wikigraph.wikidump.ArticleNameResolver;
 
 import java.util.List;
 import java.util.Map;

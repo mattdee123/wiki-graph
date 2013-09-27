@@ -1,4 +1,4 @@
-package wikidump;
+package com.wikigraph.wikidump;
 
 public class PrintingPageProcessor implements PageProcessor {
   @Override

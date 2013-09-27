@@ -1,4 +1,4 @@
-package wikidump;
+package com.wikigraph.wikidump;
 
 import com.google.common.base.Stopwatch;
 import org.xml.sax.Attributes;

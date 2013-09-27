@@ -1,4 +1,4 @@
-package main;
+package com.wikigraph.main;
 
 public class TestMode implements RunMode {
   @Override

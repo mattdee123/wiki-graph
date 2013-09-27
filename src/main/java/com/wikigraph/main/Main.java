@@ -1,8 +1,8 @@
-package main;
+package com.wikigraph.main;
 
 import com.wikigraph.ConnectionsMode;
-import wikidump.TestParseMode;
-import wikidump.WikiDumpSlicerMode;
+import com.wikigraph.wikidump.TestParseMode;
+import com.wikigraph.wikidump.WikiDumpSlicerMode;
 
 import java.util.HashMap;
 import java.util.Map;

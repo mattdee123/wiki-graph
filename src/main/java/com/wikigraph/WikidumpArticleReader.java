@@ -1,9 +1,8 @@
 package com.wikigraph;
 
 import com.google.common.base.Charsets;
-import com.google.common.base.Throwables;
 import com.google.common.io.Files;
-import wikidump.ArticleFileUtils;
+import com.wikigraph.wikidump.ArticleFileUtils;
 
 import java.io.File;
 import java.io.IOException;

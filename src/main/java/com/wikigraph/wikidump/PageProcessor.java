@@ -1,6 +1,6 @@
-package wikidump;
+package com.wikigraph.wikidump;
 
-import static wikidump.WikidumpHandler.Page;
+import static com.wikigraph.wikidump.WikidumpHandler.Page;
 
 public interface PageProcessor {
 

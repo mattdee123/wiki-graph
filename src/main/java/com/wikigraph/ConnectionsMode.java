@@ -1,11 +1,7 @@
 package com.wikigraph;
 
-import com.wikigraph.Article;
-import com.wikigraph.ArticleReader;
-import com.wikigraph.WikidumpArticleReader;
-import main.RunMode;
+import com.wikigraph.main.RunMode;
 
-import java.io.File;
 import java.util.List;
 
 public class ConnectionsMode implements RunMode {

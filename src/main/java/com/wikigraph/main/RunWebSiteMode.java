@@ -1,4 +1,4 @@
-package main;
+package com.wikigraph.main;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -8,7 +8,7 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 import spark.template.freemarker.FreeMarkerRoute;
-import wikidump.ArticleNameResolver;
+import com.wikigraph.wikidump.ArticleNameResolver;
 
 import java.io.File;
 import java.util.HashMap;

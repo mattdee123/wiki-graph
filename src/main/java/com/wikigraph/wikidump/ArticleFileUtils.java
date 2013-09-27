@@ -1,6 +1,5 @@
-package wikidump;
+package com.wikigraph.wikidump;
 
-import java.io.BufferedWriter;
 import java.io.File;
 
 public class ArticleFileUtils {

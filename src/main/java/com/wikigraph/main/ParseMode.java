@@ -1,4 +1,4 @@
-package main;
+package com.wikigraph.main;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
