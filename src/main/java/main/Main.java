@@ -1,5 +1,6 @@
 package main;
 
+import com.wikigraph.ConnectionsMode;
 import wikidump.TestParseMode;
 import wikidump.WikiDumpSlicerMode;
 

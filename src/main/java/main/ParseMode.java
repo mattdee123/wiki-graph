@@ -12,8 +12,9 @@ import java.io.IOException;
 public class ParseMode implements RunMode {
   @Override
   public void run(String[] args) {
-    if (args.length < 1) {
+    if (args.length != 1) {
       System.out.println("No file to parse specified");
+      System.exit(1);
     }
     String markup;
     try {
