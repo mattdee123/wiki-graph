@@ -35,8 +35,8 @@ public class ArticleNameResolver {
     }
   }
 
-  // Takes the REAL NAME of the article, returns the REAL NAME of the redirect
-  public String resolveRedirect(String title) {
+  // Takes the name of the link, returns the name of the associated article
+  public String resolveName(String title) {
     title = capitalizeFirstLetter(title);
     String redirect = redirects.get(title);
     if (redirect != null) {

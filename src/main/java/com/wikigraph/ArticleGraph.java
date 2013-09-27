@@ -15,14 +15,15 @@ public class ArticleGraph {
 
   private final Map<String, Article> articleMap = newHashMap();
   private final ArticleReader articleReader;
-  private final ArticleNameResolver redirects;
+  private final ArticleNameResolver nameResolver;
 
-  public ArticleGraph(ArticleReader articleReader, ArticleNameResolver redirects) {
+  public ArticleGraph(ArticleReader articleReader, ArticleNameResolver nameResolver) {
     this.articleReader = articleReader;
-    this.redirects = redirects;
+    this.nameResolver = nameResolver;
   }
 
-  public Article loadArticleFromName(String articleTitle, int depth) {
+  public Article loadArticleFromName(String linkName, int depth) {
+    String articleTitle = nameResolver.resolveName(linkName);
     Article article = getArticleOrCreateNew(articleTitle);
     loadConnections(article, depth);
     return article;
@@ -54,7 +55,6 @@ public class ArticleGraph {
   }
 
   private Article getArticleOrCreateNew(String title) {
-    title = redirects.resolveRedirect(title);
     Article article = articleMap.get(title);
     if (article == null) {
       article = new Article(title);
