@@ -2,21 +2,23 @@ package com.wikigraph.main;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
-import com.wikigraph.*;
+import com.wikigraph.Article;
+import com.wikigraph.ArticleGraph;
+import com.wikigraph.WikidumpArticleReader;
+import com.wikigraph.wikidump.ArticleNameResolver;
 import org.json.JSONArray;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 import spark.template.freemarker.FreeMarkerRoute;
-import com.wikigraph.wikidump.ArticleNameResolver;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static spark.Spark.externalStaticFileLocation;
 import static spark.Spark.get;
-import static spark.Spark.staticFileLocation;
 
 public class RunWebSiteMode implements RunMode {
   @Override
@@ -28,7 +30,7 @@ public class RunWebSiteMode implements RunMode {
     ArticleNameResolver redirects = new ArticleNameResolver(new File(args[0]));
     final ArticleGraph articleGraph = new ArticleGraph(new WikidumpArticleReader(args[0]), redirects);
 
-    staticFileLocation("static");
+    externalStaticFileLocation("src/main/resources/static");
 
     get(new FreeMarkerRoute("/") {
       @Override
