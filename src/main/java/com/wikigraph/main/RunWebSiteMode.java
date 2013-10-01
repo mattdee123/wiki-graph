@@ -46,19 +46,17 @@ public class RunWebSiteMode implements RunMode {
         String pageName = request.queryParams("page");
         List<Article> articles = articleGraph.loadArticleFromName(pageName, 1).getConnections();
         if (articles == null) {
-          //TODO(probably Aakash): article not found logic
-          return "[PAGE NOT FOUND]";
-        } else {
-          List<String> links = Lists.transform(articles, new Function<Article, String>() {
-            @Override
-            public String apply(Article article) {
-              return article.getTitle();
-            }
-          });
-
-          JSONArray linksJson = new JSONArray(links);
-          return linksJson.toString();
+          halt(404);
         }
+
+        List<String> links = Lists.transform(articles, new Function<Article, String>() {
+          @Override
+          public String apply(Article article) {
+            return article.getTitle();
+          }
+        });
+        JSONArray linksJson = new JSONArray(links);
+        return linksJson.toString();
       }
     });
   }
