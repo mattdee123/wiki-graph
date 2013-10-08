@@ -1,5 +1,8 @@
-package com.wikigraph;
+package com.wikigraph.main;
 
+import com.wikigraph.Article;
+import com.wikigraph.ArticleReader;
+import com.wikigraph.WikidumpArticleReader;
 import com.wikigraph.main.RunMode;
 
 import java.util.List;
