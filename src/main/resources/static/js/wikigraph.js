@@ -49,13 +49,13 @@ WikiGraph.prototype.showDataForPage = function(page) {
     data: {page: this.page},
     success: function(data) {
       data = JSON.parse(data);
-      this.data = data;
+      self.data = data;
       var heading = self.formatContentHeader_();
       var content = self.formatWikiLinks_(data, page);
       self.render(heading, content);
     },
     error: function() {
-      this.data = '';
+      self.data = '';
       var heading = 'Page not found';
       var content = '<h3>That page doesn\'t exist.</h3>';
       self.render(heading, content);
