@@ -6,8 +6,8 @@ WG.filter('urlencode', function() {
 
 WG.config(function($routeProvider) {
   $routeProvider
-  .when('/:page', {templateUrl: '/js/views/app.html', controller: 'FormController'})
-  .when('/', {templateUrl: '/js/views/app.html', controller: 'FormController'});
+  .when('/', {templateUrl: '/js/views/app.html', controller: 'BaseController'})
+  .when('/:page/', {templateUrl: '/js/views/app.html', controller: 'BaseController'});
 });
 
 WG.factory('Data', function($http) {
@@ -15,8 +15,12 @@ WG.factory('Data', function($http) {
   Data.loading = false;
   Data.links = [];
   Data.failure = false;
+  return Data;
+});
 
-  Data.getLinks = function(page, successCallback, errorCallback) {
+WG.service('Fetch', function($http) {
+  var Fetch = {};
+  Fetch.getLinks = function(page, successCallback, errorCallback) {
     successCallback = successCallback || function() {};
     errorCallback = errorCallback || function() {};
     var result = $http.get('/page?page='+page)
@@ -24,6 +28,5 @@ WG.factory('Data', function($http) {
                       .error(errorCallback);
     return result;
   };
-
-  return Data;
+  return Fetch;
 });

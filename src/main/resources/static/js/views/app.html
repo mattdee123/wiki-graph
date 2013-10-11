@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="jumbotron" ng-controller="FormController">
+  <div class="jumbotron">
     <h1 class="text-center">Wiki Graph</h1>
     <form ng-submit="refresh()">
       <div class="input-group">
@@ -41,7 +41,7 @@
             </a>
           </td>
           <td>
-            <a href="/#/{{ link | urlencode}}">
+            <a href="/#/{{ link | urlencode}}/">
               Graph
             </a>
           </td>

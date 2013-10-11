@@ -1,4 +1,4 @@
-WG.controller('FormController', function FormController($scope, $routeParams, $location, Data) {
+WG.controller('BaseController', function BaseController($scope, $routeParams, $location, Data, Fetch) {
   $scope.data = Data;
   $scope.form = $scope.form || {};
 
@@ -6,7 +6,7 @@ WG.controller('FormController', function FormController($scope, $routeParams, $l
     if (!($scope.form && $scope.form.page)) {
       return;
     }
-    $location.path('/' + $scope.form.page);
+    $location.path('/' + $scope.form.page + '/');
   };
 
   console.log($routeParams);
@@ -16,7 +16,7 @@ WG.controller('FormController', function FormController($scope, $routeParams, $l
     $scope.data.loading = true;
     $scope.data.basePage = $scope.form.page;
     $scope.data.failure = false;
-    Data.getLinks($scope.form.page,
+    Fetch.getLinks($scope.form.page,
       function(result) {
         $scope.data.loading = false;
         $scope.data.links = result;
