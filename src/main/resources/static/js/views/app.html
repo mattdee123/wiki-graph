@@ -1,0 +1,52 @@
+<div class="container">
+  <div class="jumbotron" ng-controller="FormController">
+    <h1 class="text-center">Wiki Graph</h1>
+    <form ng-submit="refresh()">
+      <div class="input-group">
+        <input id="input-page" class="form-control input-large" type="text" placeholder="Page to query" ng-model="form.page">
+        <span class="input-group-btn">
+          <button id="btn-refresh" class="btn btn-primary btn-large">Run</button>
+        </span>
+      </div>
+    </form>
+  </div>
+
+  <div class="panel" id="content" ng-controller="GraphController" ng-show="data.basePage">
+    <div class="panel-heading">
+      <h2 id="content-heading" ng-show="data.basePage">
+        <a href="http://en.wikipedia.org/w/index.php?title={{ data.basePage | urlencode }}">
+          {{ data.basePage }}
+        </a>
+        -
+        <a href="http://en.wikipedia.org/w/index.php?title={{ data.basePage | urlencode }}&action=raw">
+          Raw
+        </a>
+      </h2>
+    </div>
+    <div id="content-body" ng-show="data.links.length || data.failure">
+      <h3 ng-show="data.failure">That page does not exist.</h3>
+
+      <h3 ng-show="data.loading"><i class="icon-spinner icon-spin icon-4x"></i></h3>
+
+      <table class="table table-bordered table-hover table-condensed">
+        <tr ng-repeat="link in data.links">
+          <td>
+            <a href="http://en.wikipedia.org/w/index.php?title={{ link | urlencode }}">
+              {{ link }}
+            </a>
+          </td>
+          <td>
+            <a href="http://en.wikipedia.org/w/index.php?title={{ link | urlencode }}&action=raw">
+              Raw
+            </a>
+          </td>
+          <td>
+            <a href="/#/{{ link | urlencode}}">
+              Graph
+            </a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

@@ -8,34 +8,15 @@
 
   <link rel="stylesheet" href="/css/index.css">
 </head>
-<body>
-  <div class="container">
-    <div class="jumbotron">
-      <h1>Wiki Graph</h1>
-      <div class="input-group">
-        <input id="input-page" class="form-control input-large" type="text" placeholder="Page to query">
-        <span class="input-group-btn">
-          <button id="btn-refresh" class="btn btn-primary btn-large">Refresh</button>
-        </span>
-      </div>
-    </div>
-
-    <div class="panel" id="content">
-      <div class="panel-heading">
-        <h2 id="content-heading">Welcome</h2>
-      </div>
-      <div id="content-body">
-        <h3>Run a query to see the links.</h3>
-      </div>
-    </div>
-  </div>
+<body ng-app="WG">
+  <ng-view></ng-view>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-  <script src="/js/underscore.min.js"></script>
-  <script src="/js/bootstrap.min.js"></script>
-  <script src="/js/mustache.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script>
+  <script src="/js/lib/underscore.min.js"></script>
+  <script src="/js/lib/bootstrap.min.js"></script>
 
-  <script src="/js/util.js"></script>
-  <script src="/js/basegraph.js"></script>
-  <script src="/js/wikigraph.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/controllers/form_controller.js"></script>
+  <script src="/js/controllers/graph_controller.js"></script>
 </body>
 </html>
