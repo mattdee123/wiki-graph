@@ -29,7 +29,7 @@
       <h3 ng-show="data.loading"><i class="icon-spinner icon-spin icon-4x"></i></h3>
 
       <table class="table table-bordered table-hover table-condensed">
-        <tr ng-repeat="link in data.links">
+        <tr ng-repeat="link in data.links track by $index">
           <td>
             <a href="http://en.wikipedia.org/w/index.php?title={{ link | urlencode }}">
               {{ link }}
