@@ -1,6 +1,8 @@
 package com.wikigraph;
 
 import java.util.List;
+
+import com.wikigraph.wikidump.LinkParser;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
