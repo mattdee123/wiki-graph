@@ -23,10 +23,12 @@
         </a>
       </h2>
     </div>
-    <div id="content-body" ng-show="data.links.length || data.failure">
+    <div id="content-body" ng-show="data.links.length || data.failure || data.loading">
       <h3 ng-show="data.failure">That page does not exist.</h3>
 
-      <h3 ng-show="data.loading"><i class="icon-spinner icon-spin icon-4x"></i></h3>
+      <h3 ng-show="data.loading"><i class="icon-refresh icon-spin icon-4x"></i></h3>
+
+      <div id="graph"></div>
 
       <table class="table table-bordered table-hover table-condensed">
         <tr ng-repeat="link in data.links track by $index">

@@ -1,4 +1,4 @@
-WG.controller('BaseController', function BaseController($scope, $routeParams, $location, Data, Fetch) {
+WG.controller('BaseController', function BaseController($scope, $routeParams, $location, Data, Fetch, Graph) {
   $scope.data = Data;
   $scope.form = $scope.form || {};
 
@@ -9,22 +9,23 @@ WG.controller('BaseController', function BaseController($scope, $routeParams, $l
     $location.path('/' + $scope.form.page + '/');
   };
 
-  console.log($routeParams);
   if ($routeParams.page) {
     $scope.form.page = $routeParams.page;
-
     $scope.data.loading = true;
     $scope.data.basePage = $scope.form.page;
     $scope.data.failure = false;
+
     Fetch.getLinks($scope.form.page,
       function(result) {
         $scope.data.loading = false;
         $scope.data.links = result;
+        Graph.refresh($scope.data);
       },
       function(result) {
         $scope.data.loading = false;
         $scope.data.links = [];
         $scope.data.failure = true;
+        Graph.refresh($scope.data);
       }
     );
   } else {

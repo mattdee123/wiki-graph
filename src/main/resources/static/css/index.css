@@ -5,3 +5,7 @@ body {
 .jumbotron {
   border-radius: 0;
 }
+
+.link {
+  stroke: #888;
+}
