@@ -9,3 +9,8 @@ body {
 .link {
   stroke: #888;
 }
+
+.d3tooltip {
+  background-color: rgb(0, 0, 0, 0.8);
+  color: white;
+}

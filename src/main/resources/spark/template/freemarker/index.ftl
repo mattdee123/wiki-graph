@@ -14,6 +14,7 @@
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.3.3/d3.min.js"></script>
   <script src="/js/lib/d3-bootstrap.min.js"></script>
+  <script src="/js/lib/d3-helper.js"></script>
   <script src="/js/lib/underscore.min.js"></script>
   <script src="/js/lib/bootstrap.min.js"></script>
 

@@ -44,7 +44,7 @@ WG.service('Graph', function() {
       group: 0
     });
 
-    for (var i = 1; i < Math.min(data.links.length, 100); i++) {
+    for (var i = 1; i < Math.min(data.links.length, 30); i++) {
       graph.nodes.push({
         name: data.links[i],
         group: 1
@@ -61,7 +61,7 @@ WG.service('Graph', function() {
 
     var color = d3.scale.category20();
 
-    var force = d3.layout.force().charge(-1000).linkDistance(50).size([width, height]);
+    var force = d3.layout.force().charge(-1000).linkDistance(80).size([width, height]);
 
     var svg = d3.select("#graph").append("svg").attr("width", width).attr("height", height);
 
@@ -77,14 +77,9 @@ WG.service('Graph', function() {
     .data(graph.nodes)
     .enter().append("circle")
     .attr("class", "node")
-    .attr("tooltip", '')
-    .attr("title", function(d) { console.log(d.name); return d.name; })
     .attr("r", 5)
     .style("fill", function(d) { return color(d.group); })
     .call(force.drag);
-
-    node.append("title")
-    .text(function(d) { return d.name; });
 
     force.on("tick", function() {
       link.attr("x1", function(d) { return d.source.x; })
@@ -96,7 +91,12 @@ WG.service('Graph', function() {
       .attr("cy", function(d) { return d.y; });
     });
 
-    d3.selectAll('.node').call(bootstrap.tooltip().placement('right'));
+    node.call(d3.helper.tooltip()
+      .style('color', '#fafafa')
+      .style('background-color', 'rgba(0, 0, 0, 0.8')
+      .style('padding', '3px')
+      .style('border-radius', '2px')
+      .text(function(d) { return d.name; }));
   };
 
   return Graph;
