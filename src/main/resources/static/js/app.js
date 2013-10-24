@@ -44,7 +44,7 @@ WG.service('Graph', function() {
       group: 0
     });
 
-    for (var i = 1; i < Math.min(data.links.length, 30); i++) {
+    for (var i = 1; i < Math.min(data.links.length, 200); i++) {
       graph.nodes.push({
         name: data.links[i],
         group: 1
@@ -56,7 +56,7 @@ WG.service('Graph', function() {
       });
     }
 
-    var width = 960;
+    var width = 1000;
     var height = 600;
 
     var color = d3.scale.category20();
@@ -65,21 +65,25 @@ WG.service('Graph', function() {
 
     var svg = d3.select("#graph").append("svg").attr("width", width).attr("height", height);
 
-    force.nodes(graph.nodes).links(graph.links).start();
+    force
+    .nodes(graph.nodes)
+    .links(graph.links)
+    .start();
 
     var link = svg.selectAll(".link")
     .data(graph.links)
-    .enter().append("line")
+    .enter()
+    .append("line")
     .attr("class", "link")
     .style("stroke-width", function(d) { return d.value; });
 
     var node = svg.selectAll(".node")
     .data(graph.nodes)
-    .enter().append("circle")
+    .enter()
+    .append("circle")
     .attr("class", "node")
-    .attr("r", 5)
-    .style("fill", function(d) { return color(d.group); })
-    .call(force.drag);
+    .attr("r", function(d) { return Math.max(5, 10 - d.group * 3); })
+    .style("fill", function(d) { return color(d.group); });
 
     force.on("tick", function() {
       link.attr("x1", function(d) { return d.source.x; })
@@ -94,8 +98,8 @@ WG.service('Graph', function() {
     node.call(d3.helper.tooltip()
       .style('color', '#fafafa')
       .style('background-color', 'rgba(0, 0, 0, 0.8')
-      .style('padding', '3px')
-      .style('border-radius', '2px')
+      .style('padding', '3px 6px')
+      .style('border-radius', '4px')
       .text(function(d) { return d.name; }));
   };
 
