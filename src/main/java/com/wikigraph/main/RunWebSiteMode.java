@@ -10,11 +10,11 @@ import spark.Response;
 import spark.Route;
 import spark.template.freemarker.FreeMarkerRoute;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import static spark.Spark.externalStaticFileLocation;
 import static spark.Spark.get;
@@ -49,15 +49,16 @@ public class RunWebSiteMode implements RunMode {
         Collection<Article> articles = null;
         try (Transaction tx = store.beginTxn()) {
           Article start = store.forTitle(pageName);
+          if (start == null) {
+            halt(404);
+            return null;
+          }
           articles = start.getOutgoingLinks();
           tx.success();
         }
-        if (articles == null) {
-          halt(404);
-          return null;
-        }
 
-        List<String> links = new ArrayList<>();
+
+        Set<String> links = new HashSet<>();
         for (Article a : articles) {
           links.add(a.getTitle());
         }
