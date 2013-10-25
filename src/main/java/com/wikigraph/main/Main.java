@@ -15,8 +15,7 @@ public class Main {
     modes.put("slice", new WikiDumpSlicerMode());
     modes.put("parse", new ParseMode());
     modes.put("test", new TestMode());
-    modes.put("connections", new ConnectionsMode());
-    modes.put("test-parse", new TestParseMode());
+    modes.put("add", new AddToGraphMode());
 
     if (args.length < 1) {
       System.out.println("No run mode given: possible run modes are:" + modes.keySet());
