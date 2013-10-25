@@ -2,7 +2,6 @@ package com.wikigraph.main;
 
 import com.wikigraph.graph.Article;
 import com.wikigraph.graph.ArticleStore;
-import com.wikigraph.graph.Articles;
 import com.wikigraph.neo4j.Neo4jArticleStore;
 import org.json.JSONArray;
 import org.neo4j.graphdb.Transaction;
@@ -12,6 +11,7 @@ import spark.Route;
 import spark.template.freemarker.FreeMarkerRoute;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,12 +46,10 @@ public class RunWebSiteMode implements RunMode {
       @Override
       public Object handle(Request request, Response response) {
         String pageName = request.queryParams("page");
-        Map<Article, Articles.ArticleInfo> articles;
-
+        Collection<Article> articles = null;
         try (Transaction tx = store.beginTxn()) {
           Article start = store.forTitle(pageName);
-          articles = (start == null) ? null :
-                  Articles.articlesToDepth(start, MAX_DEPTH, MAX_DEGREE, MAX_ARTICLES);
+          articles = start.getOutgoingLinks();
           tx.success();
         }
         if (articles == null) {
@@ -60,7 +58,7 @@ public class RunWebSiteMode implements RunMode {
         }
 
         List<String> links = new ArrayList<>();
-        for (Article a : articles.keySet()) {
+        for (Article a : articles) {
           links.add(a.getTitle());
         }
         JSONArray linksJson = new JSONArray(links);

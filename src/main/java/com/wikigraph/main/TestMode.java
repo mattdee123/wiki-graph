@@ -1,24 +1,52 @@
 package com.wikigraph.main;
 
-import com.wikigraph.graph.Article;
-import com.wikigraph.graph.ArticleStore;
-import com.wikigraph.neo4j.Neo4jArticleStore;
+import com.wikigraph.wikidump.WikiLabels;
+import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.ResourceIterator;
 import org.neo4j.graphdb.Transaction;
-
-import java.util.Collection;
+import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 
 public class TestMode implements RunMode {
   @Override
   public void run(String[] args) {
     System.out.println("Creating db");
-    ArticleStore store = Neo4jArticleStore.forDatabaseAt(args[0]);
-    System.out.println("Created, getting node");
-    try (Transaction tx = store.beginTxn()) {
-      Article article = store.forTitle("United States");
-      System.out.println("Got Node!");
-      Collection<Article> links = article.getOutgoingLinks();
-      System.out.printf("Got %d links!%n", links.size());
-    }
+    final GraphDatabaseService graph = new GraphDatabaseFactory().newEmbeddedDatabase(args[0]);
+    Runtime.getRuntime().addShutdownHook(new Thread() {
+      @Override
+      public void run() {
+        graph.shutdown();
+      }
+    });
+    System.out.println("Created, getting nodes");
+    test("United States", graph);
+    test("Canada", graph);
+    test("Singapore American School", graph);
+    test("Wikipedia", graph);
+    test("University", graph);
+    test("Facebook", graph);
 
+  }
+
+  public static void test(String title, GraphDatabaseService graph) {
+    System.out.println("Getting for " + title);
+    try (Transaction tx = graph.beginTx()) {
+      System.out.println("Getting Node...");
+      try (ResourceIterator<Node> iterator = graph.findNodesByLabelAndProperty(WikiLabels.NODE, "title",
+              title).iterator()) {
+        System.out.println("Got Node!");
+        Node node = iterator.next();
+        System.out.println("Getting Links");
+        Iterable<Relationship> links = node.getRelationships(Direction.OUTGOING);
+        System.out.println("Got iterable!");
+        int d = 0;
+        for (Relationship r : links) {
+          System.out.print("."); d++;
+        }
+        System.out.printf("Got %d links!%n", d);
+      }
+    }
   }
 }
