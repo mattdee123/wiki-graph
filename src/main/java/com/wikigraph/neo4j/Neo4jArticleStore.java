@@ -14,16 +14,7 @@ import javax.validation.constraints.NotNull;
 public class Neo4jArticleStore implements ArticleStore {
 
   public static Neo4jArticleStore forDatabaseAt(String storeDir) {
-    final GraphDatabaseService graph = new GraphDatabaseFactory().newEmbeddedDatabase
-            (storeDir);
-    // Add shutdown hook
-    Runtime.getRuntime().addShutdownHook(new Thread() {
-      @Override
-      public void run() {
-        graph.shutdown();
-      }
-    });
-
+    final GraphDatabaseService graph = Neo4j.getGraph(storeDir);
     return new Neo4jArticleStore(graph);
   }
 
