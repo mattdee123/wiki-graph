@@ -3,13 +3,11 @@ package com.wikigraph.graph;
 
 import com.google.common.collect.ImmutableList;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
 
 /*
@@ -20,7 +18,7 @@ public class Articles {
   returns : map from (article) -> (depth, children)
    */
   public static Map<Article, ArticleInfo> articlesToDepth(Article start, int maxDepth,
-                                                   int maxDegree, int maxArticles) {
+                                                          int maxDegree, int maxArticles) {
     Map<Article, ArticleInfo> result = newHashMap();
     Queue<NodeDepth> frontier = new LinkedList<>();
     frontier.add(NodeDepth.of(start, 0));
@@ -34,7 +32,7 @@ public class Articles {
       if (depth >= maxDepth) {
         children = ImmutableList.of(); //We will add no children
       } else {
-        children = firstK(article.getOutgoingLinks(), Math.min(articlesLeft, maxDegree));
+        children = article.getOutgoingLinks(Math.min(articlesLeft, maxDegree));
         for (Article child : children) {
           if (!result.containsKey(child)) {
             frontier.add(NodeDepth.of(child, depth + 1));
@@ -45,18 +43,6 @@ public class Articles {
       result.put(article, ArticleInfo.of(children, depth));
     }
     return result;
-  }
-
-  private static Collection<Article> firstK(Collection<Article> all, int k) {
-    ArrayList<Article> list = newArrayList();
-    int limit = Math.min(k, all.size());
-    int added = 0;
-    for (Article a : all) {
-      if (added >= limit) break;
-      list.add(a);
-      added += 1;
-    }
-    return list;
   }
 
   /*

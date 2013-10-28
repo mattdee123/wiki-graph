@@ -14,6 +14,4 @@ public interface ArticleStore {
 
   public Article forTitle(String title);
 
-  public Transaction beginTxn();
-
 }

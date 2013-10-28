@@ -12,9 +12,9 @@ public abstract class Article {
 
   public abstract boolean isRedirect();
 
-  public abstract Collection<Article> getIncomingLinks();
+  public abstract Collection<Article> getIncomingLinks(int limit);
 
-  public abstract Collection<Article> getOutgoingLinks();
+  public abstract Collection<Article> getOutgoingLinks(int limit);
 
   //Title and Redirect should uniquely identify an Article
   public int hashCode() {
