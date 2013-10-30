@@ -34,73 +34,94 @@ WG.service('Fetch', function($http) {
 WG.service('Graph', function() {
   var Graph = {};
 
-  Graph.refresh = function(data) {
-    var graph = {};
-    graph.nodes = [];
-    graph.links = [];
-
-    graph.nodes.push({
-      name: data.basePage,
-      group: 0
-    });
-
-    for (var i = 1; i < Math.min(data.links.length, 200); i++) {
-      graph.nodes.push({
-        name: data.links[i],
-        group: 1
-      });
-      graph.links.push({
-        source: 0,
-        target: i,
-        value: 1
-      });
+  var formatData = function(data, maxChildren) {
+    if (maxChildren === undefined) {
+      maxChildren = 100;
     }
 
-    var width = 1000;
-    var height = 600;
+    var result = {
+      id: '0',
+      name: data.basePage
+    };
 
-    var color = d3.scale.category20();
-
-    var force = d3.layout.force().charge(-1000).linkDistance(80).size([width, height]);
-
-    var svg = d3.select("#graph").append("svg").attr("width", width).attr("height", height);
-
-    force
-    .nodes(graph.nodes)
-    .links(graph.links)
-    .start();
-
-    var link = svg.selectAll(".link")
-    .data(graph.links)
-    .enter()
-    .append("line")
-    .attr("class", "link")
-    .style("stroke-width", function(d) { return d.value; });
-
-    var node = svg.selectAll(".node")
-    .data(graph.nodes)
-    .enter()
-    .append("circle")
-    .attr("class", "node")
-    .attr("r", function(d) { return Math.max(5, 10 - d.group * 3); })
-    .style("fill", function(d) { return color(d.group); });
-
-    force.on("tick", function() {
-      link.attr("x1", function(d) { return d.source.x; })
-      .attr("y1", function(d) { return d.source.y; })
-      .attr("x2", function(d) { return d.target.x; })
-      .attr("y2", function(d) { return d.target.y; });
-
-      node.attr("cx", function(d) { return d.x; })
-      .attr("cy", function(d) { return d.y; });
+    result.children = _.map(data.links, function(x, i) {
+      return {
+        id: 'level1' + i,
+        name: x
+      };
     });
 
-    node.call(d3.helper.tooltip()
-      .style('color', '#fafafa')
-      .style('background-color', 'rgba(0, 0, 0, 0.8')
-      .style('padding', '3px 6px')
-      .style('border-radius', '4px')
-      .text(function(d) { return d.name; }));
+    result.children = _.first(result.children, maxChildren);
+
+    return result;
+  };
+
+  Graph.refresh = function(data) {
+    var rgraph = new $jit.RGraph({
+      injectInto: 'graph',
+
+      background: {
+        CanvasStyles: {
+          strokeStyle: '#555'
+        }
+      },
+
+      Navigation: {
+        enable: true,
+        panning: true,
+        zooming: 10
+      },
+
+      Node: {
+        color: '#0099dd',
+        dim: 1.75
+      },
+
+      Edge: {
+        color: '#0099dd',
+        lineWidth: 0.5
+      },
+
+      onCreateLabel: function(domElement, node) {
+        domElement.innerHTML = node.name;
+        domElement.onclick = function() {
+          rgraph.onClick(node.id);
+        };
+      },
+
+      onPlaceLabel: function(domElement, node) {
+        var style = domElement.style;
+        style.display = '';
+        style.cursor = 'pointer';
+
+        if (node._depth <= 1) {
+          style.fontSize = "0.9em";
+          style.color = "#ccc";
+
+        } else if(node._depth == 2){
+          style.fontSize = "0.8em";
+          style.color = "#777";
+
+        } else {
+          style.display = 'none';
+        }
+
+        var left = parseInt(style.left, 10);
+        var w = domElement.offsetWidth;
+        style.left = (left - w / 2) + 'px';
+      }
+    });
+
+    rgraph.loadJSON(formatData(data, 20));
+    rgraph.graph.eachNode(function(n) {
+      var pos = n.getPos();
+      pos.setc(-200, -200);
+    });
+    rgraph.compute('end');
+    rgraph.fx.animate({
+      modes:['polar'],
+      duration: 2000
+    });
   };
 
   return Graph;
