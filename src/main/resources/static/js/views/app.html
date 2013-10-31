@@ -1,6 +1,6 @@
 <div class="container">
-  <div class="jumbotron">
-    <h1 class="text-center">Wiki Graph</h1>
+  <div class="query-field">
+    <!-- <h1 class="text-center">Wiki Graph</h1> -->
     <form ng-submit="refresh()">
       <div class="input-group">
         <input id="input-page" class="form-control input-large" type="text" placeholder="Page to query" ng-model="form.page">
@@ -11,17 +11,13 @@
     </form>
   </div>
 
-  <div class="panel" id="content" ng-controller="GraphController" ng-show="data.basePage">
+  <div class="panel" id="content" ng-show="data.basePage">
     <div class="panel-heading">
-      <h2 id="content-heading" ng-show="data.basePage">
-        <a href="http://en.wikipedia.org/w/index.php?title={{ data.basePage | urlencode }}">
-          {{ data.basePage }}
-        </a>
+      <h3 id="content-heading" ng-show="data.basePage">
+        <a href="http://en.wikipedia.org/w/index.php?title={{ data.basePage | urlencode }}">{{ data.basePage }}</a>
         -
-        <a href="http://en.wikipedia.org/w/index.php?title={{ data.basePage | urlencode }}&action=raw">
-          Raw
-        </a>
-      </h2>
+        <a href="http://en.wikipedia.org/w/index.php?title={{ data.basePage | urlencode }}&action=raw">Raw</a>
+      </h3>
     </div>
     <div id="content-body" ng-show="data.links.length || data.failure || data.loading">
       <h3 ng-show="data.failure">That page does not exist.</h3>

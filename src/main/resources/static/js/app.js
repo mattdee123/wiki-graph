@@ -74,7 +74,18 @@ WG.service('Graph', function() {
 
       Node: {
         color: '#0099dd',
-        dim: 1.75
+        dim: 4,
+      },
+
+      Tips: {
+        enable: true,
+        type: 'Native',
+        offsetX: 10,
+        offsetY: 10,
+        color: '#fff',
+        onShow: function(tip, node) {
+          tip.innerHTML = node.name;
+        }
       },
 
       Edge: {
@@ -82,11 +93,21 @@ WG.service('Graph', function() {
         lineWidth: 0.5
       },
 
-      onCreateLabel: function(domElement, node) {
-        domElement.innerHTML = node.name;
-        domElement.onclick = function() {
-          rgraph.onClick(node.id);
-        };
+      Events: {
+        enable: true,
+        type: 'Native',
+        onClick: function(node, eventInfo, e) {
+          if (!node) {
+            return;
+          }
+          if (node.nodeFrom) {
+            return;
+          }
+          rgraph.onClick(node.id, {
+            duration: 500,
+            transition: $jit.Trans.Quad.easeInOut
+          });
+        }
       },
 
       onPlaceLabel: function(domElement, node) {
@@ -94,14 +115,9 @@ WG.service('Graph', function() {
         style.display = '';
         style.cursor = 'pointer';
 
-        if (node._depth <= 1) {
-          style.fontSize = "0.9em";
-          style.color = "#ccc";
-
-        } else if(node._depth == 2){
+        if (node._depth === 0) {
           style.fontSize = "0.8em";
-          style.color = "#777";
-
+          style.color = "#ccc";
         } else {
           style.display = 'none';
         }
@@ -114,14 +130,15 @@ WG.service('Graph', function() {
 
     rgraph.loadJSON(formatData(data, 20));
     rgraph.graph.eachNode(function(n) {
-      var pos = n.getPos();
-      pos.setc(-200, -200);
+      n.getPos().setc(-200, -200);
     });
     rgraph.compute('end');
-    rgraph.fx.animate({
-      modes:['polar'],
-      duration: 2000
-    });
+    // rgraph.fx.animate({
+    //   modes:['polar'],
+    //   duration: 1000
+    // });
+    rgraph.refresh();
+    rgraph.canvas.scale(2, 2);
   };
 
   return Graph;

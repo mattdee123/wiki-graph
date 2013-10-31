@@ -19,6 +19,5 @@
 
   <script src="/js/app.js"></script>
   <script src="/js/controllers/base_controller.js"></script>
-  <script src="/js/controllers/graph_controller.js"></script>
 </body>
 </html>
