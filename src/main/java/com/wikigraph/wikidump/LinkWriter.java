@@ -15,7 +15,38 @@ import java.util.List;
 import java.util.Map;
 
 import static com.wikigraph.wikidump.WikidumpHandler.Page;
+/*
+  Creates links.csv of format
 
+  inID, outID
+
+  and badlinks.csv (just for debugging really), of format
+
+  badlink |in| article
+
+  sample links.csv:
+
+  0,262139
+  1,15170
+  1,2048507
+  1,9006
+  1,8979586
+  1,34159
+  1,2082674
+  1,34159
+  1,18614
+  1,162159
+
+  sample badlinks.csv:
+
+  Wikt:anarchism|in| Anarchism
+  Wikt:brigand|in| Anarchism
+  A. K. Press|in| Anarchism
+  Anarchism_in_Italy|in| Anarchism
+  Anarchism_in_France|in| Anarchism
+  Simon_Critchley|in| Anarchism
+  Anarchist Voices: An Oral History of Anarchism in America|in| Anarchism
+ */
 public class LinkWriter implements PageProcessor {
   private final Writer linkWriter;
   private final Writer badLinkWriter;
@@ -30,9 +61,11 @@ public class LinkWriter implements PageProcessor {
     File linkFile = new File(outDir, "links.csv");
     File badLinkFile = new File(outDir, "badLinks.csv");
     try {
+      linkFile.createNewFile();
+      badLinkFile.createNewFile();
       this.linkWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(linkFile)));
       this.badLinkWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(badLinkFile)));
-    } catch (FileNotFoundException e) {
+    } catch (IOException e) {
       throw Throwables.propagate(e);
     }
     this.parser = parser;
@@ -49,7 +82,7 @@ public class LinkWriter implements PageProcessor {
         to = TitleFixer.toTitle(to);
         Integer toId = idMap.get(to);
         if (toId == null) {
-          badLinkWriter.write(to + "|in| " + from + "\n");
+          badLinkWriter.write(to + " |in| " + from + "\n");
           badCount++;
         } else {
           linkWriter.write(joiner.join(fromId, toId) + "\n");
