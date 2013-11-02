@@ -17,6 +17,7 @@ public class Main {
     modes.put("test", new TestMode());
     modes.put("cap", new TestCapitalsMode());
     modes.put("hash", new HashMode());
+    modes.put("index", new IndexMode());
 
     if (args.length < 1) {
       System.out.println("No run mode given: possible run modes are:" + modes.keySet());

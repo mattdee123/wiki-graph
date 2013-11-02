@@ -12,6 +12,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Charsets.UTF_8;
@@ -39,18 +41,23 @@ import static com.wikigraph.wikidump.WikidumpHandler.Page;
   */
 public class ArticleWriter implements PageProcessor {
   private final Writer articleWriter;
+  private final Writer duplicateWriter;
   Map<String, Integer> ids = Maps.newHashMapWithExpectedSize(14000000);
   int count = 0;
   Joiner joiner = Joiner.on('|');
   HashFunction sha256 = Hashing.sha256();
-
+  List<Character> duplicates = new ArrayList<>();
+  TitleFixer titleFixer = TitleFixer.getFixer();
 
   public ArticleWriter(String outDir) {
     File articleFile = new File(outDir, "articles.csv");
+    File duplicateFile = new File(outDir, "duplicates.csv");
     try {
-      articleFile.mkdirs();
+      articleFile.getParentFile().mkdirs();
       articleFile.createNewFile();
       articleWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(articleFile)));
+      duplicateWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(duplicateFile)));
+
     } catch (IOException e) {
       throw Throwables.propagate(e);
     }
@@ -59,13 +66,14 @@ public class ArticleWriter implements PageProcessor {
   @Override
   public void processPage(Page currentPage) {
     try {
-      String title = TitleFixer.toTitle(currentPage.title);
-      long hash = sha256.hashString(title, UTF_8).asLong();
+      String title = titleFixer.toTitle(currentPage.title);
       if (ids.containsKey(title)) {
-        System.out.println("Duplicate:" + title);
+        System.out.println("Ignoring Duplicate:" + title + ", Current: "+currentPage.title);
+        duplicateWriter.write("|capitalized|" + title + " |lowercaseFirstChar| " +
+                currentPage.title.substring(0, 1).toLowerCase() + '\n');
+        duplicates.add(currentPage.title.toLowerCase().charAt(0));
       } else {
-        articleWriter.write(joiner.join(count, hash, title.replace("\\", "\\\\"),
-                currentPage.redirect != null ? 1 : 0) + "\n");
+        articleWriter.write(joiner.join(count, title) + "\n");
         ids.put(title, count);
         count++;
       }
@@ -82,7 +90,11 @@ public class ArticleWriter implements PageProcessor {
   public void finish() {
     System.out.printf("Wrote %d articles, saved %d ids%n", count, ids.size());
     try {
+      for (char c: duplicates) {
+        duplicateWriter.write(c);
+      }
       articleWriter.close();
+      duplicateWriter.close();
     } catch (IOException e) {
       e.printStackTrace();
     }

@@ -1,27 +1,19 @@
 package com.wikigraph.main;
 
-import com.google.common.base.Throwables;
-import com.mysql.jdbc.Driver;
+import com.wikigraph.Indexer;
+import com.wikigraph.LinksSource;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.io.File;
+
+import static com.wikigraph.graph.Direction.OUTGOING;
+
 
 public class TestMode implements RunMode {
   @Override
   public void run(String[] args) {
-    Connection connection = null;
-    try {
-      DriverManager.registerDriver(new Driver());
-      System.out.println("Connecting...");
-      connection = DriverManager.getConnection("jdbc:mysql://localhost/wikipedia", "root", "");
-      Statement statement = connection.createStatement();
-      statement.executeUpdate("CREATE TABLE wikipedia");
-      System.out.println("Closing...");
-    } catch (SQLException e) {
-      throw Throwables.propagate(e);
-    }
+    File in = new File(args[0]);
+    File outDir = new File(args[1]);
+    new Indexer(new LinksSource(OUTGOING)).write(in, outDir);
   }
 
   /* LOAD DATA INFILE '/Users/mattdee/Development/articles.csv' into table articles FIELDS TERMINATED BY '|';

@@ -1,10 +1,32 @@
 package com.wikigraph.wikidump;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /*
 Static class with function to fix titles.  Not the best style to have it static, but I see no need to change this now
  */
 public class TitleFixer {
-  public static String toTitle(String line) {
+  //"ẗßⅰⅱⅲⅳⅴⅵⅶⅷⅸⅹⅺⅻⅼⅽⅾⅿﬁﬂﬀﬃﬄﬅﬆǉǰǌǳⓩⓨⓧⓦⓥⓤⓣⓢⓡⓠⓟⓞⓝⓜⓛⓚⓙⓘⓗⓖⓕⓔⓓⓒⓑⓐǆẖͅ"
+  private static final String DONT_CAPITALIZE = "ẗßⅰⅱⅲⅳⅴⅵⅶⅷⅸⅹⅺⅻⅼⅽⅾⅿﬁﬂﬀﬃﬄﬅﬆǉǰǌǳⓩⓨⓧⓦⓥⓤⓣⓢⓡⓠⓟⓞⓝⓜⓛⓚⓙⓘⓗⓖⓕⓔⓓⓒⓑⓐǆẖǈͅǲǅ";
+  private static TitleFixer singleton;
+  private Set<Character> uncapitalizables;
+
+  public static TitleFixer getFixer() {
+    if (singleton == null) {
+      singleton = new TitleFixer();
+    }
+    return singleton;
+  }
+
+  private TitleFixer() {
+    uncapitalizables = new HashSet<>();
+    for (char c : DONT_CAPITALIZE.toCharArray()) {
+      uncapitalizables.add(c);
+    }
+  }
+
+  public String toTitle(String line) {
     line = line.trim();
     if (line.length() == 0) {
       return line;
@@ -14,7 +36,7 @@ public class TitleFixer {
      This is so stupid... are there no standards for capitalizing....
       */
     String title;
-    if (line.charAt(0) != 'ß' && line.charAt(0) != 'ẗ') {
+    if (!uncapitalizables.contains(line.charAt(0))) {
       title = line.substring(0, 1).toUpperCase() + line.substring(1);
       return title;
     }

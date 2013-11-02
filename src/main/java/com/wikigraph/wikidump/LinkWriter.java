@@ -6,15 +6,16 @@ import com.google.common.collect.ImmutableList;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import static com.wikigraph.wikidump.WikidumpHandler.Page;
+
 /*
   Creates links.csv of format
 
@@ -53,8 +54,10 @@ public class LinkWriter implements PageProcessor {
   private final LinkParser parser;
   private int goodCount = 0;
   private int badCount = 0;
+  private int lastId = 0;
   private final Map<String, Integer> idMap;
   private Joiner joiner = Joiner.on(',');
+  private TitleFixer titleFixer = TitleFixer.getFixer();
 
   public LinkWriter(String outDir, LinkParser parser, Map<String, Integer> idMap) {
     this.idMap = idMap;
@@ -75,20 +78,28 @@ public class LinkWriter implements PageProcessor {
   public void processPage(Page currentPage) {
     List<String> links = currentPage.redirect == null ? parser.getConnections(currentPage.text) : ImmutableList.of
             (currentPage.redirect);
-    String from = TitleFixer.toTitle(currentPage.title);
+    String from = titleFixer.toTitle(currentPage.title);
     int fromId = idMap.get(from);
+    if (fromId < lastId) {
+      System.err.printf("Skipping out-of-order index (probably caused by duplicates) title=%s%n", from);
+      return;
+    }
+    lastId = fromId;
+    List<Integer> ids = new ArrayList<>(links.size());
+    ids.add(fromId);
     try {
       for (String to : links) {
-        to = TitleFixer.toTitle(to);
+        to = titleFixer.toTitle(to);
         Integer toId = idMap.get(to);
         if (toId == null) {
           badLinkWriter.write(to + " |in| " + from + "\n");
           badCount++;
         } else {
-          linkWriter.write(joiner.join(fromId, toId) + "\n");
+          ids.add(toId);
           goodCount++;
         }
       }
+      linkWriter.write(joiner.join(ids)+"\n");
     } catch (IOException e) {
       throw Throwables.propagate(e);
     }

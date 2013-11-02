@@ -22,6 +22,7 @@ public class SqlStore implements ArticleStore {
   private static final int REDIRECT_COL = 3;
   private final Connection connection;
   private final PreparedStatement query;
+  private TitleFixer titleFixer = TitleFixer.getFixer();
 
 
   public SqlStore(String dbName) {
@@ -52,7 +53,7 @@ public class SqlStore implements ArticleStore {
   @Override
   public Article forTitle(String title) {
     System.out.println("Getting article for " + title);
-    long hash = Hashing.sha256().hashString(TitleFixer.toTitle(title), UTF_8).asLong();
+    long hash = Hashing.sha256().hashString(titleFixer.toTitle(title), UTF_8).asLong();
     try {
 
       query.setLong(1, hash);
