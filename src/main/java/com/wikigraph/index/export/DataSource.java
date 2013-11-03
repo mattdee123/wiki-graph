@@ -1,4 +1,4 @@
-package com.wikigraph;
+package com.wikigraph.index.export;
 
 import java.io.DataOutputStream;
 

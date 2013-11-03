@@ -1,4 +1,4 @@
-package com.wikigraph;
+package com.wikigraph.index.export;
 
 import com.google.common.base.Throwables;
 import com.wikigraph.graph.Direction;
@@ -23,10 +23,10 @@ public class LinksSource implements DataSource {
   public int getIndexAndWriteData(DataOutputStream outputStream, String line) {
     try {
       String[] words = line.split(",");
-      for (int i = 1; i < words.length; i++) {
-        outputStream.writeInt(Integer.parseInt(words[i]));
-      }
-      return Integer.parseInt(words[0]);
+      int index = Integer.parseInt(words[indexPos]);
+      int target = Integer.parseInt(words[targetPos]);
+      outputStream.writeInt(target);
+      return index;
     } catch (IOException e) {
       throw Throwables.propagate(e);
     }

@@ -10,7 +10,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -85,8 +84,6 @@ public class LinkWriter implements PageProcessor {
       return;
     }
     lastId = fromId;
-    List<Integer> ids = new ArrayList<>(links.size());
-    ids.add(fromId);
     try {
       for (String to : links) {
         to = titleFixer.toTitle(to);
@@ -95,11 +92,10 @@ public class LinkWriter implements PageProcessor {
           badLinkWriter.write(to + " |in| " + from + "\n");
           badCount++;
         } else {
-          ids.add(toId);
+          linkWriter.write(joiner.join(fromId, toId) + "\n");
           goodCount++;
         }
       }
-      linkWriter.write(joiner.join(ids)+"\n");
     } catch (IOException e) {
       throw Throwables.propagate(e);
     }

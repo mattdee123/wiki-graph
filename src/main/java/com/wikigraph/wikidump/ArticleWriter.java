@@ -3,8 +3,6 @@ package com.wikigraph.wikidump;
 import com.google.common.base.Joiner;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Maps;
-import com.google.common.hash.HashFunction;
-import com.google.common.hash.Hashing;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -16,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.base.Charsets.UTF_8;
 import static com.wikigraph.wikidump.WikidumpHandler.Page;
 
 /*
@@ -45,7 +42,6 @@ public class ArticleWriter implements PageProcessor {
   Map<String, Integer> ids = Maps.newHashMapWithExpectedSize(14000000);
   int count = 0;
   Joiner joiner = Joiner.on('|');
-  HashFunction sha256 = Hashing.sha256();
   List<Character> duplicates = new ArrayList<>();
   TitleFixer titleFixer = TitleFixer.getFixer();
 
@@ -68,7 +64,7 @@ public class ArticleWriter implements PageProcessor {
     try {
       String title = titleFixer.toTitle(currentPage.title);
       if (ids.containsKey(title)) {
-        System.out.println("Ignoring Duplicate:" + title + ", Current: "+currentPage.title);
+        System.out.println("Ignoring Duplicate:" + title + ", Current: " + currentPage.title);
         duplicateWriter.write("|capitalized|" + title + " |lowercaseFirstChar| " +
                 currentPage.title.substring(0, 1).toLowerCase() + '\n');
         duplicates.add(currentPage.title.toLowerCase().charAt(0));
@@ -90,7 +86,7 @@ public class ArticleWriter implements PageProcessor {
   public void finish() {
     System.out.printf("Wrote %d articles, saved %d ids%n", count, ids.size());
     try {
-      for (char c: duplicates) {
+      for (char c : duplicates) {
         duplicateWriter.write(c);
       }
       articleWriter.close();

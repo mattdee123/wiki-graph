@@ -1,4 +1,4 @@
-package com.wikigraph;
+package com.wikigraph.index;
 
 import com.wikigraph.graph.Article;
 import com.wikigraph.graph.ArticleStore;

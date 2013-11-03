@@ -1,4 +1,4 @@
-package com.wikigraph;
+package com.wikigraph.index;
 
 import java.io.File;
 import java.io.IOException;

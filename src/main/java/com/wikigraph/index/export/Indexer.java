@@ -1,4 +1,6 @@
-package com.wikigraph;
+package com.wikigraph.index.export;
+
+import com.google.common.base.Throwables;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -27,30 +29,32 @@ public class Indexer {
       DataOutputStream dataWriter = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(dataFile)));
       BufferedReader reader = new BufferedReader(new FileReader(in));
 
-      int nextIndex = 1;
+      int lastIndex = -1;
       System.out.printf("Indexing to indexfile %s and datafile %s%n", indexFile, dataFile);
 
-      indexWriter.writeInt(dataWriter.size());
       String line;
       while (null != (line = reader.readLine())) {
+        int pos = dataWriter.size();
         int index = dataSource.getIndexAndWriteData(dataWriter, line);
-        if (index < nextIndex) {
-          System.err.printf("Out of order index, exiting now: expected next index=%d, found index=%d%n",
-                  nextIndex, index);
+        // If the new index was before the previous one
+        if (lastIndex > index) {
+          System.err.printf("Out of order index, exiting now: expected >=%d, found index=%d%n",
+                  lastIndex, index);
           return;
         }
-        while (nextIndex <= index) {
+        while (lastIndex < index) {
           // Write the current pointer of the dataWriter to the index
-          indexWriter.writeInt(dataWriter.size());
-          nextIndex++;
+          lastIndex++;
+          indexWriter.writeInt(pos);
         }
       }
+      indexWriter.writeInt(dataWriter.size());
       //Write end of data file here.
       indexWriter.close();
       dataWriter.close();
       System.out.println("Done Writing!");
     } catch (IOException e) {
-      e.printStackTrace();
+      throw Throwables.propagate(e);
     }
   }
 

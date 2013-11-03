@@ -1,4 +1,4 @@
-package com.wikigraph;
+package com.wikigraph.index;
 
 import com.google.common.base.Throwables;
 
@@ -23,7 +23,7 @@ public abstract class Index<T> {
 
   public T forIndex(int index) {
     try {
-      if (index * 4 > indexFile.length()) {
+      if ((index + 1) * 4 > indexFile.length()) {
         return null;
       }
       indexFile.seek(index * 4);
@@ -31,6 +31,14 @@ public abstract class Index<T> {
       int endPos = indexFile.readInt();
       dataFile.seek(pos);
       return getData(dataFile, endPos - pos);
+    } catch (IOException e) {
+      throw Throwables.propagate(e);
+    }
+  }
+
+  public int size() {
+    try {
+      return ((int) indexFile.length() / 4) - 1;
     } catch (IOException e) {
       throw Throwables.propagate(e);
     }
