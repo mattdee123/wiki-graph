@@ -17,7 +17,7 @@ public class ArticleSource implements DataSource {
     } catch (IOException e) {
       throw Throwables.propagate(e);
     } catch (NumberFormatException e) {
-//      System.out.printf("Bad String: %s%n", source);
+      System.out.printf("Bad String: %s%n", source);
       throw Throwables.propagate(e);
     }
   }

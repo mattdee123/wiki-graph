@@ -2,13 +2,14 @@ package com.wikigraph.main;
 
 import com.wikigraph.graph.Article;
 import com.wikigraph.graph.ArticleStore;
-import com.wikigraph.sql.SqlStore;
+import com.wikigraph.index.IndexArticleStore;
 import org.json.JSONArray;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 import spark.template.freemarker.FreeMarkerRoute;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,12 +28,12 @@ public class RunWebSiteMode implements RunMode {
   @Override
   public void run(String[] args) {
     if (args.length != 1) {
-      System.out.println("Requires 1 argument: [database name]");
+      System.out.println("Requires 1 argument: [index dir]");
       System.exit(1);
     }
     externalStaticFileLocation("src/main/resources/static");
 
-    final ArticleStore store = new SqlStore("wikipedia");
+    final ArticleStore store = new IndexArticleStore(new File(args[0]));
 
     get(new FreeMarkerRoute("/") {
       @Override
