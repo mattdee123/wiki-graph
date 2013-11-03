@@ -74,7 +74,7 @@ WG.service('Graph', function() {
 
       Node: {
         color: '#0099dd',
-        dim: 4,
+        dim: 3
       },
 
       Tips: {
@@ -82,7 +82,6 @@ WG.service('Graph', function() {
         type: 'Native',
         offsetX: 10,
         offsetY: 10,
-        color: '#fff',
         onShow: function(tip, node) {
           tip.innerHTML = node.name;
         }
@@ -97,14 +96,11 @@ WG.service('Graph', function() {
         enable: true,
         type: 'Native',
         onClick: function(node, eventInfo, e) {
-          if (!node) {
-            return;
-          }
-          if (node.nodeFrom) {
+          if (!node || node.nodeFrom) {
             return;
           }
           rgraph.onClick(node.id, {
-            duration: 500,
+            duration: 400,
             transition: $jit.Trans.Quad.easeInOut
           });
         }
@@ -115,7 +111,7 @@ WG.service('Graph', function() {
         style.display = '';
         style.cursor = 'pointer';
 
-        if (node._depth === 0) {
+        if (node._depth === 1) {
           style.fontSize = "0.8em";
           style.color = "#ccc";
         } else {
@@ -128,15 +124,11 @@ WG.service('Graph', function() {
       }
     });
 
-    rgraph.loadJSON(formatData(data, 20));
+    rgraph.loadJSON(formatData(data, 100));
     rgraph.graph.eachNode(function(n) {
       n.getPos().setc(-200, -200);
     });
     rgraph.compute('end');
-    // rgraph.fx.animate({
-    //   modes:['polar'],
-    //   duration: 1000
-    // });
     rgraph.refresh();
     rgraph.canvas.scale(2, 2);
   };
