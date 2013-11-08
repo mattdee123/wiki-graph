@@ -15,7 +15,9 @@ public class Main {
     modes.put("slice", new WikiDumpSlicerMode());
     modes.put("parse", new ParseMode());
     modes.put("test", new TestMode());
-    modes.put("add", new AddToGraphMode());
+    modes.put("cap", new TestCapitalsMode());
+    modes.put("hash", new HashMode());
+    modes.put("index", new IndexMode());
 
     if (args.length < 1) {
       System.out.println("No run mode given: possible run modes are:" + modes.keySet());
@@ -29,8 +31,7 @@ public class Main {
     if (runMode != null) {
       System.out.printf("Running with mode: %s%n", args[0]);
       runMode.run(otherArgs);
-    }
-    else {
+    } else {
       System.out.printf("No mode found matching: %s%n", args[0]);
       System.exit(1);
     }

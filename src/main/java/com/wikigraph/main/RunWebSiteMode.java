@@ -2,14 +2,14 @@ package com.wikigraph.main;
 
 import com.wikigraph.graph.Article;
 import com.wikigraph.graph.ArticleStore;
-import com.wikigraph.neo4j.Neo4jArticleStore;
+import com.wikigraph.index.IndexArticleStore;
 import org.json.JSONArray;
-import org.neo4j.graphdb.Transaction;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 import spark.template.freemarker.FreeMarkerRoute;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,16 +23,17 @@ public class RunWebSiteMode implements RunMode {
   private static final int MAX_DEPTH = 1;
   private static final int MAX_DEGREE = 11;
   private static final int MAX_ARTICLES = 50;
+  private static final int MAX_ROWS = 10000;
 
   @Override
   public void run(String[] args) {
     if (args.length != 1) {
-      System.out.println("Requires 1 argument: [storeDir]");
+      System.out.println("Requires 1 argument: [index dir]");
       System.exit(1);
     }
     externalStaticFileLocation("src/main/resources/static");
 
-    final ArticleStore store = Neo4jArticleStore.forDatabaseAt(args[0]);
+    final ArticleStore store = new IndexArticleStore(new File(args[0]));
 
     get(new FreeMarkerRoute("/") {
       @Override
@@ -47,16 +48,12 @@ public class RunWebSiteMode implements RunMode {
       public Object handle(Request request, Response response) {
         String pageName = request.queryParams("page");
         Collection<Article> articles = null;
-        try (Transaction tx = store.beginTxn()) {
-          Article start = store.forTitle(pageName);
-          if (start == null) {
-            halt(404);
-            return null;
-          }
-          articles = start.getOutgoingLinks();
-          tx.success();
+        Article start = store.forTitle(pageName);
+        if (start == null) {
+          halt(404);
+          return null;
         }
-
+        articles = start.getOutgoingLinks(MAX_ROWS);
 
         Set<String> links = new HashSet<>();
         for (Article a : articles) {
