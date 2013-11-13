@@ -68,7 +68,6 @@ WG.service('Graph', function() {
 
       Navigation: {
         enable: true,
-        panning: true,
         zooming: 10
       },
 
@@ -124,7 +123,7 @@ WG.service('Graph', function() {
       }
     });
 
-    rgraph.loadJSON(formatData(data, 100));
+    rgraph.loadJSON(formatData(data, 50));
     rgraph.graph.eachNode(function(n) {
       n.getPos().setc(-200, -200);
     });
