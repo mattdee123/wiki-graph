@@ -123,8 +123,20 @@ WG.service('Graph', function() {
       }
     });
 
-    rgraph.loadJSON(formatData(data, 50));
-    rgraph.graph.eachNode(function(n) {
+    var formattedData = {};
+    formattedData.name = data.basePage;
+    var basePageInfo = _.findWhere(data.children, {name: data.basePage});
+    formattedData.id = basePageInfo.id;
+    formattedData.children = _.filter(basePageInfo.children,
+      function (child) {
+        return child.name != formattedData.name &&
+        _.findWhere(basePageInfo.children, {id: child.id});
+      }
+    );
+    console.log(formattedData);
+    console.log(basePageInfo);
+    rgraph.loadJSON(formattedData);
+    rgraph.graph.eachNode(function (n) {
       n.getPos().setc(-200, -200);
     });
     rgraph.compute('end');

@@ -18,19 +18,19 @@ WG.controller('BaseController', function BaseController($scope, $routeParams, $l
     Fetch.getLinks($scope.form.page,
       function(result) {
         $scope.data.loading = false;
-        $scope.data.links = result;
+        $scope.data.children = result;
         Graph.refresh($scope.data);
       },
       function(result) {
         $scope.data.loading = false;
-        $scope.data.links = [];
+        $scope.data.children = [];
         $scope.data.failure = true;
         Graph.refresh($scope.data);
       }
     );
   } else {
     $scope.form.page = '';
-    $scope.data.links = [];
+    $scope.data.children = [];
     $scope.data.loading = false;
     $scope.data.failure = false;
   }

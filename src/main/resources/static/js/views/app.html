@@ -19,7 +19,7 @@
         <a href="http://en.wikipedia.org/w/index.php?title={{ data.basePage | urlencode }}&action=raw">Raw</a>
       </h3>
     </div>
-    <div id="content-body" ng-show="data.links.length || data.failure || data.loading">
+    <div id="content-body" ng-show="data.children.length || data.failure || data.loading">
       <h3 ng-show="data.failure">That page does not exist.</h3>
 
       <h3 ng-show="data.loading"><i class="icon-refresh icon-spin icon-4x"></i></h3>

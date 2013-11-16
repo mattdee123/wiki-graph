@@ -10,6 +10,8 @@ public abstract class Article {
 
   public abstract String getTitle();
 
+  public abstract int getId();
+
   public abstract boolean isRedirect();
 
   public abstract Collection<Article> getIncomingLinks(int limit);

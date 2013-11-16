@@ -1,6 +1,8 @@
 package com.wikigraph.graph;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.ImmutableList;
 
 import java.util.Collection;
@@ -17,7 +19,7 @@ public class Articles {
   /*
   returns : map from (article) -> (depth, children)
    */
-  public static Map<Article, ArticleInfo> articlesToDepth(Article start, int maxDepth,
+  public static Collection<ArticleInfo> articlesToDepth(Article start, int maxDepth,
                                                           int maxDegree, int maxArticles) {
     Map<Article, ArticleInfo> result = newHashMap();
     Queue<NodeDepth> frontier = new LinkedList<>();
@@ -40,9 +42,9 @@ public class Articles {
           }
         }
       }
-      result.put(article, ArticleInfo.of(children, depth));
+      result.put(article, ArticleInfo.of(article.getTitle(), article.getId(), children, depth));
     }
-    return result;
+    return result.values();
   }
 
   /*
@@ -51,11 +53,22 @@ public class Articles {
 
   /* Class which represents the information necessary to display an article */
   public static class ArticleInfo {
+    @JsonProperty("name")
+    public String title;
+
+    @JsonProperty("id")
+    public String id;
+
+    @JsonIgnore
     public int depth;
+
+    @JsonProperty("children")
     public Collection<Article> links;
 
-    public static ArticleInfo of(Collection<Article> links, int depth) {
+    public static ArticleInfo of(String title, int id, Collection<Article> links, int depth) {
       ArticleInfo info = new ArticleInfo();
+      info.title = title;
+      info.id = id + "";
       info.depth = depth;
       info.links = links;
       return info;
