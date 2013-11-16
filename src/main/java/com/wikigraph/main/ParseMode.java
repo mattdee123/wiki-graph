@@ -4,7 +4,7 @@ import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
 import com.google.common.base.Throwables;
 import com.google.common.io.Files;
-import com.wikigraph.LinkParser;
+import com.wikigraph.wikidump.LinkParser;
 
 import java.io.File;
 import java.io.IOException;

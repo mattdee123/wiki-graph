@@ -1,4 +1,4 @@
-package com.wikigraph;
+package com.wikigraph.wikidump;
 
 import com.google.common.collect.ImmutableList;
 
@@ -8,11 +8,10 @@ import java.util.List;
  * Parses out the links from the markup.  Tries to only get the links in the body of the article
  * (ie., ignores
  */
-public class LinkParser implements ConnectionParser {
+public class LinkParser {
   private static final String LINK_FRONT = "[[";
   private static final String LINK_END = "]]";
 
-  @Override
   public List<String> getConnections(String markup) {
     int currentIndex = 0;
     int length = markup.length();
@@ -24,6 +23,12 @@ public class LinkParser implements ConnectionParser {
       int endIndex = markup.indexOf(LINK_END, frontIndex);
       if (endIndex == -1)
         break;
+      //Deal with unclosed links
+      int nextFront = markup.indexOf(LINK_FRONT, frontIndex + LINK_FRONT.length());
+      if (nextFront != -1 && nextFront < endIndex) {
+        currentIndex = nextFront;
+        continue;
+      }
       currentIndex = endIndex + LINK_END.length();
       String inBrackets = markup.substring(frontIndex + LINK_FRONT.length(), endIndex);
       // Both of these are delimiters in the markup which come after the link name
@@ -40,7 +45,9 @@ public class LinkParser implements ConnectionParser {
 //        System.err.printf("Ignoring %s because of invalid beginning%n", title);
         continue;
       }
-      listBuilder.add(title);
+      if (title.indexOf('\n') == -1) {
+        listBuilder.add(title);
+      }
     }
     return listBuilder.build();
   }
