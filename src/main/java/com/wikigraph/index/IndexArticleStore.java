@@ -36,7 +36,9 @@ public class IndexArticleStore implements ArticleStore {
     if (id == null) {
       return null;
     } else {
-      return new IndexArticle(title, id, outgoingIndex, incomingIndex, articleIndex);
+      IndexArticle article = new IndexArticle(id, outgoingIndex, incomingIndex, articleIndex);
+      article.setTitle(title);
+      return article;
     }
   }
 }

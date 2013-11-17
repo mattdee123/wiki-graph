@@ -3,6 +3,7 @@ package com.wikigraph.main;
 import com.wikigraph.graph.Article;
 import com.wikigraph.graph.ArticleStore;
 import com.wikigraph.index.IndexArticleStore;
+import com.wikigraph.main.RunMode;
 import org.json.JSONArray;
 import spark.Request;
 import spark.Response;
