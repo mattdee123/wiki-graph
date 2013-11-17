@@ -8,7 +8,7 @@ Static class with function to fix titles.  Not the best style to have it static,
  */
 public class TitleFixer {
   //"ẗßⅰⅱⅲⅳⅴⅵⅶⅷⅸⅹⅺⅻⅼⅽⅾⅿﬁﬂﬀﬃﬄﬅﬆǉǰǌǳⓩⓨⓧⓦⓥⓤⓣⓢⓡⓠⓟⓞⓝⓜⓛⓚⓙⓘⓗⓖⓕⓔⓓⓒⓑⓐǆẖͅ"
-  private static final String DONT_CAPITALIZE = "ẗßⅰⅱⅲⅳⅴⅵⅶⅷⅸⅹⅺⅻⅼⅽⅾⅿﬁﬂﬀﬃﬄﬅﬆǉǰǌǳⓩⓨⓧⓦⓥⓤⓣⓢⓡⓠⓟⓞⓝⓜⓛⓚⓙⓘⓗⓖⓕⓔⓓⓒⓑⓐǆẖǈͅǲǅ";
+  private static final String DONT_CAPITALIZE = "ǋẗßⅰⅱⅲⅳⅴⅵⅶⅷⅸⅹⅺⅻⅼⅽⅾⅿﬁﬂﬀﬃﬄﬅﬆǉǰǌǳⓩⓨⓧⓦⓥⓤⓣⓢⓡⓠⓟⓞⓝⓜⓛⓚⓙⓘⓗⓖⓕⓔⓓⓒⓑⓐǆẖǈͅǲǅ";
   private static TitleFixer singleton;
   private Set<Character> uncapitalizables;
 

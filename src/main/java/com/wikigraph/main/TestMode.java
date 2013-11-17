@@ -1,18 +1,18 @@
 package com.wikigraph.main;
 
+import com.google.common.collect.Lists;
 import com.wikigraph.index.LinkIndex;
 
 import java.io.File;
+import java.util.List;
 
 
 public class TestMode implements RunMode {
   @Override
   public void run(String[] args) {
-    File in = new File(args[0]);
-    LinkIndex index = new LinkIndex(in);
-    for (int i = 0; i < 11; i++) {
-      System.out.println(index.forIndex(i));
-    }
+    List<Integer> l = Lists.newArrayListWithCapacity(10);
+    l.set(9,1);
+    System.out.println(l);
   }
 
   /* LOAD DATA INFILE '/Users/mattdee/Development/articles.csv' into table articles FIELDS TERMINATED BY '|';

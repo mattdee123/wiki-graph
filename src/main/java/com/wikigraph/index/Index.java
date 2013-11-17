@@ -9,6 +9,11 @@ import java.io.RandomAccessFile;
 
 public abstract class Index<T> {
 
+  public static final String OUT_DIR = "outgoing";
+  public static final String IN_DIR = "incoming";
+  public static final String ARTICLE_DIR = "article-id";
+  public static final String ARTICLE_HASH_DIR = "article-hash";
+
   private RandomAccessFile indexFile;
   private RandomAccessFile dataFile;
 

@@ -24,24 +24,4 @@ public class ArticleIndex extends Index<String> {
     }
     return fixer.toTitle(new String(chars));
   }
-
-  public Map<String, Integer> getMap() {
-    System.out.println("Getting Reverse Map...");
-    Map<String, Integer> map = new HashMap<>(size());
-    for (int i = 0; i < size(); i++) {
-      if (i % 100000 == 0) {
-        System.out.println(i);
-      }
-      String s = forIndex(i);
-      if (s != null) {
-        map.put(s, i);
-      }
-    }
-    System.out.println("Got Reverse Map!");
-    String s = map.keySet().iterator().next();
-    System.out.println(s);
-
-    return map;
-  }
-
 }

@@ -47,7 +47,7 @@ public class RunWebSiteMode implements RunMode {
       @Override
       public Object handle(Request request, Response response) {
         String pageName = request.queryParams("page");
-        Collection<Article> articles = null;
+        Collection<Article> articles;
         Article start = store.forTitle(pageName);
         if (start == null) {
           halt(404);
@@ -59,6 +59,7 @@ public class RunWebSiteMode implements RunMode {
         for (Article a : articles) {
           links.add(a.getTitle());
         }
+        System.out.printf("Returning %d links%n", links.size());
         JSONArray linksJson = new JSONArray(links);
         return linksJson.toString();
       }
