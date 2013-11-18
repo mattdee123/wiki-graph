@@ -7,19 +7,14 @@ import com.wikigraph.algorithms.GraphVertex;
 import com.wikigraph.graph.Article;
 import com.wikigraph.graph.ArticleStore;
 import com.wikigraph.index.IndexArticleStore;
-import com.wikigraph.main.RunMode;
-import org.json.JSONArray;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 import spark.template.freemarker.FreeMarkerRoute;
 
 import java.io.File;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import static spark.Spark.externalStaticFileLocation;
 import static spark.Spark.get;
@@ -50,7 +45,7 @@ public class RunWebSiteMode implements RunMode {
         int maxDepth = Integer.parseInt(request.queryParams("maxDepth"));
         int maxDegree = Integer.parseInt(request.queryParams("maxDegree"));
         int maxArticles = Integer.parseInt(request.queryParams("maxArticles"));
-        Collection<Article> articles;
+
         Article start = store.forTitle(pageName);
         if (start == null) {
           halt(404);
@@ -67,6 +62,20 @@ public class RunWebSiteMode implements RunMode {
           e.printStackTrace();
           return "{}";
         }
+      }
+    });
+
+    get(new Route("/path") {
+      @Override
+      public Object handle(Request request, Response response) {
+        Article start = store.forTitle(request.queryParams("start"));
+        Article end = store.forTitle(request.queryParams("end"));
+
+        Algos.Path result = Algos.shortestPath(start, end);
+
+        System.out.println("Found path: " + result);
+
+        return result.toList().toString();
       }
     });
   }

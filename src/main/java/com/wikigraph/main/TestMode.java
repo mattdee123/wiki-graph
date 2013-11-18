@@ -20,7 +20,7 @@ public class TestMode implements RunMode {
     Article b = articleStore.forTitle(args[2]);
     Path p = Algos.shortestPath(a, b);
     System.out.println("Finished! The path is: "+ p);
-
+    System.out.println(p.toList());
 
   }
 }
