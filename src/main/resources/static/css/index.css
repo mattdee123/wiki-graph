@@ -14,6 +14,10 @@ body {
   height: 100px;
 }
 
+#content {
+  color: #eaeaea;
+}
+
 #graph {
   text-align: center;
   width: 100%;

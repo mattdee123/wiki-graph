@@ -23,7 +23,6 @@
         <input class="form-control" type="number" ng-model="form.maxArticles" ng-value="100">
       </div>
     </form>
-      <h3 ng-show="data.loading"><i class="icon-refresh icon-spin icon-4x"></i></h3>
   </div>
 
   <div class="" id="content" ng-show="data.basePage">
@@ -38,9 +37,7 @@
     -->
     <div id="content-body" ng-show="data.graph.children.length || data.failure || data.loading">
       <h3 class="text-center" ng-show="data.failure">That page does not exist.</h3>
-
-      <h3 class="text-center" ng-show="data.loading"><i class="icon-refresh icon-spin icon-4x"></i></h3>
-
+      <h3 class="text-center" ng-show="data.loading"><i class="icon-refresh icon-spin"></i></h3>
       <div id="graph"></div>
 
 <!--       <table class="table table-bordered table-hover table-condensed">

@@ -71,7 +71,8 @@ WG.service('Graph', function() {
 
       Navigation: {
         enable: true,
-        zooming: 10
+        zooming: 10,
+        panning: true
       },
 
       Node: {
