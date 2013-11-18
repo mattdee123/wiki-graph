@@ -6,8 +6,16 @@ WG.filter('urlencode', function() {
 
 WG.config(function($routeProvider) {
   $routeProvider
-  .when('/', {templateUrl: '/js/views/app.html', controller: 'BaseController', reloadOnSearch: false})
-  .when('/algos', {templateUrl: '/js/views/algos.html', controller: 'AlgosController'});
+  .when('/', {
+    templateUrl: '/js/views/app.html',
+    controller: 'BaseController',
+    reloadOnSearch: false
+  })
+  .when('/algos', {
+    templateUrl: '/js/views/algos.html',
+    controller: 'AlgosController',
+    reloadOnSearch: false
+  });
 });
 
 WG.factory('Data', function($http) {
