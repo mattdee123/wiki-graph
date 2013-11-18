@@ -1,7 +1,10 @@
 package com.wikigraph.wikidump;
 
+import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Throwables;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import java.io.BufferedWriter;
@@ -37,22 +40,34 @@ import static com.wikigraph.wikidump.WikidumpHandler.Page;
   9|5294478145563524887|AssistiveTechnology|1
   */
 public class ArticleWriter implements PageProcessor {
-  private final Writer articleWriter;
+
+  public static final int NUM_BUCKETS = 15000000;
+  public static final String ARTICLE_HASH = "article-hash.csv";
+  public static final String ARTICLE_ID = "article-id.csv";
+
+  private final Writer articleIdWriter;
   private final Writer duplicateWriter;
+  private final Writer articleHashWriter;
+
   Map<String, Integer> ids = Maps.newHashMapWithExpectedSize(14000000);
+  List<List<String>> buckets = Lists.newArrayListWithCapacity(NUM_BUCKETS);
   int count = 0;
   Joiner joiner = Joiner.on('|');
   List<Character> duplicates = new ArrayList<>();
   TitleFixer titleFixer = TitleFixer.getFixer();
 
   public ArticleWriter(String outDir) {
-    File articleFile = new File(outDir, "articles.csv");
+    while (buckets.size() < NUM_BUCKETS) {
+      buckets.add(new ArrayList<String>());
+    }
+    File articleIdFile = new File(outDir, ARTICLE_ID);
+    File articleHashFile = new File(outDir, ARTICLE_HASH);
     File duplicateFile = new File(outDir, "duplicates.csv");
     try {
-      articleFile.getParentFile().mkdirs();
-      articleFile.createNewFile();
-      articleWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(articleFile)));
+      articleIdFile.getParentFile().mkdirs();
+      articleIdWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(articleIdFile)));
       duplicateWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(duplicateFile)));
+      articleHashWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(articleHashFile)));
 
     } catch (IOException e) {
       throw Throwables.propagate(e);
@@ -69,7 +84,13 @@ public class ArticleWriter implements PageProcessor {
                 currentPage.title.substring(0, 1).toLowerCase() + '\n');
         duplicates.add(currentPage.title.toLowerCase().charAt(0));
       } else {
-        articleWriter.write(joiner.join(count, title) + "\n");
+        articleIdWriter.write(joiner.join(count, title) + "\n");
+        int bucket = title.hashCode() % NUM_BUCKETS;
+        if (bucket < 0) {
+          bucket += NUM_BUCKETS;
+        }
+
+        buckets.get(bucket).add(title);
         ids.put(title, count);
         count++;
       }
@@ -89,8 +110,23 @@ public class ArticleWriter implements PageProcessor {
       for (char c : duplicates) {
         duplicateWriter.write(c);
       }
-      articleWriter.close();
+      articleIdWriter.close();
       duplicateWriter.close();
+      System.out.println("Now Writing hash values");
+      for (int i = 0; i < NUM_BUCKETS; i++) {
+        if (buckets.get(i).size() > 0) {
+          Iterable<String> nameAndIdString = Iterables.transform(buckets.get(i), new Function<String, String>() {
+            @Override
+            public String apply(String title) {
+              return String.format("%s#%d", title, ids.get(title));
+            }
+          });
+
+          articleHashWriter.write(i + "|" + joiner.join(nameAndIdString) + "\n");
+        }
+      }
+      articleHashWriter.close();
+      buckets = null;
     } catch (IOException e) {
       e.printStackTrace();
     }

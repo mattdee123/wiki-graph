@@ -48,6 +48,10 @@ import static com.wikigraph.wikidump.WikidumpHandler.Page;
   Anarchist Voices: An Oral History of Anarchism in America|in| Anarchism
  */
 public class LinkWriter implements PageProcessor {
+
+  public static final String IN = "in.csv";
+  public static final String OUT = "links.csv";
+
   private final Writer linkWriter;
   private final Writer badLinkWriter;
   private final LinkParser parser;
@@ -60,7 +64,7 @@ public class LinkWriter implements PageProcessor {
 
   public LinkWriter(String outDir, LinkParser parser, Map<String, Integer> idMap) {
     this.idMap = idMap;
-    File linkFile = new File(outDir, "links.csv");
+    File linkFile = new File(outDir, OUT);
     File badLinkFile = new File(outDir, "badLinks.csv");
     try {
       linkFile.createNewFile();

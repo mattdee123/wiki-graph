@@ -11,26 +11,35 @@ import java.util.Collection;
 import java.util.List;
 
 public class IndexArticle extends Article {
-  @JsonProperty("name")
-  private final String title;
+  private String title;
 
-  @JsonProperty("id")
   private final int id;
 
   private final LinkIndex outgoingIndex;
   private final LinkIndex incomingIndex;
   private final ArticleIndex articleIndex;
 
-  public IndexArticle(String title, int id, LinkIndex outgoingIndex, LinkIndex incomingIndex, ArticleIndex articleIndex) {
-    this.title = title;
+  public IndexArticle(int id, LinkIndex outgoingIndex, LinkIndex incomingIndex, ArticleIndex articleIndex) {
     this.id = id;
     this.outgoingIndex = outgoingIndex;
     this.incomingIndex = incomingIndex;
     this.articleIndex = articleIndex;
   }
+/* Only to be used when we know the title in advance */
+  public void setTitle(String title) {
+    if (this.title == null) {
+      this.title = title;
+    } else {
+      System.err.println("Tried to set title that was already set");
+    }
+
+  }
 
   @Override
   public String getTitle() {
+    if (title == null) {
+      title = articleIndex.forIndex(id);
+    }
     return title;
   }
 
@@ -40,7 +49,6 @@ public class IndexArticle extends Article {
   }
 
   @Override
-  @JsonIgnore
   public boolean isRedirect() {
     return false;  //TODO : get this working!
   }
@@ -64,8 +72,7 @@ public class IndexArticle extends Article {
     Collection<Article> result = new ArrayList<>(max);
     for (int i = 0; i < max; i++) {
       int newId = links.get(i);
-      String title = articleIndex.forIndex(newId);
-      result.add(new IndexArticle(title, newId, outgoingIndex, incomingIndex, articleIndex));
+      result.add(new IndexArticle(newId, outgoingIndex, incomingIndex, articleIndex));
     }
     return result;
   }

@@ -1,29 +1,27 @@
 package com.wikigraph.main;
 
+import com.google.common.base.Stopwatch;
+import com.google.common.collect.Lists;
+import com.wikigraph.algorithms.Algos;
+import com.wikigraph.algorithms.GraphVertex;
+import com.wikigraph.graph.Article;
+import com.wikigraph.graph.ArticleStore;
+import com.wikigraph.index.IndexArticleStore;
 import com.wikigraph.index.LinkIndex;
 
 import java.io.File;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 public class TestMode implements RunMode {
   @Override
   public void run(String[] args) {
-    File in = new File(args[0]);
-    LinkIndex index = new LinkIndex(in);
-    for (int i = 0; i < 11; i++) {
-      System.out.println(index.forIndex(i));
-    }
+    ArticleStore articleStore = new IndexArticleStore(new File(args[0]));
+    Article a = articleStore.forTitle("United States");
+    Stopwatch stopwatch = new Stopwatch().start();
+    GraphVertex v = Algos.getSubGraph(a, 3, 500, 1000);
+    stopwatch.stop();
+    System.out.println("DONE!  " + stopwatch.elapsed(TimeUnit.MILLISECONDS) + "\n" + v);
   }
-
-  /* LOAD DATA INFILE '/Users/mattdee/Development/articles.csv' into table articles FIELDS TERMINATED BY '|';
-
-     CREATE TABLE links( start INTEGER NOT NULL, end INTEGER NOT NULL, INDEX (start), INDEX (end));
-
-      CREATE TABLE articles (id INTEGER NOT NULL, hash BIGINT NOT NULL, name VARCHAR(512) NOT NULL,
-      redirect BOOL NOT NULL,
-      PRIMARY KEY (id),
-      UNIQUE INDEX(hash)) CHARACTER SET ISO-8859-1;
-      INSERT INTO links (start,end) VALUES (1,1);
-      for i in `ls`; do echo $i; mysql -uroot -pmatt -e "LOAD DATA INFILE '/data/articles/$i' into table wikipedia.articles FIELDS TERMINATED BY '|'"; done;
-   */
 }

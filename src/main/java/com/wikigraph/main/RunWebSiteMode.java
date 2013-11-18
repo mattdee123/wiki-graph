@@ -2,10 +2,12 @@ package com.wikigraph.main;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wikigraph.algorithms.Algos;
+import com.wikigraph.algorithms.GraphVertex;
 import com.wikigraph.graph.Article;
 import com.wikigraph.graph.ArticleStore;
-import com.wikigraph.graph.Articles;
 import com.wikigraph.index.IndexArticleStore;
+import org.json.JSONArray;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -14,7 +16,6 @@ import spark.template.freemarker.FreeMarkerRoute;
 import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static spark.Spark.externalStaticFileLocation;
@@ -48,14 +49,14 @@ public class RunWebSiteMode implements RunMode {
       @Override
       public Object handle(Request request, Response response) {
         String pageName = request.queryParams("page");
-        Collection<Article> articles = null;
+        Collection<Article> articles;
         Article start = store.forTitle(pageName);
         if (start == null) {
           halt(404);
           return null;
         }
         articles = start.getOutgoingLinks(MAX_ROWS);
-        Collection result = Articles.articlesToDepth(start, MAX_DEPTH, MAX_DEGREE, MAX_ARTICLES);
+        GraphVertex result = Algos.getSubGraph(start, MAX_DEPTH, MAX_DEGREE, MAX_ARTICLES);
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -65,13 +66,6 @@ public class RunWebSiteMode implements RunMode {
           e.printStackTrace();
           return "{}";
         }
-
-//        Set<String> links = new HashSet<>();
-//        for (Article a : articles) {
-//          links.add(a.getTitle());
-//        }
-//        JSONArray linksJson = new JSONArray(links);
-//        return linksJson.toString();
       }
     });
   }

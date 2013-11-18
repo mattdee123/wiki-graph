@@ -10,8 +10,6 @@ import java.util.concurrent.TimeUnit;
 
 public class WikidumpHandler extends DefaultHandler {
 
-
-
   private int pageNum;
   private long lastElapsed;
   private Page currentPage;
@@ -36,7 +34,8 @@ public class WikidumpHandler extends DefaultHandler {
       currentPage = new Page();
       if ((pageNum & 16383) == 0) {
         long thisElapsed = stopwatch.elapsed(TimeUnit.MILLISECONDS);
-        System.out.printf("Page %d started, elapsed time = %ds (+%dms)%n", pageNum, thisElapsed / 1000, thisElapsed - lastElapsed);
+        System.out.printf("\rPage %d started, elapsed time = %ds (+%dms)", pageNum, thisElapsed / 1000,
+                thisElapsed - lastElapsed);
         lastElapsed = thisElapsed;
       }
       pageNum++;
@@ -65,7 +64,8 @@ public class WikidumpHandler extends DefaultHandler {
   public void endDocument() throws SAXException {
     super.endDocument();
     pageProcessor.finish();
-    System.out.println("Finished!");
+    System.out.println("\nFinished! Took " + stopwatch.elapsed((TimeUnit.SECONDS)) + "s");
+    stopwatch.stop();
   }
 
   @Override
