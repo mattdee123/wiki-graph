@@ -21,9 +21,9 @@ import static spark.Spark.externalStaticFileLocation;
 import static spark.Spark.get;
 
 public class RunWebSiteMode implements RunMode {
-  private static final int MAX_DEPTH = 1;
-  private static final int MAX_DEGREE = 11;
-  private static final int MAX_ARTICLES = 50;
+  private static final int MAX_DEPTH = 5;
+  private static final int MAX_DEGREE = 20;
+  private static final int MAX_ARTICLES = 1000;
   private static final int MAX_ROWS = 10000;
 
   @Override

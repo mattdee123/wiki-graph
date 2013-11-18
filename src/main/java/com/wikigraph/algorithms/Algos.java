@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
@@ -53,6 +54,42 @@ public class Algos {
       }
     }
     return root;
+  }
+
+  public static Path shortestPath(Article start, Article end) {
+    Queue<Path> frontier = new LinkedList<>();
+    Set<Article> seen = new HashSet<>();
+    frontier.add(Path.of(0, start, null));
+    while (!frontier.isEmpty()) {
+      Path path = frontier.remove();
+      System.out.println(path.end.getTitle());
+
+      if(!seen.contains(path.end)) {
+        seen.add(path.end);
+        for(Article child : path.end.getOutgoingLinks(-1)) {
+          Path newPath = Path.of(path.depth+1, child, path);
+          if (child.equals(end)) {
+            return newPath;
+          }
+          frontier.add(newPath);
+        }
+      }
+    }
+    return null;
+  }
+
+  public static class Path {
+    public int depth;
+    public Article end;
+    public Path previous;
+
+    public static Path of(int depth, Article end, Path previous) {
+      Path path = new Path();
+      path.depth = depth;
+      path.previous = previous;
+      path.end = end;
+      return path;
+    }
   }
 
   /*
