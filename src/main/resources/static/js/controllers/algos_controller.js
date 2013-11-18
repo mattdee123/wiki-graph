@@ -1,6 +1,7 @@
 WG.controller('AlgosController', function($scope, Fetch) {
   $scope.form = {};
   $scope.shortestPathLoading = false;
+  $scope.shortestPath = {};
 
   $scope.shortestPath = function() {
     $scope.shortestPathLoading = true;
@@ -14,5 +15,11 @@ WG.controller('AlgosController', function($scope, Fetch) {
         $scope.shortestPathResult = [];
       }
     );
+  };
+
+  $scope.switchShortestPath = function() {
+    var tmp = $scope.shortestPath.start;
+    $scope.shortestPath.start = $scope.shortestPath.end;
+    $scope.shortestPath.end = tmp;
   };
 });

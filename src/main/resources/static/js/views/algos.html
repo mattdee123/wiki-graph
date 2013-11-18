@@ -9,11 +9,16 @@
           <input id="input-page" class="form-control input-large" type="text"
           placeholder="Start" ng-model="shortestPath.start">
         </div>
+        <div class="col-lg-1">
+          <button type="button" class="btn btn-default form-control input-large" ng-click="switchShortestPath()">
+            <i class="icon-exchange"></i>
+          </button>
+        </div>
         <div class="col-lg-5">
           <input id="input-page" class="form-control input-large" type="text"
           placeholder="End" ng-model="shortestPath.end">
         </div>
-        <div class="col-lg-2">
+        <div class="col-lg-1">
           <input type="submit" class="btn btn-primary form-control input-large" value="Run">
         </div>
       </div>
