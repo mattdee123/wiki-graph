@@ -3,6 +3,8 @@ package com.wikigraph.graph;
 import com.google.common.base.Objects;
 
 import java.util.Collection;
+import java.util.List;
+
 /*
 Immutable class which represents a Wikipedia article, and allows graph operations.
  */
@@ -14,19 +16,20 @@ public abstract class Article {
 
   public abstract boolean isRedirect();
 
-  public abstract Collection<Article> getIncomingLinks(int limit);
+  /* Subzero limit => no limit */
+  public abstract List<Article> getIncomingLinks(int limit);
 
-  public abstract Collection<Article> getOutgoingLinks(int limit);
+  /* Subzero limit => no limit */
+  public abstract List<Article> getOutgoingLinks(int limit);
 
-  //Title and Redirect should uniquely identify an Article
   public int hashCode() {
-    return Objects.hashCode(getTitle(), isRedirect());
+    return getId();
   }
 
   public boolean equals(Object o) {
     if (o instanceof Article) {
       Article other = (Article) o;
-      return Objects.equal(other.getTitle(), getTitle()) && other.isRedirect() == isRedirect();
+      return other.getId() == getId();
     }
     return false;
   }

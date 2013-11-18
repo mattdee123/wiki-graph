@@ -1,19 +1,19 @@
 package com.wikigraph.algorithms;
 
 
-import com.google.common.collect.ImmutableList;
+import com.google.common.base.Stopwatch;
 import com.wikigraph.graph.Article;
 
+import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
-import static com.google.common.collect.Maps.newHashMap;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 /*
 Collection of static helper functions regarding the graph
@@ -24,7 +24,7 @@ public class Algos {
    */
   public static GraphVertex getSubGraph(Article start, int maxDepth, int maxDegree, int maxArticles) {
     GraphVertex root = new GraphVertex(start.getTitle(), start.getId());
-    Queue<NodeDepth> frontier = new LinkedList<>();
+    Queue<NodeDepth> frontier = new ArrayDeque<>();
     Map<Article, GraphVertex> seen = new HashMap<>();
     frontier.add(NodeDepth.of(start, 0, root));
     int articlesLeft = maxArticles - 1; // Includes articles in the frontier in amount subtracted
@@ -60,17 +60,26 @@ public class Algos {
     Queue<Path> frontier = new LinkedList<>();
     Set<Article> seen = new HashSet<>();
     frontier.add(Path.of(0, start, null));
+    int depth = 0;
+    int searched = 0;
+    Stopwatch s = new Stopwatch().start();
     while (!frontier.isEmpty()) {
       Path path = frontier.remove();
-      System.out.println(path.end.getTitle());
 
-      if(!seen.contains(path.end)) {
-        seen.add(path.end);
-        for(Article child : path.end.getOutgoingLinks(-1)) {
-          Path newPath = Path.of(path.depth+1, child, path);
-          if (child.equals(end)) {
-            return newPath;
-          }
+      searched++;
+      if (searched % 1000 == 0) System.out.println("Searched " + searched + " in " + s.elapsed(MILLISECONDS) + "ms");
+
+      if (path.depth != depth) {
+        depth = path.depth;
+        System.out.printf("At Depth: %d, queue size=%d%n", depth, frontier.size());
+      }
+      seen.add(path.end);
+      for (Article child : path.end.getOutgoingLinks(-1)) {
+        Path newPath = Path.of(path.depth + 1, child, path);
+        if (child.equals(end)) {
+          return newPath;
+        }
+        if (!seen.contains(child)) {
           frontier.add(newPath);
         }
       }
@@ -89,6 +98,13 @@ public class Algos {
       path.previous = previous;
       path.end = end;
       return path;
+    }
+
+    public String toString() {
+      if(previous == null) {
+        return end.getTitle();
+      }
+      return previous + " -> " + end.getTitle();
     }
   }
 

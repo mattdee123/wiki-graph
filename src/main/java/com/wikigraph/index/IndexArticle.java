@@ -3,7 +3,6 @@ package com.wikigraph.index;
 import com.wikigraph.graph.Article;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class IndexArticle extends Article {
@@ -20,14 +19,14 @@ public class IndexArticle extends Article {
     this.incomingIndex = incomingIndex;
     this.articleIndex = articleIndex;
   }
-/* Only to be used when we know the title in advance */
+
+  /* Only to be used when we know the title in advance */
   public void setTitle(String title) {
     if (this.title == null) {
       this.title = title;
     } else {
       System.err.println("Tried to set title that was already set");
     }
-
   }
 
   @Override
@@ -49,19 +48,24 @@ public class IndexArticle extends Article {
   }
 
   @Override
-  public Collection<Article> getIncomingLinks(int limit) {
+  public List<Article> getIncomingLinks(int limit) {
     return getLinks(limit, incomingIndex);
   }
 
   @Override
-  public Collection<Article> getOutgoingLinks(int limit) {
+  public List<Article> getOutgoingLinks(int limit) {
     return getLinks(limit, outgoingIndex);
   }
 
-  private Collection<Article> getLinks(int limit, LinkIndex index) {
+  private List<Article> getLinks(int limit, LinkIndex index) {
     List<Integer> links = index.forIndex(id);
-    int max = Math.min(limit, links.size());
-    Collection<Article> result = new ArrayList<>(max);
+    int max;
+    if (limit < 0) {
+      max = links.size();
+    } else {
+      max = Math.min(limit, links.size());
+    }
+    List<Article> result = new ArrayList<>(max);
     for (int i = 0; i < max; i++) {
       int newId = links.get(i);
       result.add(new IndexArticle(newId, outgoingIndex, incomingIndex, articleIndex));
