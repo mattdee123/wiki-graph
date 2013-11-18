@@ -74,10 +74,17 @@ public class RunWebSiteMode implements RunMode {
       public Object handle(Request request, Response response) {
         Article start = store.forTitle(request.queryParams("start"));
         Article end = store.forTitle(request.queryParams("end"));
+        if (start == null || end == null) {
+          halt(404);
+          return null;
+        }
         Stopwatch stopwatch = new Stopwatch().start();
         Path result = Algos.bidirectionalSearch(start, end);
         stopwatch.stop();
         System.out.println("Found path: " + result + " in " + stopwatch.elapsed(MILLISECONDS) +"ms");
+        if (result == null) {
+          return null; //TODO (aakash?) return something sensible.
+        }
         return result.toList().toString();
       }
     });

@@ -1,6 +1,5 @@
 package com.wikigraph.algorithms;
 
-import com.google.common.base.Stopwatch;
 import com.wikigraph.graph.Article;
 
 import java.util.ArrayDeque;
@@ -10,8 +9,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
-
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 /*
 Collection of static helper functions regarding the graph
@@ -88,7 +85,7 @@ public class Algos {
 
   public static Path bidirectionalSearch(Article start, Article end) {
 
-    if(start.equals(end)) {
+    if (start.equals(end)) {
       return Path.of(0, start, null);
     }
 
@@ -106,50 +103,64 @@ public class Algos {
     endFrontier.add(endPath);
     while (!(startFrontier.isEmpty() || endFrontier.isEmpty())) {
       // Search Forwards
-      Queue<Path> nextStartFrontier = new ArrayDeque<>();
-      while (!startFrontier.isEmpty()) {
-        Path p = startFrontier.remove();
-        //@assert(!fromEnd.contains(p)); - we've already checked
-        for (Article child : p.end.getOutgoingLinks(-1)) {
-          if (fromStart.containsKey(child)) {
-            // We've already seen it from the start - carry on
-            continue;
-          }
-          if (fromEnd.containsKey(child)) {
-            // We've seen it from the end - DONE!
-            return p.withEnd(fromEnd.get(child));
-          } else {
-            Path newPath = Path.of(p.depth + 1, child, p);
-            fromStart.put(child, newPath);
-            nextStartFrontier.add(newPath);
-          }
-        }
-      }
-      startFrontier = nextStartFrontier;
-      // Search Backwards
-      Queue<Path> nextEndFrontier = new ArrayDeque<>();
-      while (!endFrontier.isEmpty()) {
-        Path p = endFrontier.remove();
-        //@assert(!fromStart.contains(p)); - we've already checked
-        for (Article child : p.end.getIncomingLinks(-1)) {
-          if (fromEnd.containsKey(child)) {
-            // We've already seen it from the start - carry on
-            continue;
-          }
-          if (fromStart.containsKey(child)) {
-            // We've seen it from the start - DONE!
-            return fromStart.get(child).withEnd(p);
-          } else {
-            Path newPath = Path.of(p.depth + 1, child, p);
-            fromEnd.put(child, newPath);
-            nextEndFrontier.add(newPath);
+      if (startFrontier.size() < endFrontier.size()) {
+        Queue<Path> nextStartFrontier = new ArrayDeque<>();
+        while (!startFrontier.isEmpty()) {
+          tick(fromEnd, fromStart);
+          Path p = startFrontier.remove();
+          //@assert(!fromEnd.contains(p)); - we've already checked
+          for (Article child : p.end.getOutgoingLinks(-1)) {
+            if (fromStart.containsKey(child)) {
+              // We've already seen it from the start - carry on
+              continue;
+            }
+            if (fromEnd.containsKey(child)) {
+              // We've seen it from the end - DONE!
+              return p.withEnd(fromEnd.get(child));
+            } else {
+              Path newPath = Path.of(p.depth + 1, child, p);
+              fromStart.put(child, newPath);
+              nextStartFrontier.add(newPath);
+            }
           }
         }
+        startFrontier = nextStartFrontier;
+      } else {
+        // Search Backwards
+        Queue<Path> nextEndFrontier = new ArrayDeque<>();
+        while (!endFrontier.isEmpty()) {
+          tick(fromEnd, fromStart);
+          Path p = endFrontier.remove();
+          //@assert(!fromStart.contains(p)); - we've already checked
+          for (Article child : p.end.getIncomingLinks(-1)) {
+            if (fromEnd.containsKey(child)) {
+              // We've already seen it from the start - carry on
+              continue;
+            }
+            if (fromStart.containsKey(child)) {
+              // We've seen it from the start - DONE!
+              return fromStart.get(child).withEnd(p);
+            } else {
+              Path newPath = Path.of(p.depth + 1, child, p);
+              fromEnd.put(child, newPath);
+              nextEndFrontier.add(newPath);
+            }
+          }
+        }
+        endFrontier = nextEndFrontier;
       }
-      endFrontier = nextEndFrontier;
     }
     return null;
 
+  }
+
+  static int counts = 0;
+
+  private static void tick(HashMap<Article, Path> fromEnd, HashMap<Article, Path> fromStart) {
+    counts++;
+    if (counts % 1000 == 0) {
+      System.out.printf("Looked at %d so far%n", counts);
+    }
   }
 
 

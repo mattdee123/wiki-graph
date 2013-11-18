@@ -31,14 +31,14 @@ public class Path {
   }
 
   public String toString() {
-    if(previous == null) {
-      return end.getTitle();
+    if (previous == null) {
+      return end.getTitle() + " (" + depth + ")";
     }
-    return previous + " -> " + end.getTitle();
+    return previous + " -> " + end.getTitle() + " (" + depth + ")";
   }
 
   public Path withEnd(Path end) {
-    if(end == null) {
+    if (end == null) {
       return this;
     }
     Path next = Path.of(depth + 1, end.end, this);
