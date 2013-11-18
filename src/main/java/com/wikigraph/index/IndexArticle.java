@@ -1,5 +1,9 @@
 package com.wikigraph.index;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wikigraph.graph.Article;
 
 import java.util.ArrayList;
@@ -27,6 +31,7 @@ public class IndexArticle extends Article {
     } else {
       System.err.println("Tried to set title that was already set");
     }
+
   }
 
   @Override
@@ -47,17 +52,18 @@ public class IndexArticle extends Article {
     return false;  //TODO : get this working!
   }
 
-  @Override
+  @Override @JsonIgnore
   public List<Article> getIncomingLinks(int limit) {
     return getLinks(limit, incomingIndex);
   }
 
-  @Override
+  @Override @JsonIgnore
   public List<Article> getOutgoingLinks(int limit) {
     return getLinks(limit, outgoingIndex);
   }
-
-  private List<Article> getLinks(int limit, LinkIndex index) {
+  
+  @JsonProperty("links")
+  private List<Article> getLinks(int limit, LinkIndex index) { 
     List<Integer> links = index.forIndex(id);
     int max;
     if (limit < 0) {
@@ -71,5 +77,15 @@ public class IndexArticle extends Article {
       result.add(new IndexArticle(newId, outgoingIndex, incomingIndex, articleIndex));
     }
     return result;
+  }
+
+  public String toString() {
+    ObjectMapper mapper = new ObjectMapper();
+    try {
+      return mapper.writeValueAsString(this);
+    } catch (JsonProcessingException e) {
+      e.printStackTrace();
+      return "{}";
+    }
   }
 }

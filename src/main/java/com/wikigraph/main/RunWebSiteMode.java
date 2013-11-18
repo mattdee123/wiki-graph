@@ -1,5 +1,9 @@
 package com.wikigraph.main;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wikigraph.algorithms.Algos;
+import com.wikigraph.algorithms.GraphVertex;
 import com.wikigraph.graph.Article;
 import com.wikigraph.graph.ArticleStore;
 import com.wikigraph.index.IndexArticleStore;
@@ -21,11 +25,6 @@ import static spark.Spark.externalStaticFileLocation;
 import static spark.Spark.get;
 
 public class RunWebSiteMode implements RunMode {
-  private static final int MAX_DEPTH = 5;
-  private static final int MAX_DEGREE = 20;
-  private static final int MAX_ARTICLES = 1000;
-  private static final int MAX_ROWS = 10000;
-
   @Override
   public void run(String[] args) {
     if (args.length != 1) {
@@ -48,21 +47,26 @@ public class RunWebSiteMode implements RunMode {
       @Override
       public Object handle(Request request, Response response) {
         String pageName = request.queryParams("page");
+        int maxDepth = Integer.parseInt(request.queryParams("maxDepth"));
+        int maxDegree = Integer.parseInt(request.queryParams("maxDegree"));
+        int maxArticles = Integer.parseInt(request.queryParams("maxArticles"));
         Collection<Article> articles;
         Article start = store.forTitle(pageName);
         if (start == null) {
           halt(404);
           return null;
         }
-        articles = start.getOutgoingLinks(MAX_ROWS);
 
-        Set<String> links = new HashSet<>();
-        for (Article a : articles) {
-          links.add(a.getTitle());
+        GraphVertex result = Algos.getSubGraph(start, maxDepth, maxDegree, maxArticles);
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+          return mapper.writer().withDefaultPrettyPrinter().writeValueAsString(result);
+        } catch (JsonProcessingException e) {
+          e.printStackTrace();
+          return "{}";
         }
-        System.out.printf("Returning %d links%n", links.size());
-        JSONArray linksJson = new JSONArray(links);
-        return linksJson.toString();
       }
     });
   }

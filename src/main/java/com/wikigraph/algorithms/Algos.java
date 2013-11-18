@@ -2,6 +2,7 @@ package com.wikigraph.algorithms;
 
 
 import com.google.common.base.Stopwatch;
+import com.google.common.collect.ImmutableList;
 import com.wikigraph.graph.Article;
 
 import java.util.ArrayDeque;
