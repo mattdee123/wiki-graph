@@ -72,18 +72,35 @@ public class RunWebSiteMode implements RunMode {
     get(new Route("/path") {
       @Override
       public Object handle(Request request, Response response) {
-        Article start = store.forTitle(request.queryParams("start"));
-        Article end = store.forTitle(request.queryParams("end"));
-        if (start == null || end == null) {
-          halt(404);
-          return null;
+        String startTitle = request.queryParams("start");
+        String endTitle = request.queryParams("end");
+
+        if (startTitle == null || startTitle.length() == 0) {
+          halt(400, "No start title specified.");
         }
+
+        if (endTitle == null || endTitle.length() == 0) {
+          halt(400, "No end title specified.");
+        }
+
+        Article start = store.forTitle(startTitle);
+        Article end = store.forTitle(endTitle);
+
+        if (start == null) {
+          halt(404, "Article " + startTitle + " does not exist.");
+        }
+
+        if (end == null) {
+          halt(404, "Article " + endTitle + " does not exist.");
+        }
+
         Stopwatch stopwatch = new Stopwatch().start();
         Path result = Algos.bidirectionalSearch(start, end);
         stopwatch.stop();
         System.out.println("Found path: " + result + " in " + stopwatch.elapsed(MILLISECONDS) +"ms");
+
         if (result == null) {
-          return null; //TODO (aakash?) return something sensible.
+          halt(404, "There is no path between those two articles.");
         }
         return result.toList().toString();
       }

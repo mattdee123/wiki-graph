@@ -25,6 +25,7 @@
       </div>
     </form>
     <br>
+    {{ shortestPathError }}
     <table class="table table-bordered result-shortest-path">
       <tr>
         <td ng-repeat="article in shortestPathResult">{{ article.title }}</td>

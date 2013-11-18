@@ -1,5 +1,6 @@
 WG.controller('AlgosController', function ($scope, $location, $routeParams, Fetch) {
   $scope.shortestPathLoading = false;
+  $scope.shortestPathError = null;
   $scope.form = {};
   $scope.form.shortestPath = {
     start: 'hi', end: 'hihihi'
@@ -10,13 +11,17 @@ WG.controller('AlgosController', function ($scope, $location, $routeParams, Fetc
 
   if ($scope.form.shortestPath.start && $scope.form.shortestPath.end) {
     $scope.shortestPathLoading = true;
+    $scope.shortestPathError = null;
     Fetch.getShortestPath($scope.form.shortestPath.start, $scope.form.shortestPath.end,
       function(result) {
         $scope.shortestPathLoading = false;
+        $scope.shortestPathError = null;
         $scope.shortestPathResult = result;
       },
       function(error) {
         $scope.shortestPathLoading = false;
+        console.log(error);
+        $scope.shortestPathError = error;
         $scope.shortestPathResult = [];
       }
     );
@@ -26,13 +31,17 @@ WG.controller('AlgosController', function ($scope, $location, $routeParams, Fetc
     $location.search('shortestPathStart', $scope.form.shortestPath.start);
     $location.search('shortestPathEnd', $scope.form.shortestPath.end);
     $scope.shortestPathLoading = true;
+    $scope.shortestPathError = null;
     Fetch.getShortestPath($scope.form.shortestPath.start, $scope.form.shortestPath.end,
       function(result) {
         $scope.shortestPathLoading = false;
+        $scope.shortestPathError = null;
         $scope.shortestPathResult = result;
       },
       function(error) {
         $scope.shortestPathLoading = false;
+        console.log(error);
+        $scope.shortestPathError = error;
         $scope.shortestPathResult = [];
       }
     );
