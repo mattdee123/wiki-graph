@@ -73,6 +73,8 @@ public class RunWebSiteMode implements RunMode {
 
         Algos.Path result = Algos.shortestPath(start, end);
 
+        System.out.println("Found path: " + result);
+
         return result.toList().toString();
       }
     });
