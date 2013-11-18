@@ -2,14 +2,12 @@ package com.wikigraph.algorithms;
 
 
 import com.google.common.base.Stopwatch;
-import com.google.common.collect.ImmutableList;
 import com.wikigraph.graph.Article;
 
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
@@ -58,7 +56,7 @@ public class Algos {
   }
 
   public static Path shortestPath(Article start, Article end) {
-    Queue<Path> frontier = new LinkedList<>();
+    Queue<Path> frontier = new ArrayDeque<>();
     Set<Article> seen = new HashSet<>();
     frontier.add(Path.of(0, start, null));
     int depth = 0;
@@ -68,20 +66,21 @@ public class Algos {
       Path path = frontier.remove();
 
       searched++;
-      if (searched % 1000 == 0) System.out.println("Searched " + searched + " in " + s.elapsed(MILLISECONDS) + "ms");
+      if (searched % 1000 == 0) System.out.printf("\r%d : Searched %,d/%,d (%,d) in %,dms", depth, searched,
+              seen.size(), frontier.size(), s.elapsed(MILLISECONDS));
 
       if (path.depth != depth) {
         depth = path.depth;
-        System.out.printf("At Depth: %d, queue size=%d%n", depth, frontier.size());
       }
-      seen.add(path.end);
       for (Article child : path.end.getOutgoingLinks(-1)) {
         Path newPath = Path.of(path.depth + 1, child, path);
         if (child.equals(end)) {
+          System.out.println();
           return newPath;
         }
         if (!seen.contains(child)) {
           frontier.add(newPath);
+          seen.add(child);
         }
       }
     }
