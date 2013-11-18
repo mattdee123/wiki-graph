@@ -1,15 +1,15 @@
 package com.wikigraph.main;
 
 
-
+import com.google.common.base.Stopwatch;
 import com.wikigraph.algorithms.Algos;
+import com.wikigraph.algorithms.Path;
 import com.wikigraph.graph.Article;
 import com.wikigraph.graph.ArticleStore;
 import com.wikigraph.index.IndexArticleStore;
 
 import java.io.File;
-
-import static com.wikigraph.algorithms.Algos.Path;
+import java.util.concurrent.TimeUnit;
 
 
 public class TestMode implements RunMode {
@@ -18,9 +18,14 @@ public class TestMode implements RunMode {
     ArticleStore articleStore = new IndexArticleStore(new File(args[0]));
     Article a = articleStore.forTitle(args[1]);
     Article b = articleStore.forTitle(args[2]);
-    Path p = Algos.shortestPath(a, b);
-    System.out.println("Finished! The path is: "+ p);
-    System.out.println(p.toList());
+    Stopwatch s = new Stopwatch().start();
+    Path p = Algos.bidirectionalSearch(a, b);
+    s.stop();
+    System.out.println("Finished Bidirectional in " + s.elapsed(TimeUnit.MILLISECONDS) + "ms! The path is: " + p);
+    s.reset().start();
+    p = Algos.shortestPathBfs(a, b);
+    s.stop();
+    System.out.println("Finished BFS in " + s.elapsed(TimeUnit.MILLISECONDS) + "ms! The path is: " + p);
 
   }
 }

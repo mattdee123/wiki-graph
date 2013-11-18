@@ -1,14 +1,12 @@
 package com.wikigraph.algorithms;
 
 import com.google.common.base.Stopwatch;
-import com.google.common.collect.Lists;
 import com.wikigraph.graph.Article;
 
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
@@ -56,19 +54,19 @@ public class Algos {
     return root;
   }
 
-  public static Path shortestPath(Article start, Article end) {
+  public static Path shortestPathBfs(Article start, Article end) {
     Queue<Path> frontier = new ArrayDeque<>();
     Set<Article> seen = new HashSet<>();
     frontier.add(Path.of(0, start, null));
     int depth = 0;
-    int searched = 0;
-    Stopwatch s = new Stopwatch().start();
+//    int searched = 0;
+//    Stopwatch s = new Stopwatch().start();
     while (!frontier.isEmpty()) {
       Path path = frontier.remove();
 
-      searched++;
-      if (searched % 1000 == 0) System.out.printf("\r%d : Searched %,d/%,d (%,d) in %,dms", depth, searched,
-              seen.size(), frontier.size(), s.elapsed(MILLISECONDS));
+//      searched++;
+//      if (searched % 1000 == 0) System.out.printf("\r%d : Searched %,d/%,d in %,dms", depth, searched,
+//              seen.size(), s.elapsed(MILLISECONDS));
 
       if (path.depth != depth) {
         depth = path.depth;
@@ -88,38 +86,72 @@ public class Algos {
     return null;
   }
 
-  public static class Path {
-    public int depth;
-    public Article end;
-    public Path previous;
+  public static Path bidirectionalSearch(Article start, Article end) {
 
-    public static Path of(int depth, Article end, Path previous) {
-      Path path = new Path();
-      path.depth = depth;
-      path.previous = previous;
-      path.end = end;
-      return path;
+    if(start.equals(end)) {
+      return Path.of(0, start, null);
     }
 
-    public List<Article> toList() {
-      List<Article> result;
-      if (previous == null) {
-        result = Lists.newArrayList();
-      } else {
-        result = previous.toList();
+    HashMap<Article, Path> fromStart = new HashMap<>();
+    HashMap<Article, Path> fromEnd = new HashMap<>();
+    Queue<Path> startFrontier = new ArrayDeque<>();
+    Queue<Path> endFrontier = new ArrayDeque<>();
+
+    Path startPath = Path.of(0, start, null);
+    Path endPath = Path.of(0, end, null);
+
+    fromStart.put(start, startPath);
+    fromEnd.put(end, endPath);
+    startFrontier.add(startPath);
+    endFrontier.add(endPath);
+    while (!(startFrontier.isEmpty() || endFrontier.isEmpty())) {
+      // Search Forwards
+      Queue<Path> nextStartFrontier = new ArrayDeque<>();
+      while (!startFrontier.isEmpty()) {
+        Path p = startFrontier.remove();
+        //@assert(!fromEnd.contains(p)); - we've already checked
+        for (Article child : p.end.getOutgoingLinks(-1)) {
+          if (fromStart.containsKey(child)) {
+            // We've already seen it from the start - carry on
+            continue;
+          }
+          if (fromEnd.containsKey(child)) {
+            // We've seen it from the end - DONE!
+            return p.withEnd(fromEnd.get(child));
+          } else {
+            Path newPath = Path.of(p.depth + 1, child, p);
+            fromStart.put(child, newPath);
+            nextStartFrontier.add(newPath);
+          }
+        }
       }
-
-      result.add(end);
-      return result;
-    }
-
-    public String toString() {
-      if(previous == null) {
-        return end.getTitle();
+      startFrontier = nextStartFrontier;
+      // Search Backwards
+      Queue<Path> nextEndFrontier = new ArrayDeque<>();
+      while (!endFrontier.isEmpty()) {
+        Path p = endFrontier.remove();
+        //@assert(!fromStart.contains(p)); - we've already checked
+        for (Article child : p.end.getIncomingLinks(-1)) {
+          if (fromEnd.containsKey(child)) {
+            // We've already seen it from the start - carry on
+            continue;
+          }
+          if (fromStart.containsKey(child)) {
+            // We've seen it from the start - DONE!
+            return fromStart.get(child).withEnd(p);
+          } else {
+            Path newPath = Path.of(p.depth + 1, child, p);
+            fromEnd.put(child, newPath);
+            nextEndFrontier.add(newPath);
+          }
+        }
       }
-      return previous + " -> " + end.getTitle();
+      endFrontier = nextEndFrontier;
     }
+    return null;
+
   }
+
 
   /*
   Convenience value classes for algorithms.

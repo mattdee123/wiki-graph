@@ -2,8 +2,10 @@ package com.wikigraph.main;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Stopwatch;
 import com.wikigraph.algorithms.Algos;
 import com.wikigraph.algorithms.GraphVertex;
+import com.wikigraph.algorithms.Path;
 import com.wikigraph.graph.Article;
 import com.wikigraph.graph.ArticleStore;
 import com.wikigraph.index.IndexArticleStore;
@@ -15,7 +17,9 @@ import spark.template.freemarker.FreeMarkerRoute;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static spark.Spark.externalStaticFileLocation;
 import static spark.Spark.get;
 
@@ -70,11 +74,10 @@ public class RunWebSiteMode implements RunMode {
       public Object handle(Request request, Response response) {
         Article start = store.forTitle(request.queryParams("start"));
         Article end = store.forTitle(request.queryParams("end"));
-
-        Algos.Path result = Algos.shortestPath(start, end);
-
-        System.out.println("Found path: " + result);
-
+        Stopwatch stopwatch = new Stopwatch().start();
+        Path result = Algos.bidirectionalSearch(start, end);
+        stopwatch.stop();
+        System.out.println("Found path: " + result + " in " + stopwatch.elapsed(MILLISECONDS) +"ms");
         return result.toList().toString();
       }
     });
