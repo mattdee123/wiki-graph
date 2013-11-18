@@ -2,17 +2,10 @@ package com.wikigraph.algorithms;
 
 
 import com.google.common.base.Stopwatch;
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.wikigraph.graph.Article;
 
-import java.util.ArrayDeque;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
@@ -99,6 +92,18 @@ public class Algos {
       path.previous = previous;
       path.end = end;
       return path;
+    }
+
+    public List<Article> toList() {
+      List result;
+      if (previous == null) {
+        result = Lists.newArrayList();
+      } else {
+        result = previous.toList();
+      }
+
+      result.add(end);
+      return result;
     }
 
     public String toString() {

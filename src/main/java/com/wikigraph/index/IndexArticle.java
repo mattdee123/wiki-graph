@@ -47,7 +47,7 @@ public class IndexArticle extends Article {
     return id;
   }
 
-  @Override
+  @Override @JsonIgnore
   public boolean isRedirect() {
     return false;  //TODO : get this working!
   }

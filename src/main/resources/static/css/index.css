@@ -29,3 +29,15 @@ body {
   padding: 6px 10px;
   border-radius: 3px;
 }
+
+.algo-field {
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #ddd;
+}
+
+.nav-links {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+}

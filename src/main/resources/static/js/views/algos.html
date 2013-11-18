@@ -1,0 +1,23 @@
+<div class="container">
+  <div class="algo-field">
+    <h1>Shortest Path</h1>
+    <form ng-submit="shortestPath()">
+      <div class="col-lg-5">
+        <input id="input-page" class="form-control input-large" type="text"
+         placeholder="Start" ng-model="shortestPath.start">
+      </div>
+      <div class="col-lg-5">
+        <input id="input-page" class="form-control input-large" type="text"
+         placeholder="End" ng-model="shortestPath.end">
+      </div>
+      <div class="col-lg-2">
+        <input type="submit" class="btn btn-primary form-control input-large" value="Run">
+      </div>
+    </form>
+    <table class="table table-striped">
+      <tr ng-repeat="article in shortestPathResult">
+        <td>{{ article.title }}</td>
+      </tr>
+    </table>
+  </div>
+</div>

@@ -2,9 +2,9 @@ WG.controller('BaseController', function BaseController($scope, $routeParams, $l
   $scope.data = Data;
   $scope.form = $scope.form || {};
 
-  $scope.form.maxDepth = parseInt($routeParams.maxDepth) || 5;
-  $scope.form.maxDegree = parseInt($routeParams.maxDegree) || 20;
-  $scope.form.maxArticles = parseInt($routeParams.maxArticles) || 100;
+  $scope.form.maxDepth = parseInt($routeParams.maxDepth, 10) || 5;
+  $scope.form.maxDegree = parseInt($routeParams.maxDegree, 10) || 20;
+  $scope.form.maxArticles = parseInt($routeParams.maxArticles, 10) || 100;
 
   $scope.refresh = function() {
     if (!($scope.form && $scope.form.page)) {
@@ -19,12 +19,11 @@ WG.controller('BaseController', function BaseController($scope, $routeParams, $l
     $scope.data.basePage = $scope.form.page;
     $scope.data.failure = false;
 
-    console.log($scope.form);
     Fetch.getLinks($scope.form,
       function(result) {
         $scope.data.loading = false;
-        console.log(result);
         $scope.data.graph = result;
+        $scope.data.failure = false;
         Graph.refresh($scope.data.graph);
       },
       function(result) {
@@ -46,6 +45,7 @@ WG.controller('BaseController', function BaseController($scope, $routeParams, $l
       function(result) {
         $scope.data.loading = false;
         $scope.data.graph = result;
+        $scope.data.failure = false;
         Graph.refresh($scope.data.graph);
       },
       function(result) {

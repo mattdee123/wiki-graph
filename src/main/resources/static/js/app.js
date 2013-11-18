@@ -6,7 +6,8 @@ WG.filter('urlencode', function() {
 
 WG.config(function($routeProvider) {
   $routeProvider
-  .when('/', {templateUrl: '/js/views/app.html', controller: 'BaseController', reloadOnSearch: false});
+  .when('/', {templateUrl: '/js/views/app.html', controller: 'BaseController', reloadOnSearch: false})
+  .when('/algos', {templateUrl: '/js/views/algos.html', controller: 'AlgosController'});
 });
 
 WG.factory('Data', function($http) {
@@ -19,6 +20,7 @@ WG.factory('Data', function($http) {
 
 WG.service('Fetch', function($http) {
   var Fetch = {};
+
   Fetch.getLinks = function(form, successCallback, errorCallback) {
     successCallback = successCallback || function() {};
     errorCallback = errorCallback || function() {};
@@ -31,33 +33,28 @@ WG.service('Fetch', function($http) {
     .error(errorCallback);
     return result;
   };
+
+  Fetch.getShortestPath = function(start, end, successCallback, errorCallback) {
+    successCallback = successCallback || function() {};
+    errorCallback = errorCallback || function() {};
+    var result = $http({
+      url: '/path',
+      method: 'GET',
+      params: {
+        start: start,
+        end: end
+      }
+    })
+    .success(successCallback)
+    .error(errorCallback);
+    return result;
+  };
+
   return Fetch;
 });
 
 WG.service('Graph', function() {
   var Graph = {};
-
-  var formatData = function(data, maxChildren) {
-    if (maxChildren === undefined) {
-      maxChildren = 100;
-    }
-
-    var result = {
-      id: '0',
-      name: data.basePage
-    };
-
-    result.children = _.map(data.links, function(x, i) {
-      return {
-        id: 'level1' + i,
-        name: x
-      };
-    });
-
-    result.children = _.first(result.children, maxChildren);
-
-    return result;
-  };
 
   Graph.refresh = function(data) {
     console.log('Refreshing with', data);
