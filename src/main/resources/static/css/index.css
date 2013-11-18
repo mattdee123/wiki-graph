@@ -10,6 +10,10 @@ body {
   margin-bottom: 20px;
 }
 
+.query-field form {
+  height: 100px;
+}
+
 #graph {
   text-align: center;
   width: 100%;

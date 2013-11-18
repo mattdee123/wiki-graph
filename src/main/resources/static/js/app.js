@@ -6,8 +6,7 @@ WG.filter('urlencode', function() {
 
 WG.config(function($routeProvider) {
   $routeProvider
-  .when('/', {templateUrl: '/js/views/app.html', controller: 'BaseController'})
-  .when('/:page/', {templateUrl: '/js/views/app.html', controller: 'BaseController'});
+  .when('/', {templateUrl: '/js/views/app.html', controller: 'BaseController', reloadOnSearch: false});
 });
 
 WG.factory('Data', function($http) {
@@ -20,10 +19,14 @@ WG.factory('Data', function($http) {
 
 WG.service('Fetch', function($http) {
   var Fetch = {};
-  Fetch.getLinks = function(page, successCallback, errorCallback) {
+  Fetch.getLinks = function(form, successCallback, errorCallback) {
     successCallback = successCallback || function() {};
     errorCallback = errorCallback || function() {};
-    var result = $http.get('/page?page='+page)
+    var result = $http({
+      url: '/page',
+      method: 'GET',
+      params: form
+    })
     .success(successCallback)
     .error(errorCallback);
     return result;
@@ -57,10 +60,13 @@ WG.service('Graph', function() {
   };
 
   Graph.refresh = function(data) {
+    console.log('Refreshing with', data);
+    $('#graph-canvaswidget').remove();
     var rgraph = new $jit.RGraph({
       injectInto: 'graph',
 
       background: {
+        numberOfCircles: 100,
         CanvasStyles: {
           strokeStyle: '#555'
         }
