@@ -10,8 +10,13 @@
 </head>
 <body ng-app="WG">
   <div class="nav-links">
-    <a href="#/" class="btn btn-primary"><i class="icon-code-fork"></i></a> <br> <br>
-    <a href="#/algos" class="btn btn-primary"><i class="icon-bolt"></i></a>
+    <a href="#/" class="btn btn-primary" tooltip title="Visualization">
+      <i class="icon-code-fork"></i>
+    </a>
+    <br> <br>
+    <a href="#/algos" class="btn btn-primary" tooltip title="Analysis">
+      <i class="icon-bolt"></i>
+    </a>
   </div>
   <ng-view></ng-view>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>

@@ -25,12 +25,10 @@
       </div>
     </form>
     <br>
-    <h4>
-     {{ shortestPathError }}
-    </h4>
+    <h4>{{ shortestPathError }}</h4>
     <h4 class="text-center">
       <span ng-repeat="article in shortestPathResult">
-        <a ng-href="//en.wikipedia.org/wiki/{{ article.title }}" class="btn btn-default" target="_blank">
+        <a ng-href="//en.wikipedia.org/wiki/{{ article.title | urlencode }}" class="btn btn-default" target="_blank">
           {{ article.title }}
         </a>
         <i class="icon-long-arrow-right" ng-hide="$last"></i>

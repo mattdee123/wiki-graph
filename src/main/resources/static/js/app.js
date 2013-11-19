@@ -151,7 +151,7 @@ WG.directive('tooltip', function() {
   var dir = {};
   dir.restrict = 'A';
   dir.link = function(scope, elem) {
-    $(elem).tooltip({container: 'body', position: 'bottom'});
+    $(elem).tooltip({container: 'body', placement: 'right'});
   };
   return dir;
 });
