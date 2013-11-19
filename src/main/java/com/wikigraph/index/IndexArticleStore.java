@@ -30,9 +30,7 @@ public class IndexArticleStore implements ArticleStore {
   @Override
   public Article forTitle(String title) {
     title = TitleFixer.getFixer().toTitle(title);
-    System.out.println("Fetching for:" +title);
     Integer id = articleHashIndex.getId(title);
-    System.out.println("Found: "+id);
     if (id == null) {
       return null;
     } else {

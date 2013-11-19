@@ -81,6 +81,7 @@ public class RunWebSiteMode implements RunMode {
 
         if (endTitle == null || endTitle.length() == 0) {
           halt(400, "No end title specified.");
+          return null;
         }
 
         Article start = store.forTitle(startTitle);
@@ -88,19 +89,23 @@ public class RunWebSiteMode implements RunMode {
 
         if (start == null) {
           halt(404, "Article " + startTitle + " does not exist.");
+          return null;
         }
 
         if (end == null) {
           halt(404, "Article " + endTitle + " does not exist.");
+          return null;
         }
+        System.out.printf("Found %d for %s and %d for %s%n", start.getId(), startTitle, end.getId(), endTitle);
 
         Stopwatch stopwatch = new Stopwatch().start();
         Path result = Algos.bidirectionalSearch(start, end);
         stopwatch.stop();
-        System.out.println("Found path: " + result + " in " + stopwatch.elapsed(MILLISECONDS) +"ms");
+        System.out.println("Found path: " + result + " in " + stopwatch.elapsed(MILLISECONDS) + "ms");
 
         if (result == null) {
           halt(404, "There is no path between those two articles.");
+          return null;
         }
 
         ObjectMapper mapper = new ObjectMapper();
