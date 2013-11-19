@@ -19,7 +19,7 @@ WG.controller('BaseController', function BaseController($scope, $routeParams, $l
     $scope.data.basePage = $scope.form.page;
     $scope.data.failure = false;
 
-    Fetch.getLinks($scope.form,
+    Fetch.getGraph($scope.form,
       function(result) {
         $scope.data.loading = false;
         $scope.data.graph = result;
@@ -41,7 +41,7 @@ WG.controller('BaseController', function BaseController($scope, $routeParams, $l
     $scope.data.basePage = $scope.form.page;
     $scope.data.failure = false;
 
-    Fetch.getLinks($scope.form,
+    Fetch.getGraph($scope.form,
       function(result) {
         $scope.data.loading = false;
         $scope.data.graph = result;

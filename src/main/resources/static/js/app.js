@@ -15,6 +15,11 @@ WG.config(function($routeProvider) {
     templateUrl: '/js/views/algos.html',
     controller: 'AlgosController',
     reloadOnSearch: false
+  })
+  .when('/links', {
+    templateUrl: '/js/views/links.html',
+    controller: 'LinksController',
+    reloadOnSearch: false
   });
 });
 
@@ -29,11 +34,24 @@ WG.factory('Data', function($http) {
 WG.service('Fetch', function($http) {
   var Fetch = {};
 
+  Fetch.getGraph = function(form, successCallback, errorCallback) {
+    successCallback = successCallback || function() {};
+    errorCallback = errorCallback || function() {};
+    var result = $http({
+      url: '/graph',
+      method: 'GET',
+      params: form
+    })
+    .success(successCallback)
+    .error(errorCallback);
+    return result;
+  };
+
   Fetch.getLinks = function(form, successCallback, errorCallback) {
     successCallback = successCallback || function() {};
     errorCallback = errorCallback || function() {};
     var result = $http({
-      url: '/page',
+      url: '/links',
       method: 'GET',
       params: form
     })

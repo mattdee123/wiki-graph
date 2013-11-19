@@ -1,0 +1,53 @@
+<div class="container">
+  <div class="query-field">
+    <form ng-submit="refresh()">
+      <div class="input-group">
+        <input id="input-page" class="form-control input-large" type="text" placeholder="Page to query" ng-model="form.page">
+        <span class="input-group-btn">
+          <button id="btn-refresh" class="btn btn-primary btn-large">
+            Run
+          </button>
+        </span>
+      </div>
+    </form>
+  </div>
+
+  <div id="content" ng-show="data.basePage">
+    <div id="content-body" ng-show="data.links || data.error || data.loading">
+      <h3 class="text-center" ng-show="data.error">That page does not exist.</h3>
+      <h3 class="text-center" ng-show="data.loading"><i class="icon-refresh icon-spin"></i></h3>
+
+      <h2>Outgoing Links</h2>
+      <table class="table table-bordered table-condensed">
+        <tr ng-repeat="link in data.links.out track by $index">
+          <td>
+            <a ng-href="http://en.wikipedia.org/w/index.php?title={{ link.title | urlencode }}">
+              {{ link.title }}
+            </a>
+          </td>
+          <td>
+            <a ng-href="#/?page={{ link.title | urlencode}}">
+              Graph
+            </a>
+          </td>
+        </tr>
+      </table>
+
+      <h2>Incoming Links</h2>
+      <table class="table table-bordered table-condensed">
+        <tr ng-repeat="link in data.links.in track by $index">
+          <td>
+            <a ng-href="http://en.wikipedia.org/w/index.php?title={{ link.title | urlencode }}">
+              {{ link.title }}
+            </a>
+          </td>
+          <td>
+            <a ng-href="#/?page={{ link.title | urlencode}}">
+              Graph
+            </a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

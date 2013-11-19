@@ -2,9 +2,7 @@ WG.controller('AlgosController', function ($scope, $location, $routeParams, Fetc
   $scope.shortestPathLoading = false;
   $scope.shortestPathError = null;
   $scope.form = {};
-  $scope.form.shortestPath = {
-    start: 'hi', end: 'hihihi'
-  };
+  $scope.form.shortestPath = {};
 
   $scope.form.shortestPath.start = $routeParams.shortestPathStart;
   $scope.form.shortestPath.end = $routeParams.shortestPathEnd;

@@ -18,6 +18,14 @@ body {
   color: #eaeaea;
 }
 
+a {
+  color: white;
+}
+
+a:hover {
+  color: #aaa;
+}
+
 #graph {
   text-align: center;
   width: 100%;
@@ -49,4 +57,8 @@ body {
   position: fixed;
   top: 10px;
   left: 10px;
+}
+
+.nav-links .btn {
+  width: 40px;
 }
