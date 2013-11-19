@@ -10,8 +10,6 @@ import com.wikigraph.algorithms.Path;
 import com.wikigraph.graph.Article;
 import com.wikigraph.graph.ArticleStore;
 import com.wikigraph.index.IndexArticleStore;
-import org.json.JSONException;
-import org.json.JSONObject;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -20,7 +18,6 @@ import spark.template.freemarker.FreeMarkerRoute;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static spark.Spark.externalStaticFileLocation;
@@ -106,7 +103,6 @@ public class RunWebSiteMode implements RunMode {
           halt(404, "There is no path between those two articles.");
         }
 
-        JSONObject json = new JSONObject();
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> retVal = Maps.newHashMap();
         retVal.put("path", result.toList());
