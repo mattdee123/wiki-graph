@@ -25,11 +25,16 @@
       </div>
     </form>
     <br>
-    {{ shortestPathError }}
-    <table class="table table-bordered result-shortest-path">
-      <tr>
-        <td ng-repeat="article in shortestPathResult">{{ article.title }}</td>
-      </tr>
-    </table>
+    <h4>
+     {{ shortestPathError }}
+    </h4>
+    <h4 class="text-center">
+      <span ng-repeat="article in shortestPathResult">
+        <a ng-href="//en.wikipedia.org/wiki/{{ article.title }}" class="btn btn-default" target="_blank">
+          {{ article.title }}
+        </a>
+        <i class="icon-long-arrow-right" ng-hide="$last"></i>
+      </span>
+    </h4>
   </div>
 </div>
