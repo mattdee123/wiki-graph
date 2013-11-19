@@ -28,7 +28,7 @@ public abstract class Index<T> {
     }
   }
 
-  public T forIndex(int index) {
+  public synchronized T forIndex(int index) {
     try {
       if ((index + 1) * 4 > indexFile.length()) {
         return null;
