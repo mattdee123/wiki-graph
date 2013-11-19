@@ -101,14 +101,14 @@ public class Algos {
     fromEnd.put(end, endPath);
     startFrontier.add(startPath);
     endFrontier.add(endPath);
+    int expanded = 1;
     while (!(startFrontier.isEmpty() || endFrontier.isEmpty())) {
       // Search Forwards
       if (startFrontier.size() < endFrontier.size()) {
+        expanded += startFrontier.size();
         Queue<Path> nextStartFrontier = new ArrayDeque<>();
         while (!startFrontier.isEmpty()) {
-          tick(fromEnd, fromStart);
           Path p = startFrontier.remove();
-          //@assert(!fromEnd.contains(p)); - we've already checked
           for (Article child : p.end.getOutgoingLinks(-1)) {
             if (fromStart.containsKey(child)) {
               // We've already seen it from the start - carry on
@@ -116,6 +116,7 @@ public class Algos {
             }
             if (fromEnd.containsKey(child)) {
               // We've seen it from the end - DONE!
+              System.out.printf("Expanded %d%n", expanded);
               return p.withEnd(fromEnd.get(child));
             } else {
               Path newPath = Path.of(p.depth + 1, child, p);
@@ -127,11 +128,10 @@ public class Algos {
         startFrontier = nextStartFrontier;
       } else {
         // Search Backwards
+        expanded += endFrontier.size();
         Queue<Path> nextEndFrontier = new ArrayDeque<>();
         while (!endFrontier.isEmpty()) {
-          tick(fromEnd, fromStart);
           Path p = endFrontier.remove();
-          //@assert(!fromStart.contains(p)); - we've already checked
           for (Article child : p.end.getIncomingLinks(-1)) {
             if (fromEnd.containsKey(child)) {
               // We've already seen it from the start - carry on
@@ -139,6 +139,7 @@ public class Algos {
             }
             if (fromStart.containsKey(child)) {
               // We've seen it from the start - DONE!
+              System.out.printf("Expanded %d%n", expanded);
               return fromStart.get(child).withEnd(p);
             } else {
               Path newPath = Path.of(p.depth + 1, child, p);
@@ -153,16 +154,6 @@ public class Algos {
     return null;
 
   }
-
-  static int counts = 0;
-
-  private static void tick(HashMap<Article, Path> fromEnd, HashMap<Article, Path> fromStart) {
-    counts++;
-    if (counts % 1000 == 0) {
-      System.out.printf("Looked at %d so far%n", counts);
-    }
-  }
-
 
   /*
   Convenience value classes for algorithms.
