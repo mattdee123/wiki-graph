@@ -20,7 +20,6 @@ WG.controller('AlgosController', function ($scope, $location, $routeParams, Fetc
       },
       function(error) {
         $scope.shortestPathLoading = false;
-        console.log(error);
         $scope.shortestPathError = error;
         $scope.shortestPathResult = [];
       }
@@ -40,7 +39,6 @@ WG.controller('AlgosController', function ($scope, $location, $routeParams, Fetc
       },
       function(error) {
         $scope.shortestPathLoading = false;
-        console.log(error);
         $scope.shortestPathError = error;
         $scope.shortestPathResult = [];
       }

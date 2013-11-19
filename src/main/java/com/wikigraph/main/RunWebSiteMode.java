@@ -3,12 +3,15 @@ package com.wikigraph.main;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Stopwatch;
+import com.google.common.collect.Maps;
 import com.wikigraph.algorithms.Algos;
 import com.wikigraph.algorithms.GraphVertex;
 import com.wikigraph.algorithms.Path;
 import com.wikigraph.graph.Article;
 import com.wikigraph.graph.ArticleStore;
 import com.wikigraph.index.IndexArticleStore;
+import org.json.JSONException;
+import org.json.JSONObject;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -102,7 +105,19 @@ public class RunWebSiteMode implements RunMode {
         if (result == null) {
           halt(404, "There is no path between those two articles.");
         }
-        return result.toList().toString();
+
+        JSONObject json = new JSONObject();
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> retVal = Maps.newHashMap();
+        retVal.put("path", result.toList());
+        retVal.put("time", stopwatch.elapsed(MILLISECONDS));
+        try {
+          return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(retVal);
+        } catch (JsonProcessingException e) {
+          e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+          halt(500);
+        }
+        return "{}";
       }
     });
   }
