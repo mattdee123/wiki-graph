@@ -27,7 +27,7 @@
     </form>
     <br>
     <h4>{{ shortestPathError }}</h4>
-    <h4 class="text-center">
+    <h4 class="text-center result-shortest-path">
       <span ng-repeat="article in shortestPathResult.path">
         <a ng-href="//en.wikipedia.org/wiki/{{ article.title | urlencode }}" class="btn btn-default" target="_blank">
           {{ article.title }}
