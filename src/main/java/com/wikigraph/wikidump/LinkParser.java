@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 
 import java.util.List;
 import java.util.HashSet;
+import java.util.ArrayList;
 
 /**
  * Parses out the links from the markup.  Tries to only get the links in the body of the article.
@@ -33,7 +34,9 @@ public class LinkParser {
       int endComment = markup.indexOf(COMMENT_END, currentIndex);
       int frontIndex = markup.indexOf(LINK_FRONT, currentIndex);
 
-      if (frontIndex > frontComment && frontComment != -1) {
+      if (frontIndex > frontComment && 
+         (frontIndex < endComment || endComment == -1) && 
+          frontComment != -1) {
         if (endComment != -1) {
           currentIndex = endComment;
           continue;
