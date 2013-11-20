@@ -3,21 +3,43 @@ package com.wikigraph.wikidump;
 import com.google.common.collect.ImmutableList;
 
 import java.util.List;
+import java.util.HashSet;
 
 /**
- * Parses out the links from the markup.  Tries to only get the links in the body of the article
- * (ie., ignores
+ * Parses out the links from the markup.  Tries to only get the links in the body of the article.
+ * Will stop parsing once it hits references, if the section exists.
+ * 
  */
 public class LinkParser {
   private static final String LINK_FRONT = "[[";
   private static final String LINK_END = "]]";
+  private static final String ARTICLE_END = "==References==";
+  //most articles have a reference section signaling the end. If not, tough shit.
+  private static final String COMMENT_FRONT = "<!--";
+  private static final String COMMENT_END = "-->";
 
   public List<String> getConnections(String markup) {
     int currentIndex = 0;
-    int length = markup.length();
-    ImmutableList.Builder<String> listBuilder = ImmutableList.builder();
-    while (currentIndex < length) {
+
+    //deal with articles without ref section
+    int stopIndex = markup.indexOf(ARTICLE_END);
+    if (stopIndex < 0) {
+      stopIndex = markup.length();
+    }
+
+    HashSet<String> set = new HashSet<String>();
+    while (currentIndex < stopIndex) {
+      int frontComment = markup.indexOf(COMMENT_FRONT, currentIndex);
+      int endComment = markup.indexOf(COMMENT_END, currentIndex);
       int frontIndex = markup.indexOf(LINK_FRONT, currentIndex);
+
+      if (frontIndex > frontComment && frontComment != -1) {
+        if (endComment != -1) {
+          currentIndex = endComment;
+          continue;
+        }
+        else break;
+      }
       if (frontIndex == -1)
         break;
       int endIndex = markup.indexOf(LINK_END, frontIndex);
@@ -46,9 +68,10 @@ public class LinkParser {
         continue;
       }
       if (title.indexOf('\n') == -1) {
-        listBuilder.add(title);
+        set.add(title);
       }
     }
-    return listBuilder.build();
+    List<String> list = new ArrayList<String>(set);
+    return list;
   }
 }
