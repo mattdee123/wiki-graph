@@ -1,4 +1,4 @@
-WG.controller('AlgosController', function ($scope, $location, $routeParams, Fetch) {
+WG.controller('AlgosController', function ($scope, $location, $routeParams, $http, Fetch) {
   $scope.shortestPathLoading = false;
   $scope.shortestPathError = null;
   $scope.form = {};
@@ -47,5 +47,23 @@ WG.controller('AlgosController', function ($scope, $location, $routeParams, Fetc
     var tmp = $scope.form.shortestPath.start;
     $scope.form.shortestPath.start = $scope.form.shortestPath.end;
     $scope.form.shortestPath.end = tmp;
+  };
+
+  $scope.randomizeShortestPath = function() {
+    $http({
+      method: 'GET',
+      url: '/api/randomArticle?start=1', // Prevents Angular caching the random article.
+    })
+    .success(function(article) {
+      $scope.form.shortestPath.start = article;
+    });
+
+    $http({
+      method: 'GET',
+      url: '/api/randomArticle?end=1',
+    })
+    .success(function(article) {
+      $scope.form.shortestPath.end = article;
+    });
   };
 });
