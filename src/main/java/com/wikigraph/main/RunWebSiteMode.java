@@ -19,12 +19,15 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static spark.Spark.externalStaticFileLocation;
 import static spark.Spark.get;
 
 public class RunWebSiteMode implements RunMode {
+  private static final Random random = new Random();
+
   @Override
   public void run(String[] args) {
     if (args.length != 1) {
@@ -100,7 +103,7 @@ public class RunWebSiteMode implements RunMode {
         Stopwatch stopwatch = new Stopwatch().start();
         Path path = Algos.bidirectionalSearch(start, end);
         stopwatch.stop();
-        System.out.println("Found path: " + path + " in " + stopwatch.elapsed(MILLISECONDS) +"ms");
+        System.out.println("Found path: " + path + " in " + stopwatch.elapsed(MILLISECONDS) + "ms");
 
         if (path == null) {
           halt(404, "There is no path between those two articles.");
@@ -147,6 +150,14 @@ public class RunWebSiteMode implements RunMode {
           halt(500);
         }
         return "{}";
+      }
+    });
+
+    get(new Route("/api/randomArticle") {
+      @Override
+      public Object handle(Request request, Response response) {
+        int id = random.nextInt(store.numberOfArticles());
+        return store.forId(id).getTitle();
       }
     });
   }

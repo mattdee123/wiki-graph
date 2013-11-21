@@ -12,4 +12,8 @@ public interface ArticleStore {
 
   public Article forTitle(String title);
 
+  public int numberOfArticles();
+
+  public Article forId(int id);
+
 }

@@ -38,7 +38,7 @@ public class LinkParser {
       // Get next link start
       nextLink = nextLink(markup, nextLink+1, nextCommentStart);
       if(nextLink > nextCommentStart) {
-        nextCommentStart = indexOfOrEndComents(markup, COMMENT_FRONT, nextLink);
+        nextCommentStart = indexOfOrEnd(markup, COMMENT_FRONT, nextLink);
       }
     }
     return new ArrayList<>(set);
@@ -90,12 +90,6 @@ public class LinkParser {
 
   // Like String.indexOf, but returns the length of the string if not found.
   private int indexOfOrEnd(String toSearch, String search, int offset) {
-    int index = toSearch.indexOf(search, offset);
-    return index == -1 ? toSearch.length() : index;
-  }
-
-  // Like String.indexOf, but returns the length of the string if not found.
-  private int indexOfOrEndComents(String toSearch, String search, int offset) {
     int index = toSearch.indexOf(search, offset);
     return index == -1 ? toSearch.length() : index;
   }

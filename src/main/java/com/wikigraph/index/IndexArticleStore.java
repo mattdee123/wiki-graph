@@ -39,4 +39,14 @@ public class IndexArticleStore implements ArticleStore {
       return article;
     }
   }
+
+  @Override
+  public int numberOfArticles() {
+    return articleIndex.size();
+  }
+
+  @Override
+  public Article forId(int id) {
+    return new IndexArticle(id, outgoingIndex, incomingIndex, articleIndex);
+  }
 }
