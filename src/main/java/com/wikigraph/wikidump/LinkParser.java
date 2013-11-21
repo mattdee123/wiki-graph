@@ -24,11 +24,13 @@ public class LinkParser {
 
     //deal with articles without ref section
     int stopIndex = markup.indexOf(ARTICLE_END);
+    System.out.println(stopIndex);
+
     if (stopIndex < 0) {
       stopIndex = markup.length();
     }
 
-    HashSet<String> set = new HashSet<String>();
+    HashSet<String> set = new HashSet<>();
     while (currentIndex < stopIndex) {
       int frontComment = markup.indexOf(COMMENT_FRONT, currentIndex);
       int endComment = markup.indexOf(COMMENT_END, currentIndex);
@@ -74,7 +76,6 @@ public class LinkParser {
         set.add(title);
       }
     }
-    List<String> list = new ArrayList<String>(set);
-    return list;
+    return new ArrayList<>(set);
   }
 }
