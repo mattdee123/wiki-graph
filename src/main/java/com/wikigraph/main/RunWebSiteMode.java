@@ -3,6 +3,7 @@ package com.wikigraph.main;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Stopwatch;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.wikigraph.algorithms.Algos;
 import com.wikigraph.algorithms.GraphVertex;
@@ -146,7 +147,7 @@ public class RunWebSiteMode implements RunMode {
         try {
           return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(result);
         } catch (JsonProcessingException e) {
-          e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+          e.printStackTrace();
           halt(500);
         }
         return "{}";
@@ -156,8 +157,31 @@ public class RunWebSiteMode implements RunMode {
     get(new Route("/api/randomArticle") {
       @Override
       public Object handle(Request request, Response response) {
-        int id = random.nextInt(store.numberOfArticles());
-        return store.forId(id).getTitle();
+        int count;
+
+        try {
+          count = Integer.parseInt(request.queryParams("count"));
+        } catch (NumberFormatException e) {
+          e.printStackTrace();
+          count = 1;
+        }
+
+        List<String> articles = Lists.newArrayList();
+
+        for (int i = 0; i < count; i++) {
+          int id = random.nextInt(store.numberOfArticles());
+          articles.add(store.forId(id).getTitle());
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+          return mapper.writeValueAsString(articles);
+        } catch (JsonProcessingException e) {
+          e.printStackTrace();
+          halt(500);
+        }
+
+        return "[]";
       }
     });
   }

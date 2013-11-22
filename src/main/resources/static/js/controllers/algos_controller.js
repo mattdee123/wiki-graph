@@ -50,18 +50,11 @@ WG.controller('AlgosController', function ($scope, $location, $routeParams, $htt
   $scope.shortestPath.randomize = function() {
     $http({
       method: 'GET',
-      url: '/api/randomArticle?start=1', // Prevents Angular caching the random article.
+      url: '/api/randomArticle?count=2', // Prevents Angular caching the random article.
     })
-    .success(function(article) {
-      $scope.shortestPath.start = article;
-    });
-
-    $http({
-      method: 'GET',
-      url: '/api/randomArticle?end=1',
-    })
-    .success(function(article) {
-      $scope.shortestPath.end = article;
+    .success(function(articles) {
+      $scope.shortestPath.start = articles[0];
+      $scope.shortestPath.end = articles[1];
     });
   };
 });
