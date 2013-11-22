@@ -1,61 +1,61 @@
+/**
+ * Algorithms controller. Used on the #/algos page.
+ */
+
 WG.controller('AlgosController', function ($scope, $location, $routeParams, $http, Fetch) {
-  $scope.shortestPathLoading = false;
-  $scope.shortestPathError = null;
-  $scope.form = {};
-  $scope.form.shortestPath = {};
+  $scope.data = {
+    shortestPath: {
+      loading: false,
+      error: null,
+      start: $routeParams.shortestPathStart,
+      end: $routeParams.shortestPathEnd
+    }
+  };
 
-  $scope.form.shortestPath.start = $routeParams.shortestPathStart;
-  $scope.form.shortestPath.end = $routeParams.shortestPathEnd;
-
-  if ($scope.form.shortestPath.start && $scope.form.shortestPath.end) {
-    $scope.shortestPathLoading = true;
-    $scope.shortestPathError = null;
-    Fetch.getShortestPath($scope.form.shortestPath.start, $scope.form.shortestPath.end,
+  // Fetches the data required for the shortest path algorithm.
+  $scope.data.shortestPath.fetch = function() {
+    $scope.data.shortestPath.loading = true;
+    $scope.data.shortestPath.error = null;
+    Fetch.getShortestPath($scope.data.shortestPath.start, $scope.data.shortestPath.end,
       function(result) {
-        $scope.shortestPathLoading = false;
-        $scope.shortestPathError = null;
-        $scope.shortestPathResult = result;
+        $scope.data.shortestPath.loading = false;
+        $scope.data.shortestPath.error = null;
+        $scope.data.shortestPath.result = result;
       },
       function(error) {
-        $scope.shortestPathLoading = false;
-        $scope.shortestPathError = error;
-        $scope.shortestPathResult = [];
+        $scope.data.shortestPath.loading = false;
+        $scope.data.shortestPath.error = error;
+        $scope.data.shortestPath.result = [];
       }
     );
+  };
+
+  if ($scope.data.shortestPath.start && $scope.data.shortestPath.end) {
+    $scope.data.shortestPath.fetch();
   }
 
-  $scope.shortestPath = function() {
-    $location.search('shortestPathStart', $scope.form.shortestPath.start);
-    $location.search('shortestPathEnd', $scope.form.shortestPath.end);
-    $scope.shortestPathLoading = true;
-    $scope.shortestPathError = null;
-    Fetch.getShortestPath($scope.form.shortestPath.start, $scope.form.shortestPath.end,
-      function(result) {
-        $scope.shortestPathLoading = false;
-        $scope.shortestPathError = null;
-        $scope.shortestPathResult = result;
-      },
-      function(error) {
-        $scope.shortestPathLoading = false;
-        $scope.shortestPathError = error;
-        $scope.shortestPathResult = [];
-      }
-    );
+  // Submit handler for the submission of shortestPath.
+  $scope.data.shortestPath.submit = function() {
+    $location.search('shortestPathStart', $scope.data.shortestPath.start);
+    $location.search('shortestPathEnd', $scope.data.shortestPath.end);
+    $scope.data.shortestPath.fetch();
   };
 
-  $scope.switchShortestPath = function() {
-    var tmp = $scope.form.shortestPath.start;
-    $scope.form.shortestPath.start = $scope.form.shortestPath.end;
-    $scope.form.shortestPath.end = tmp;
+  // Swaps the values of the shortestPath start and end
+  $scope.data.shortestPath.swap = function() {
+    var tmp = $scope.data.shortestPath.start;
+    $scope.data.shortestPath.start = $scope.data.shortestPath.end;
+    $scope.data.shortestPath.end = tmp;
   };
 
-  $scope.randomizeShortestPath = function() {
+  // Randomly selects a start and end article.
+  $scope.data.shortestPath.randomize = function() {
     $http({
       method: 'GET',
       url: '/api/randomArticle?start=1', // Prevents Angular caching the random article.
     })
     .success(function(article) {
-      $scope.form.shortestPath.start = article;
+      $scope.data.shortestPath.start = article;
     });
 
     $http({
@@ -63,7 +63,7 @@ WG.controller('AlgosController', function ($scope, $location, $routeParams, $htt
       url: '/api/randomArticle?end=1',
     })
     .success(function(article) {
-      $scope.form.shortestPath.end = article;
+      $scope.data.shortestPath.end = article;
     });
   };
 });
