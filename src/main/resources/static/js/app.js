@@ -14,12 +14,10 @@ WG.config(function($routeProvider) {
   .when('/algos', {
     templateUrl: '/js/views/algos.html',
     controller: 'AlgosController',
-    reloadOnSearch: false
   })
   .when('/links', {
     templateUrl: '/js/views/links.html',
     controller: 'LinksController',
-    reloadOnSearch: false
   });
 });
 
