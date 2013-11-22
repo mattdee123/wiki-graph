@@ -25,40 +25,11 @@
     </form>
   </div>
 
-  <div class="" id="content" ng-show="data.basePage">
-    <!--
-    <div class="panel-heading">
-      <h3 id="content-heading" ng-show="data.basePage">
-        <a href="http://en.wikipedia.org/w/index.php?title={{ data.basePage | urlencode }}">{{ data.basePage }}</a>
-        -
-        <a href="http://en.wikipedia.org/w/index.php?title={{ data.basePage | urlencode }}&action=raw">Raw</a>
-      </h3>
-    </div>
-    -->
-    <div id="content-body" ng-show="data.graph.children.length || data.failure || data.loading">
-      <h3 class="text-center" ng-show="data.failure">That page does not exist.</h3>
+  <div id="content" ng-show="data.basePage">
+    <div id="content-body">
+      <h3 class="text-center" ng-show="data.error">That page does not exist.</h3>
       <h3 class="text-center" ng-show="data.loading"><i class="icon-refresh icon-spin"></i></h3>
-      <div id="graph"></div>
-
-<!--       <table class="table table-bordered table-hover table-condensed">
-        <tr ng-repeat="link in data.links track by $index">
-          <td>
-            <a href="http://en.wikipedia.org/w/index.php?title={{ link | urlencode }}">
-              {{ link }}
-            </a>
-          </td>
-          <td>
-            <a href="http://en.wikipedia.org/w/index.php?title={{ link | urlencode }}&action=raw">
-              Raw
-            </a>
-          </td>
-          <td>
-            <a href="/#/{{ link | urlencode}}/">
-              Graph
-            </a>
-          </td>
-        </tr>
-      </table>
- -->    </div>
+      <div id="graph" ng-show="data.graph && !data.error"></div>
+    </div>
   </div>
 </div>

@@ -13,20 +13,12 @@ WG.config(function($routeProvider) {
   })
   .when('/algos', {
     templateUrl: '/js/views/algos.html',
-    controller: 'AlgosController',
+    controller: 'AlgosController'
   })
   .when('/links', {
     templateUrl: '/js/views/links.html',
-    controller: 'LinksController',
+    controller: 'LinksController'
   });
-});
-
-WG.factory('Data', function($http) {
-  var Data = {};
-  Data.loading = false;
-  Data.links = [];
-  Data.failure = false;
-  return Data;
 });
 
 WG.service('Fetch', function($http) {
@@ -81,8 +73,12 @@ WG.service('Graph', function() {
   var Graph = {};
 
   Graph.refresh = function(data) {
-    console.log('Refreshing with', data);
     $('#graph-canvaswidget').remove();
+
+    if (!data) {
+      return;
+    }
+
     var rgraph = new $jit.RGraph({
       injectInto: 'graph',
 

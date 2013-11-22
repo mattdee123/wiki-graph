@@ -1,10 +1,41 @@
-WG.controller('BaseController', function BaseController($scope, $routeParams, $location, Data, Fetch, Graph) {
-  $scope.data = Data;
-  $scope.form = $scope.form || {};
+WG.controller('BaseController', function BaseController($scope, $routeParams, $location, Fetch, Graph) {
+  $scope.data = {
+    loading: false,
+    basePage: null,
+    error: false,
+    graph: {}
+  };
 
-  $scope.form.maxDepth = parseInt($routeParams.maxDepth, 10) || 5;
-  $scope.form.maxDegree = parseInt($routeParams.maxDegree, 10) || 20;
-  $scope.form.maxArticles = parseInt($routeParams.maxArticles, 10) || 100;
+  $scope.form = {
+    page: $routeParams.page,
+    maxDepth: parseInt($routeParams.maxDepth, 10) || 5,
+    maxDegree: parseInt($routeParams.maxDegree, 10) || 20,
+    maxArticles: parseInt($routeParams.maxArticles, 10) || 100
+  };
+
+  var getGraph = function() {
+    $scope.data.loading = true;
+    $scope.data.basePage = $scope.form.page;
+    $scope.data.error = false;
+
+    Fetch.getGraph($scope.form,
+      function(result) {
+        $scope.data.loading = false;
+        $scope.data.graph = result;
+        $scope.data.error = false;
+        Graph.refresh($scope.data.graph);
+      },
+      function(result) {
+        $scope.data.loading = false;
+        $scope.data.graph = {};
+        $scope.data.error = true;
+      }
+    );
+  };
+
+  if ($scope.form.page) {
+    getGraph();
+  }
 
   $scope.refresh = function() {
     if (!($scope.form && $scope.form.page)) {
@@ -14,51 +45,6 @@ WG.controller('BaseController', function BaseController($scope, $routeParams, $l
     $location.search('maxDepth', $scope.form.maxDepth);
     $location.search('maxDegree', $scope.form.maxDegree);
     $location.search('maxArticles', $scope.form.maxArticles);
-
-    $scope.data.loading = true;
-    $scope.data.basePage = $scope.form.page;
-    $scope.data.failure = false;
-
-    Fetch.getGraph($scope.form,
-      function(result) {
-        $scope.data.loading = false;
-        $scope.data.graph = result;
-        $scope.data.failure = false;
-        Graph.refresh($scope.data.graph);
-      },
-      function(result) {
-        $scope.data.loading = false;
-        $scope.data.graph = [];
-        $scope.data.failure = true;
-        Graph.refresh($scope.data.graph);
-      }
-    );
+    getGraph();
   };
-
-  if ($routeParams.page) {
-    $scope.form.page = $routeParams.page;
-    $scope.data.loading = true;
-    $scope.data.basePage = $scope.form.page;
-    $scope.data.failure = false;
-
-    Fetch.getGraph($scope.form,
-      function(result) {
-        $scope.data.loading = false;
-        $scope.data.graph = result;
-        $scope.data.failure = false;
-        Graph.refresh($scope.data.graph);
-      },
-      function(result) {
-        $scope.data.loading = false;
-        $scope.data.graph = [];
-        $scope.data.failure = true;
-        Graph.refresh($scope.data.graph);
-      }
-    );
-  } else {
-    $scope.form.page = '';
-    $scope.data.graph = {};
-    $scope.data.loading = false;
-    $scope.data.failure = false;
-  }
 });
