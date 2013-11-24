@@ -31,16 +31,20 @@ public class RunWebSiteMode implements RunMode {
 
   @Override
   public void run(String[] args) {
+    String inDir = null;
     if (args.length == 0) {
       System.out.println("Takes 1 argument : defaulting to index dir of ./index/");
+      inDir = "index";
     }
     else if (args.length != 1) {
       System.out.println("Requires 1 argument: [index dir]");
       System.exit(1);
+    } else {
+      inDir = args[0];
     }
     externalStaticFileLocation("src/main/resources/static");
 
-    final ArticleStore store = new IndexArticleStore(new File(args[0]));
+    final ArticleStore store = new IndexArticleStore(new File(inDir));
 
     get(new FreeMarkerRoute("/") {
       @Override
