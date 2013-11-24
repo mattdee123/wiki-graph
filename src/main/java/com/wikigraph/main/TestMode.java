@@ -19,13 +19,12 @@ public class TestMode implements RunMode {
     Article a = articleStore.forTitle(args[1]);
     Article b = articleStore.forTitle(args[2]);
     Stopwatch s = new Stopwatch().start();
-    Path p = Algos.bidirectionalSearch(a, b);
-    s.stop();
-    System.out.println("Finished Bidirectional in " + s.elapsed(TimeUnit.MILLISECONDS) + "ms! The path is: " + p);
-    s.reset().start();
-    p = Algos.shortestPathBfs(a, b);
-    s.stop();
-    System.out.println("Finished BFS in " + s.elapsed(TimeUnit.MILLISECONDS) + "ms! The path is: " + p);
+    while (true) {
+      Path p = Algos.bidirectionalSearch(a, b);
+      s.stop();
+      System.out.println("Finished Bidirectional in " + s.elapsed(TimeUnit.MILLISECONDS) + "ms! The path is: " + p);
+      s.reset().start();
+    }
 
   }
 }

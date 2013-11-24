@@ -104,7 +104,7 @@ public class Algos {
     int expanded = 1;
     while (!(startFrontier.isEmpty() || endFrontier.isEmpty())) {
       // Search Forwards
-      if (startFrontier.size() < endFrontier.size()) {
+      if (startFrontier.size() <= endFrontier.size()) {
         expanded += startFrontier.size();
         Queue<Path> nextStartFrontier = new ArrayDeque<>();
         while (!startFrontier.isEmpty()) {

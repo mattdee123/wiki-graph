@@ -31,7 +31,10 @@ public class RunWebSiteMode implements RunMode {
 
   @Override
   public void run(String[] args) {
-    if (args.length != 1) {
+    if (args.length == 0) {
+      System.out.println("Takes 1 argument : defaulting to index dir of ./index/");
+    }
+    else if (args.length != 1) {
       System.out.println("Requires 1 argument: [index dir]");
       System.exit(1);
     }
