@@ -8,7 +8,7 @@ import java.util.Map;
 
 import static com.wikigraph.wikidump.ArticleWriter.NUM_BUCKETS;
 
-public class ArticleHashIndex extends Index<Map<String, Integer>> {
+public class ArticleHashIndex extends DataFileIndex<Map<String, Integer>> {
 
   private char[] buf = new char[512];
 

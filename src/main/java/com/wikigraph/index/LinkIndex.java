@@ -6,7 +6,7 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LinkIndex extends Index<List<Integer>> {
+public class LinkIndex extends DataFileIndex<List<Integer>> {
 
   public LinkIndex(File dir) {
     super(dir);

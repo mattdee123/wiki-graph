@@ -5,10 +5,8 @@ import com.wikigraph.wikidump.TitleFixer;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.HashMap;
-import java.util.Map;
 
-public class ArticleIndex extends Index<String> {
+public class ArticleIndex extends DataFileIndex<String> {
   private TitleFixer fixer = TitleFixer.getFixer();
   public ArticleIndex(File dir) {
     super(dir);

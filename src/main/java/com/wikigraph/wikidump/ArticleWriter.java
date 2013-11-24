@@ -44,10 +44,12 @@ public class ArticleWriter implements PageProcessor {
   public static final int NUM_BUCKETS = 15000000;
   public static final String ARTICLE_HASH = "article-hash.csv";
   public static final String ARTICLE_ID = "article-id.csv";
+  public static final String REDIRECTS = "redirects.csv";
 
   private final Writer articleIdWriter;
   private final Writer duplicateWriter;
   private final Writer articleHashWriter;
+  private final Writer redirectWriter;
 
   Map<String, Integer> ids = Maps.newHashMapWithExpectedSize(14000000);
   List<List<String>> buckets = Lists.newArrayListWithCapacity(NUM_BUCKETS);
@@ -63,11 +65,13 @@ public class ArticleWriter implements PageProcessor {
     File articleIdFile = new File(outDir, ARTICLE_ID);
     File articleHashFile = new File(outDir, ARTICLE_HASH);
     File duplicateFile = new File(outDir, "duplicates.csv");
+    File redirectFile = new File(outDir, REDIRECTS);
     try {
       articleIdFile.getParentFile().mkdirs();
       articleIdWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(articleIdFile)));
       duplicateWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(duplicateFile)));
       articleHashWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(articleHashFile)));
+      redirectWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(redirectFile)));
 
     } catch (IOException e) {
       throw Throwables.propagate(e);
@@ -84,6 +88,9 @@ public class ArticleWriter implements PageProcessor {
                 currentPage.title.substring(0, 1).toLowerCase() + '\n');
         duplicates.add(currentPage.title.toLowerCase().charAt(0));
       } else {
+        if (currentPage.redirect != null) {
+          redirectWriter.write(count + "\n");
+        }
         articleIdWriter.write(joiner.join(count, title) + "\n");
         int bucket = title.hashCode() % NUM_BUCKETS;
         if (bucket < 0) {
@@ -112,6 +119,7 @@ public class ArticleWriter implements PageProcessor {
       }
       articleIdWriter.close();
       duplicateWriter.close();
+      redirectWriter.close();
       System.out.println("Now Writing hash values");
       for (int i = 0; i < NUM_BUCKETS; i++) {
         if (buckets.get(i).size() > 0) {
