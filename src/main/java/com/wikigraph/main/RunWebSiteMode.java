@@ -28,6 +28,7 @@ import static spark.Spark.get;
 
 public class RunWebSiteMode implements RunMode {
   private static final Random random = new Random();
+  private static final int MAX_VERTICES = 1000;
 
   @Override
   public void run(String[] args) {
@@ -60,7 +61,7 @@ public class RunWebSiteMode implements RunMode {
         String pageName = request.queryParams("page");
         int maxDepth = Integer.parseInt(request.queryParams("maxDepth"));
         int maxDegree = Integer.parseInt(request.queryParams("maxDegree"));
-        int maxArticles = Integer.parseInt(request.queryParams("maxArticles"));
+        int maxArticles = Math.min(Integer.parseInt(request.queryParams("maxArticles")), MAX_VERTICES);
 
         Article start = store.forTitle(pageName);
         if (start == null) {

@@ -14,7 +14,7 @@ public class WriteRedirects {
 
   public void write(File inFile, File outFile) {
     try {
-      System.out.println("Writing from" + inFile + " to " + outFile);
+      System.out.println("Writing from " + inFile + " to " + outFile);
       BufferedReader reader = new BufferedReader(new FileReader(inFile));
       DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(outFile)));
       int index = 0;
