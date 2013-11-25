@@ -1,4 +1,4 @@
-WG.controller('LinksController', function BaseController($scope, $routeParams, $location, Data, Fetch, Graph) {
+WG.controller('LinksController', function BaseController($scope, $routeParams, $location, Fetch, Graph) {
   $scope.data = {};
   $scope.form = $scope.form || {};
 
