@@ -79,6 +79,7 @@ public class LinkWriter implements PageProcessor {
 
   @Override
   public void processPage(Page currentPage) {
+    if (titleFixer.shouldIgnore(currentPage.title)) return;
     List<String> links = currentPage.redirect == null ? parser.getConnections(currentPage.text) : ImmutableList.of
             (currentPage.redirect);
     String from = titleFixer.toTitle(currentPage.title);

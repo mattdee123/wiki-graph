@@ -42,4 +42,8 @@ public class TitleFixer {
     }
     return line;
   }
+
+  public boolean shouldIgnore(String title) {
+    return (title.startsWith("File:"));
+  }
 }
