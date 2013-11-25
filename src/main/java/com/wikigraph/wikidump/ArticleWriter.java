@@ -80,6 +80,7 @@ public class ArticleWriter implements PageProcessor {
 
   @Override
   public void processPage(Page currentPage) {
+    if (!shouldIgnore(currentPage.title)) return;
     try {
       String title = titleFixer.toTitle(currentPage.title);
       if (ids.containsKey(title)) {
@@ -104,6 +105,10 @@ public class ArticleWriter implements PageProcessor {
     } catch (IOException e) {
       throw Throwables.propagate(e);
     }
+  }
+
+  private boolean shouldIgnore(String title) {
+    return (title.startsWith("File:"));
   }
 
   public Map<String, Integer> getIds() {
