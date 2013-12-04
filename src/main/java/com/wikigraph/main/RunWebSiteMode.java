@@ -50,8 +50,8 @@ public class RunWebSiteMode implements RunMode {
     get(new FreeMarkerRoute("/") {
       @Override
       public Object handle(Request request, Response response) {
-        Map<String, Object> templateValues = new HashMap<String, Object>();
-        return modelAndView(templateValues, "index.ftl");
+        response.type("text/html");
+        return modelAndView(null, "index.ftl");
       }
     });
 
