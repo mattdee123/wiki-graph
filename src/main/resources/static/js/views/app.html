@@ -1,35 +1,44 @@
-<div class="container">
-  <div class="query-field">
-    <form ng-submit="refresh()">
-      <div class="input-group">
-        <input id="input-page" class="form-control input-large" type="text" placeholder="Page to query" ng-model="form.page">
-        <span class="input-group-btn">
-          <button id="btn-refresh" class="btn btn-primary btn-large">
-            Run
-          </button>
-        </span>
+<div class="query-field">
+  <form ng-submit="refresh()">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="input-group">
+          <input id="input-page" class="form-control input-lg" type="text" placeholder="Page to query" ng-model="form.page">
+          <span class="input-group-btn">
+            <button id="btn-refresh" class="btn btn-primary btn-lg">
+              Run
+            </button>
+          </span>
+        </div>
       </div>
-      <br>
-      <div class="input-group col-lg-3">
-        <span class="input-group-addon">Max Articles</span>
-        <input class="form-control" type="number" ng-model="form.maxArticles" ng-value="100" min="1" max="1000">
-      </div>
-      <div class="input-group col-lg-3">
-        <span class="input-group-addon">Max Degree</span>
-        <input class="form-control" type="number" ng-model="form.maxDegree" ng-value="20" min="1">
-      </div>
-      <div class="input-group col-lg-3">
-        <span class="input-group-addon">Max Depth</span>
-        <input class="form-control" type="number" ng-model="form.maxDepth" ng-value="5" min="1">
-      </div>
-    </form>
-  </div>
-
-  <div id="content" ng-show="data.basePage">
-    <div id="content-body">
-      <h3 class="text-center" ng-show="data.error">That page does not exist.</h3>
-      <h3 class="text-center" ng-show="data.loading"><i class="icon-refresh icon-spin"></i></h3>
-      <div id="graph" ng-show="data.graph && !data.error"></div>
     </div>
+    <div class="row">
+      <div class="col-sm-4 col-md-3">
+        <div class="input-group">
+          <span class="input-group-addon">Max Articles</span>
+          <input class="form-control" type="number" ng-model="form.maxArticles" ng-value="100" min="1" max="1000">
+        </div>
+      </div>
+      <div class="col-sm-4 col-md-3">
+        <div class="input-group">
+          <span class="input-group-addon">Max Degree</span>
+          <input class="form-control" type="number" ng-model="form.maxDegree" ng-value="20" min="1">
+        </div>
+      </div>
+      <div class="col-sm-4 col-md-3">
+        <div class="input-group">
+          <span class="input-group-addon">Max Depth</span>
+          <input class="form-control" type="number" ng-model="form.maxDepth" ng-value="5" min="1">
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div id="content" ng-show="data.basePage">
+  <div id="content-body">
+    <h3 class="text-center" ng-show="data.error">That page does not exist.</h3>
+    <h3 class="text-center" ng-show="data.loading"><i class="fa fa-refresh fa-spin"></i></h3>
+    <div id="graph" ng-show="data.graph && !data.error"></div>
   </div>
 </div>

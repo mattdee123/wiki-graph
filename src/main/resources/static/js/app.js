@@ -1,4 +1,4 @@
-var WG = angular.module('WG', []);
+var WG = angular.module('WG', ['ngRoute']);
 
 WG.filter('urlencode', function() {
   return encodeURIComponent;
@@ -18,6 +18,12 @@ WG.config(function($routeProvider) {
   .when('/links', {
     templateUrl: '/js/views/links.html',
     controller: 'LinksController'
+  });
+});
+
+WG.run(function($rootScope) {
+  $rootScope.$on('$routeChangeSuccess', function(event, newRoute) {
+    $rootScope.currentController = newRoute.$$route.controller;
   });
 });
 

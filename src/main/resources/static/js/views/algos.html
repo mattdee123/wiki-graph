@@ -1,45 +1,43 @@
-<div class="container">
-  <div class="algo-field">
-    <h1>
-      Shortest Path
-      <a class="btn btn-default" ng-click="shortestPath.randomize()">
-        Randomize
-      </a>
-      <i class="icon-refresh icon-spin" ng-show="shortestPath.loading"></i>
-    </h1>
-    <br>
-    <div class="row">
-      <form ng-submit="shortestPath.submit()">
-        <div class="col-lg-5">
-          <input id="input-page" class="form-control input-large" type="text"
-          placeholder="Start" ng-model="shortestPath.start">
-        </div>
-        <div class="col-lg-1">
-          <button type="button" class="btn btn-default form-control input-large" ng-click="shortestPath.swap()">
-            <i class="icon-exchange"></i>
-          </button>
-        </div>
-        <div class="col-lg-5">
-          <input id="input-page" class="form-control input-large" type="text"
-          placeholder="End" ng-model="shortestPath.end">
-        </div>
-        <div class="col-lg-1">
-          <input type="submit" class="btn btn-primary form-control input-large" value="Run">
-        </div>
+<div class="algo-field">
+  <h1>
+    Shortest Path
+    <a class="btn btn-default" ng-click="shortestPath.randomize()">
+      Randomize
+    </a>
+    <i class="fa fa-refresh fa-spin" ng-show="shortestPath.loading"></i>
+  </h1>
+  <br>
+  <div class="row">
+    <form ng-submit="shortestPath.submit()">
+      <div class="col-sm-5">
+        <input id="input-page" class="form-control input-lg" type="text"
+        placeholder="Start" ng-model="shortestPath.start">
       </div>
-    </form>
-    <br>
-    <h4>{{ shortestPath.error }}</h4>
-    <h4 class="text-center result-shortest-path">
-      <span ng-repeat="article in shortestPath.result.path">
-        <a ng-href="//en.wikipedia.org/wiki/{{ article.title | urlencode }}" class="btn btn-default" target="_blank">
-          {{ article.title }}
-        </a>
-        <i class="icon-long-arrow-right" ng-hide="$last"></i>
-      </span>
-    </h4>
-    <h4 class="text-center" ng-show="shortestPath.result.time">
-      Completed in {{ shortestPath.result.time }} ms
-    </h4>
-  </div>
+      <div class="col-sm-1">
+        <button type="button" class="btn btn-default form-control input-lg" ng-click="shortestPath.swap()">
+          <i class="fa fa-exchange"></i>
+        </button>
+      </div>
+      <div class="col-sm-5">
+        <input id="input-page" class="form-control input-lg" type="text"
+        placeholder="End" ng-model="shortestPath.end">
+      </div>
+      <div class="col-sm-1">
+        <input type="submit" class="btn btn-primary form-control input-lg" value="Run">
+      </div>
+    </div>
+  </form>
+  <br>
+  <h4>{{ shortestPath.error }}</h4>
+  <h4 class="text-center result-shortest-path">
+    <span ng-repeat="article in shortestPath.result.path">
+      <a ng-href="//en.wikipedia.org/wiki/{{ article.title | urlencode }}" class="btn btn-default" target="_blank">
+        {{ article.title }}
+      </a>
+      <i class="fa fa-long-arrow-right" ng-hide="$last"></i>
+    </span>
+  </h4>
+  <h4 class="text-center" ng-show="shortestPath.result.time">
+    Completed in {{ shortestPath.result.time | number:0 }} ms
+  </h4>
 </div>
