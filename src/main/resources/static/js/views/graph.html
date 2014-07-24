@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-xs-12">
         <div class="input-group">
-          <input id="input-page" class="form-control input-lg" type="text" placeholder="Page to query" ng-model="form.page">
+          <input class="form-control input-lg" type="text" placeholder="Page to query" ng-model="form.page">
           <span class="input-group-btn">
             <button id="btn-refresh" class="btn btn-primary btn-lg">
               Run
@@ -35,10 +35,10 @@
   </form>
 </div>
 
-<div id="content" ng-show="data.basePage">
-  <div id="content-body">
+<div class="content" ng-show="data.basePage">
+  <div class="content-body">
     <h3 class="text-center" ng-show="data.error">That page does not exist.</h3>
     <h3 class="text-center" ng-show="data.loading"><i class="fa fa-refresh fa-spin"></i></h3>
-    <div id="graph" ng-show="data.graph && !data.error"></div>
+    <div class="graph" ng-show="data.graph && !data.error"></div>
   </div>
 </div>

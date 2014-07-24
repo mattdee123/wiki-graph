@@ -20,7 +20,7 @@ WG.config(function($routeProvider) {
     controller: 'LinksController'
   })
   .otherwise({
-    redirectTo: '/graph'
+    redirectTo: '/algos'
   });
 });
 

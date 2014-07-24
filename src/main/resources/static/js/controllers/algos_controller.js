@@ -44,6 +44,7 @@ WG.controller('AlgosController', function ($scope, $location, $routeParams, $htt
     var tmp = $scope.shortestPath.start;
     $scope.shortestPath.start = $scope.shortestPath.end;
     $scope.shortestPath.end = tmp;
+    $scope.shortestPath.submit();
   };
 
   // Randomly selects a start and end article.
@@ -55,6 +56,7 @@ WG.controller('AlgosController', function ($scope, $location, $routeParams, $htt
     .success(function(articles) {
       $scope.shortestPath.start = articles[0];
       $scope.shortestPath.end = articles[1];
+      $scope.shortestPath.submit();
     });
   };
 });

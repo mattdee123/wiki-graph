@@ -1,9 +1,9 @@
 <div class="query-field">
   <form ng-submit="refresh()">
     <div class="input-group">
-      <input id="input-page" class="form-control input-large" type="text" placeholder="Page to query" ng-model="form.page">
+      <input class="form-control input-lg" type="text" placeholder="Page to query" ng-model="form.page">
       <span class="input-group-btn">
-        <button id="btn-refresh" class="btn btn-primary btn-large">
+        <button type="submit" class="btn btn-primary btn-lg">
           Run
         </button>
       </span>
@@ -16,9 +16,9 @@
     <h3 class="text-center" ng-show="data.error">That page does not exist.</h3>
     <h3 class="text-center" ng-show="data.loading"><i class="fa fa-refresh fa-spin"></i></h3>
 
-    <h2 ng-show="data.links.out.length">{{ data.links.out.length }} outgoing links:</h2>
-    <table class="table table-bordered table-condensed">
-      <tr ng-repeat="link in data.links.out track by $index">
+    <h2 ng-show="data.links.in.length">{{ data.links.in.length }} incoming links:</h2>
+    <table class="table table-bordered table-striped table-condensed">
+      <tr ng-repeat="link in data.links.in track by $index">
         <td>
           <a ng-href="http://en.wikipedia.org/w/index.php?title={{ link.title | urlencode }}">
             {{ link.title }}
@@ -32,9 +32,9 @@
       </tr>
     </table>
 
-    <h2 ng-show="data.links.in.length">{{ data.links.in.length }} incoming links:</h2>
-    <table class="table table-bordered table-condensed">
-      <tr ng-repeat="link in data.links.in track by $index">
+    <h2 ng-show="data.links.out.length">{{ data.links.out.length }} outgoing links:</h2>
+    <table class="table table-bordered table-striped table-condensed">
+      <tr ng-repeat="link in data.links.out track by $index">
         <td>
           <a ng-href="http://en.wikipedia.org/w/index.php?title={{ link.title | urlencode }}">
             {{ link.title }}
