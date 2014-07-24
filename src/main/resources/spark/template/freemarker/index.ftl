@@ -23,7 +23,7 @@
 
       <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <li ng-class="{active: currentController === 'BaseController'}"><a href="#/">Visualize</a></li>
+          <li ng-class="{active: currentController === 'GraphController'}"><a href="#/graph">Visualize</a></li>
           <li ng-class="{active: currentController === 'AlgosController'}"><a href="#/algos">Analyze</a></li>
           <li ng-class="{active: currentController === 'LinksController'}"><a href="#/links">Links</a></li>
         </ul>
@@ -42,7 +42,7 @@
   <script src="/js/lib/jit.min.js"></script>
 
   <script src="/js/app.js"></script>
-  <script src="/js/controllers/base_controller.js"></script>
+  <script src="/js/controllers/graph_controller.js"></script>
   <script src="/js/controllers/algos_controller.js"></script>
   <script src="/js/controllers/links_controller.js"></script>
 </body>

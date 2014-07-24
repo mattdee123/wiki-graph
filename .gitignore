@@ -21,3 +21,7 @@ target/
 #Don't want to check all of wikipedia in
 data/
 index/
+
+# Sublime Text #
+*.sublime-workspace
+

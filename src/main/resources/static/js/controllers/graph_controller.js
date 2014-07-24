@@ -1,4 +1,4 @@
-WG.controller('BaseController', function BaseController($scope, $routeParams, $location, Fetch, Graph) {
+WG.controller('GraphController', function($scope, $routeParams, $location, Fetch, Graph) {
   $scope.data = {
     loading: false,
     basePage: null,

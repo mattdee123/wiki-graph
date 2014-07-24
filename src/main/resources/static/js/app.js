@@ -6,9 +6,9 @@ WG.filter('urlencode', function() {
 
 WG.config(function($routeProvider) {
   $routeProvider
-  .when('/', {
-    templateUrl: '/js/views/app.html',
-    controller: 'BaseController',
+  .when('/graph', {
+    templateUrl: '/js/views/graph.html',
+    controller: 'GraphController',
     reloadOnSearch: false
   })
   .when('/algos', {
@@ -18,6 +18,9 @@ WG.config(function($routeProvider) {
   .when('/links', {
     templateUrl: '/js/views/links.html',
     controller: 'LinksController'
+  })
+  .otherwise({
+    redirectTo: '/graph'
   });
 });
 
