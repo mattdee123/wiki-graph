@@ -9,13 +9,6 @@
   <link rel="stylesheet" href="/css/index.css">
 </head>
 <body ng-app="WG">
-  <a href="https://github.com/mattdee123/wiki-graph">
-    <img style="position: absolute; top: 0; right: 0; border: 0; z-index: 1"
-    src="//camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67"
-    alt="Fork me on GitHub"
-    data-canonical-src="//s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png">
-  </a>
-
   <nav class="navbar navbar-default" role="navigation">
     <div class="container-fluid">
       <div class="navbar-header">
@@ -32,6 +25,14 @@
           <li ng-class="{active: currentController === 'GraphController'}"><a href="#/graph">Visualize</a></li>
           <li ng-class="{active: currentController === 'AlgosController'}"><a href="#/algos">Analyze</a></li>
           <li ng-class="{active: currentController === 'LinksController'}"><a href="#/links">Links</a></li>
+        </ul>
+
+        <ul class="nav navbar-nav pull-right">
+          <li>
+            <a href="https://github.com/mattdee123/wiki-graph" target="_blank">
+              <i class="fa fa-github"></i>
+            </a>
+          </li>
         </ul>
       </div>
     </div>
