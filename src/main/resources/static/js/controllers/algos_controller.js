@@ -1,8 +1,4 @@
-/**
- * Algorithms controller. Used on the #/algos page.
- */
-
-WG.controller('AlgosController', function ($scope, $location, $routeParams, $http, Fetch) {
+WG.controller('AlgosController', function($scope, $location, $routeParams, $http, Fetch) {
   $scope.shortestPath = {
     loading: false,
     error: null,
@@ -14,18 +10,16 @@ WG.controller('AlgosController', function ($scope, $location, $routeParams, $htt
   $scope.shortestPath.fetch = function() {
     $scope.shortestPath.loading = true;
     $scope.shortestPath.error = null;
-    Fetch.getShortestPath($scope.shortestPath.start, $scope.shortestPath.end,
-      function(result) {
+    Fetch.getShortestPath($scope.shortestPath.start, $scope.shortestPath.end)
+      .then(function(result) {
         $scope.shortestPath.loading = false;
         $scope.shortestPath.error = null;
-        $scope.shortestPath.result = result;
-      },
-      function(error) {
+        $scope.shortestPath.result = result.data;
+      }, function(error) {
         $scope.shortestPath.loading = false;
-        $scope.shortestPath.error = error;
+        $scope.shortestPath.error = error.data;
         $scope.shortestPath.result = [];
-      }
-    );
+      });
   };
 
   if ($scope.shortestPath.start && $scope.shortestPath.end) {
@@ -53,10 +47,10 @@ WG.controller('AlgosController', function ($scope, $location, $routeParams, $htt
       method: 'GET',
       url: '/api/randomArticle?count=2', // Prevents Angular caching the random article.
     })
-    .success(function(articles) {
-      $scope.shortestPath.start = articles[0];
-      $scope.shortestPath.end = articles[1];
-      $scope.shortestPath.submit();
-    });
+      .success(function(articles) {
+        $scope.shortestPath.start = articles[0];
+        $scope.shortestPath.end = articles[1];
+        $scope.shortestPath.submit();
+      });
   };
 });

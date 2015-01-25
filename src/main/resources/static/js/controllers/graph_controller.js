@@ -13,28 +13,31 @@ WG.controller('GraphController', function($scope, $routeParams, $location, Fetch
     maxArticles: parseInt($routeParams.maxArticles, 10) || 100
   };
 
-  var getGraph = function() {
-    $scope.data.loading = true;
-    $scope.data.basePage = $scope.form.page;
+  var refreshGraph = function(result) {
+    $scope.data.loading = false;
+    $scope.data.graph = result.data;
     $scope.data.error = false;
+    Graph.refresh($scope.data.graph, function(node) {
+      $scope.form.page = node.name;
+      $scope.refresh();
+    });
+  };
 
-    Fetch.getGraph($scope.form,
-      function(result) {
-        $scope.data.loading = false;
-        $scope.data.graph = result;
-        $scope.data.error = false;
-        Graph.refresh($scope.data.graph);
-      },
-      function(result) {
-        $scope.data.loading = false;
-        $scope.data.graph = {};
-        $scope.data.error = true;
-      }
-    );
+  var refreshGraphError = function() {
+    $scope.data.loading = false;
+    $scope.data.graph = {};
+    $scope.data.error = true;
+  };
+
+  var getGraph = function(form) {
+    $scope.data.loading = true;
+    $scope.data.basePage = form.page;
+    $scope.data.error = false;
+    Fetch.getGraph(form).then(refreshGraph, refreshGraphError);
   };
 
   if ($scope.form.page) {
-    getGraph();
+    getGraph($scope.form);
   }
 
   $scope.refresh = function() {
@@ -45,6 +48,6 @@ WG.controller('GraphController', function($scope, $routeParams, $location, Fetch
     $location.search('maxDepth', $scope.form.maxDepth);
     $location.search('maxDegree', $scope.form.maxDegree);
     $location.search('maxArticles', $scope.form.maxArticles);
-    getGraph();
+    getGraph($scope.form);
   };
 });

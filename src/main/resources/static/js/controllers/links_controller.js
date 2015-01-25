@@ -1,4 +1,4 @@
-WG.controller('LinksController', function BaseController($scope, $routeParams, $location, Fetch, Graph) {
+WG.controller('LinksController', function BaseController($scope, $routeParams, $location, Fetch) {
   $scope.data = {};
   $scope.form = $scope.form || {};
 
@@ -12,18 +12,16 @@ WG.controller('LinksController', function BaseController($scope, $routeParams, $
     $scope.data.basePage = $scope.form.page;
     $scope.data.error = false;
 
-    Fetch.getLinks($scope.form,
-      function(result) {
+    Fetch.getLinks($scope.form)
+      .then(function(result) {
         $scope.data.loading = false;
-        $scope.data.links = result;
+        $scope.data.links = result.data;
         $scope.data.error = false;
-      },
-      function(result) {
+      }, function(result) {
         $scope.data.loading = false;
         $scope.data.links = {};
-        $scope.data.error = result;
-      }
-    );
+        $scope.data.error = result.data;
+      });
   };
 
   if ($routeParams.page) {
@@ -32,18 +30,17 @@ WG.controller('LinksController', function BaseController($scope, $routeParams, $
     $scope.data.basePage = $scope.form.page;
     $scope.data.error = false;
 
-    Fetch.getLinks($scope.form,
-      function(result) {
+    Fetch.getLinks($scope.form)
+      .then(function(result) {
         $scope.data.loading = false;
-        $scope.data.links = result;
+        $scope.data.links = result.data;
         $scope.data.error = false;
       },
       function(result) {
         $scope.data.loading = false;
         $scope.data.links = {};
-        $scope.data.error = result;
-      }
-    );
+        $scope.data.error = result.data;
+      });
   } else {
     $scope.form.page = '';
     $scope.data.links = {};

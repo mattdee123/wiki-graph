@@ -6,73 +6,60 @@ WG.filter('urlencode', function() {
 
 WG.config(function($routeProvider) {
   $routeProvider
-  .when('/graph', {
-    templateUrl: '/js/views/graph.html',
-    controller: 'GraphController',
-    reloadOnSearch: false
-  })
-  .when('/algos', {
-    templateUrl: '/js/views/algos.html',
-    controller: 'AlgosController'
-  })
-  .when('/links', {
-    templateUrl: '/js/views/links.html',
-    controller: 'LinksController'
-  })
-  .otherwise({
-    redirectTo: '/algos'
-  });
+    .when('/graph', {
+      templateUrl: '/js/views/graph.html',
+      controller: 'GraphController',
+      reloadOnSearch: false
+    })
+    .when('/algos', {
+      templateUrl: '/js/views/algos.html',
+      controller: 'AlgosController'
+    })
+    .when('/links', {
+      templateUrl: '/js/views/links.html',
+      controller: 'LinksController'
+    })
+    .otherwise({
+      redirectTo: '/algos'
+    });
 });
 
 WG.run(function($rootScope) {
   $rootScope.$on('$routeChangeSuccess', function(event, newRoute) {
-    $rootScope.currentController = newRoute.$$route.controller;
+    if (newRoute && newRoute.$$route) {
+      $rootScope.currentController = newRoute.$$route.controller;
+    }
   });
 });
 
 WG.service('Fetch', function($http) {
   var Fetch = {};
 
-  Fetch.getGraph = function(form, successCallback, errorCallback) {
-    successCallback = successCallback || function() {};
-    errorCallback = errorCallback || function() {};
-    var result = $http({
+  Fetch.getGraph = function(form) {
+    return $http({
       url: '/graph',
       method: 'GET',
       params: form
-    })
-    .success(successCallback)
-    .error(errorCallback);
-    return result;
+    });
   };
 
-  Fetch.getLinks = function(form, successCallback, errorCallback) {
-    successCallback = successCallback || function() {};
-    errorCallback = errorCallback || function() {};
-    var result = $http({
+  Fetch.getLinks = function(form) {
+    return $http({
       url: '/links',
       method: 'GET',
       params: form
     })
-    .success(successCallback)
-    .error(errorCallback);
-    return result;
   };
 
-  Fetch.getShortestPath = function(start, end, successCallback, errorCallback) {
-    successCallback = successCallback || function() {};
-    errorCallback = errorCallback || function() {};
-    var result = $http({
+  Fetch.getShortestPath = function(start, end) {
+    return $http({
       url: '/path',
       method: 'GET',
       params: {
         start: start,
         end: end
       }
-    })
-    .success(successCallback)
-    .error(errorCallback);
-    return result;
+    });
   };
 
   return Fetch;
@@ -81,34 +68,30 @@ WG.service('Fetch', function($http) {
 WG.service('Graph', function() {
   var Graph = {};
 
-  Graph.refresh = function(data) {
+  Graph.refresh = function(data, onBeforeCompute) {
     $('#graph-canvaswidget').remove();
 
     if (!data) {
       return;
     }
 
-    var rgraph = new $jit.RGraph({
+    var rGraph = new $jit.RGraph({
       injectInto: 'graph',
-
       background: {
         numberOfCircles: 100,
         CanvasStyles: {
           strokeStyle: '#555'
         }
       },
-
       Navigation: {
         enable: true,
         zooming: 10,
         panning: true
       },
-
       Node: {
         color: '#0099dd',
         dim: 3
       },
-
       Tips: {
         enable: true,
         type: 'Native',
@@ -118,12 +101,10 @@ WG.service('Graph', function() {
           tip.innerHTML = node.name;
         }
       },
-
       Edge: {
         color: '#0099dd',
         lineWidth: 0.5
       },
-
       Events: {
         enable: true,
         type: 'Native',
@@ -131,13 +112,12 @@ WG.service('Graph', function() {
           if (!node || node.nodeFrom) {
             return;
           }
-          rgraph.onClick(node.id, {
+          rGraph.onClick(node.id, {
             duration: 400,
             transition: $jit.Trans.Quad.easeInOut
           });
         }
       },
-
       onPlaceLabel: function(domElement, node) {
         var style = domElement.style;
         style.display = '';
@@ -153,16 +133,17 @@ WG.service('Graph', function() {
         var left = parseInt(style.left, 10);
         var w = domElement.offsetWidth;
         style.left = (left - w / 2) + 'px';
-      }
+      },
+      onBeforeCompute: onBeforeCompute
     });
 
-    rgraph.loadJSON(data);
-    rgraph.graph.eachNode(function (n) {
+    rGraph.loadJSON(data);
+    rGraph.graph.eachNode(function(n) {
       n.getPos().setc(-200, -200);
     });
-    rgraph.compute('end');
-    rgraph.refresh();
-    rgraph.canvas.scale(2, 2);
+    rGraph.compute('end');
+    rGraph.refresh();
+    rGraph.canvas.scale(2, 2);
   };
 
   return Graph;
@@ -172,7 +153,7 @@ WG.directive('tooltip', function() {
   var dir = {};
   dir.restrict = 'A';
   dir.link = function(scope, elem) {
-    $(elem).tooltip({container: 'body', placement: 'right'});
+    elem.tooltip({container: 'body', placement: 'right'});
   };
   return dir;
 });
