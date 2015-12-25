@@ -25,3 +25,9 @@ index/
 # Sublime Text #
 *.sublime-workspace
 
+# Client
+client/node_modules
+client/bower_components
+src/main/resources/static/js
+src/main/resources/static/views
+app.js

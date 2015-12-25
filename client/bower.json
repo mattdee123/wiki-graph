@@ -1,0 +1,17 @@
+{
+  "name": "wiki-graph-client",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "resources/js/vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.0",
+    "angular-ui-router": "~0.2.10",
+    "angular-bootstrap": "~0.10.0",
+    "angular-resource": "~1.2.5"
+  }
+}

@@ -7,50 +7,33 @@
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
   <link rel="stylesheet" href="/css/index.css">
+
+  <base href="/">
 </head>
-<body ng-app="WG">
-  <nav class="navbar navbar-default" role="navigation">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-navbar-collapse-1">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-      </div>
+<body>
+  <wg-app></wg-app>
 
-      <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-          <li ng-class="{active: currentController === 'GraphController'}"><a href="#/graph">Visualize</a></li>
-          <li ng-class="{active: currentController === 'AlgosController'}"><a href="#/algos">Analyze</a></li>
-          <li ng-class="{active: currentController === 'LinksController'}"><a href="#/links">Links</a></li>
-        </ul>
+  <script src="https://code.angularjs.org/tools/system.js"></script>
+  <script src="https://code.angularjs.org/2.0.0-beta.0/angular2-polyfills.js"></script>
+  <script src="https://code.angularjs.org/2.0.0-beta.0/Rx.js"></script>
+  <script src="https://code.angularjs.org/2.0.0-beta.0/angular2.dev.js"></script>
+  <script src="https://code.angularjs.org/2.0.0-beta.0/http.dev.js"></script>
+  <script src="https://code.angularjs.org/2.0.0-beta.0/router.dev.js"></script>
 
-        <ul class="nav navbar-nav pull-right">
-          <li>
-            <a href="https://github.com/mattdee123/wiki-graph" target="_blank">
-              <i class="fa fa-github"></i>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-  <div class="container">
-    <ng-view></ng-view>
-  </div>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular-route.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.3.3/d3.min.js"></script>
-  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script>
+    System.config({
+      packages: {
+        js: {
+          format: 'register',
+          defaultExtension: 'js'
+        }
+      }
+    });
+    System.import('js/app')
+      .then(null, console.error.bind(console));
+  </script>
+
   <script src="/js/lib/underscore.min.js"></script>
   <script src="/js/lib/jit.min.js"></script>
-
-  <script src="/js/app.js"></script>
-  <script src="/js/controllers/graph_controller.js"></script>
-  <script src="/js/controllers/algos_controller.js"></script>
-  <script src="/js/controllers/links_controller.js"></script>
 </body>
 </html>
