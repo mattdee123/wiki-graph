@@ -33,7 +33,7 @@
   <div *ngIf="result">
     <h4 class="text-center result-shortest-path">
     <span *ngFor="#article of result.path; #last = last">
-      <a href="//en.wikipedia.org/wiki/{{ encodeUrl(article.title) }}" class="btn btn-default"
+      <a href="//en.wikipedia.org/wiki/{{ article.title | urlencode }}" class="btn btn-default"
          target="_blank">
         {{ article.title }}
       </a>

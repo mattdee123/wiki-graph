@@ -3,18 +3,20 @@ import {ROUTER_DIRECTIVES, Location, RouteParams} from 'angular2/router';
 import {CORE_DIRECTIVES} from 'angular2/common';
 
 import {QueryService} from "../query.service";
+import {UrlencodePipe} from "../pipes";
 
 @Component({
   selector: 'wg-shortest-path',
   templateUrl: 'views/algos/shortestpath.tpl.html',
-  directives: [ROUTER_DIRECTIVES]
+  directives: [ROUTER_DIRECTIVES],
+  pipes: [UrlencodePipe]
 })
 export class ShortestPathComponent {
   private start:string;
   private end:string;
   private loading:boolean;
   private error:string;
-  private result:{
+  private result: {
     time: number;
     path: string[];
   };
@@ -22,15 +24,13 @@ export class ShortestPathComponent {
   constructor(private queryService:QueryService,
               private location:Location,
               private params:RouteParams) {
-    this.start = decodeURIComponent(params.get('shortestPathStart'));
-    this.end = decodeURIComponent(params.get('shortestPathEnd'));
-    if (this.start && this.end) {
+    let start = params.get('shortestPathStart');
+    let end = params.get('shortestPathEnd');
+    if (start && end) {
+      this.start = decodeURIComponent(start);
+      this.end = decodeURIComponent(end);
       this.submit();
     }
-  }
-
-  private encodeUrl(url:string) {
-    return encodeURIComponent(url);
   }
 
   private randomize() {
@@ -58,8 +58,8 @@ export class ShortestPathComponent {
           this.error = err.text();
         },
         () => {
-          let start = this.encodeUrl(this.start);
-          let end = this.encodeUrl(this.end);
+          let start = encodeURIComponent(this.start);
+          let end = encodeURIComponent(this.end);
           this.location.replaceState('/algos', `shortestPathStart=${start}&shortestPathEnd=${end}`);
           this.loading = false;
         }

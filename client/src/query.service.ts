@@ -19,4 +19,10 @@ export class QueryService {
     let url = `/path?start=${start}&end=${end}`;
     return this.http.get(url);
   }
+
+  public getLinks(page: string) {
+    page = encodeURIComponent(page);
+    let url = `/links?page=${page}`;
+    return this.http.get(url);
+  }
 }

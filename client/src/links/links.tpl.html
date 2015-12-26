@@ -1,0 +1,57 @@
+<div class="query-field">
+  <form (ngSubmit)="submit()">
+    <div class="input-group">
+      <input class="form-control input-lg" type="text" placeholder="Page to query"
+             [(ngModel)]="page">
+      <span class="input-group-btn">
+        <button type="submit" class="btn btn-primary btn-lg">
+          Run
+        </button>
+      </span>
+    </div>
+  </form>
+</div>
+
+<div id="content">
+  <div *ngIf="error">
+    <h3 class="text-center">That page does not exist.</h3>
+  </div>
+  <div *ngIf="loading">
+    <h3 class="text-center"><i class="fa fa-refresh fa-spin"></i></h3>
+  </div>
+  <div *ngIf="links">
+    <h2 *ngIf="links && links.in.length">{{ links.in.length }} incoming links:</h2>
+    <table class="table table-bordered table-striped table-condensed"
+           *ngIf="links && links.in.length">
+      <tr *ngFor="#link of links.in">
+        <td>
+          <a target="_blank"
+             href="http://en.wikipedia.org/w/index.php?title={{ link.title | urlencode }}">
+            {{ link.title }}
+          </a>
+        </td>
+        <td>
+          <a href="#/?page={{ link.title | urlencode}}">
+            Graph
+          </a>
+        </td>
+      </tr>
+    </table>
+    <h2 *ngIf="links && links.out.length">{{ links.out.length }} outgoing links:</h2>
+    <table class="table table-bordered table-striped table-condensed" *ngIf="links">
+      <tr *ngFor="#link of links.out">
+        <td>
+          <a target="_blank"
+             href="http://en.wikipedia.org/w/index.php?title={{ link.title | urlencode }}">
+            {{ link.title }}
+          </a>
+        </td>
+        <td>
+          <a href="#/?page={{ link.title | urlencode}}">
+            Graph
+          </a>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
