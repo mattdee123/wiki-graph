@@ -1,5 +1,19 @@
 var gulp = require('gulp');
 var ts = require('gulp-typescript');
+var less = require('gulp-less');
+var autoprefixer = require('gulp-autoprefixer');
+var cssnano = require('gulp-cssnano');
+
+gulp.task('styles', function() {
+  return gulp.src('less/style.less')
+    .pipe(less())
+    .pipe(cssnano())
+    .pipe(autoprefixer({
+      browsers: ['last 2 versions'],
+      cascade: false
+    }))
+    .pipe(gulp.dest('../src/main/resources/static/css'));
+});
 
 gulp.task('templates', function() {
   return gulp.src('src/**/*.tpl.html')
@@ -21,7 +35,8 @@ gulp.task('typescript', function () {
     .pipe(gulp.dest(outDir));
 });
 
-gulp.task('default', ['typescript', 'templates'], function () {
+gulp.task('default', ['styles', 'typescript', 'templates'], function () {
+  gulp.watch('less/**/*.less', ['styles']);
   gulp.watch('src/**/*.ts', ['typescript']);
   gulp.watch('src/**/*.html', ['templates']);
 });
