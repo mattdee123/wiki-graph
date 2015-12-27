@@ -1,0 +1,46 @@
+<div class="query-field">
+  <form (ngSubmit)="submit()">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="input-group">
+          <input class="form-control input-lg" type="text" placeholder="Page to query"
+                 [(ngModel)]="page">
+          <span class="input-group-btn">
+            <button id="btn-refresh" class="btn btn-primary btn-lg">
+              Run
+            </button>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4 col-md-3">
+        <div class="input-group">
+          <span class="input-group-addon">Max Articles</span>
+          <input class="form-control" type="number" [(ngModel)]="maxArticles"
+                 min="1" max="1000">
+        </div>
+      </div>
+      <div class="col-sm-4 col-md-3">
+        <div class="input-group">
+          <span class="input-group-addon">Max Degree</span>
+          <input class="form-control" type="number" [(ngModel)]="maxDegree" min="1">
+        </div>
+      </div>
+      <div class="col-sm-4 col-md-3">
+        <div class="input-group">
+          <span class="input-group-addon">Max Depth</span>
+          <input class="form-control" type="number" [(ngModel)]="maxDepth" min="1">
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="content">
+  <div class="content-body">
+    <h3 class="text-center" *ngIf="error">That page does not exist.</h3>
+    <h3 class="text-center" *ngIf="loading"><i class="fa fa-refresh fa-spin"></i></h3>
+    <div class="graph" id="graph"></div>
+  </div>
+</div>
