@@ -1,7 +1,5 @@
 import {Component} from "angular2/core";
-import {ROUTER_DIRECTIVES} from "angular2/router";
 import {CORE_DIRECTIVES} from "angular2/common";
-import {UrlencodePipe} from "../pipes";
 import {ElementRef} from "angular2/core";
 import {QueryService} from "../query.service";
 
@@ -10,8 +8,7 @@ declare var $jit:any;
 
 @Component({
   templateUrl: 'views/graph/graph.tpl.html',
-  directives: [ROUTER_DIRECTIVES, CORE_DIRECTIVES],
-  pipes: [UrlencodePipe]
+  directives: [CORE_DIRECTIVES]
 })
 export class GraphComponent {
   private maxArticles = 100;
@@ -24,8 +21,7 @@ export class GraphComponent {
   private error:boolean;
   private graph:any;
 
-  constructor(private elementRef:ElementRef,
-              private queryService:QueryService) {
+  constructor(private queryService:QueryService) {
   }
 
   private submit() {
@@ -41,7 +37,7 @@ export class GraphComponent {
           this.refreshGraph((node) => {});
           this.loading = false;
         },
-        err => {
+        () => {
           this.error = true;
           this.loading = false;
         }
