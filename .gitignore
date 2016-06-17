@@ -28,5 +28,6 @@ index/
 # Client
 client/node_modules
 client/bower_components
+client/typings
 src/main/resources/static
 app.js

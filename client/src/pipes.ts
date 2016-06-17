@@ -1,11 +1,6 @@
-import {Pipe} from "angular2/core";
-import {PipeTransform} from "angular2/core";
-import {Injectable} from "angular2/core";
+import {Pipe, PipeTransform} from "@angular/core";
 
-@Pipe({
-  name: 'urlencode'
-})
-@Injectable()
+@Pipe({name: 'urlencode'})
 export class UrlencodePipe implements PipeTransform {
   public transform(value: string) {
     return encodeURIComponent(value);

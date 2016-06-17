@@ -1,14 +1,16 @@
-import {Component} from 'angular2/core';
-import {Inject} from "angular2/core";
-import {ROUTER_DIRECTIVES} from 'angular2/router';
-import {CORE_DIRECTIVES} from "angular2/common";
+import {Component} from '@angular/core';
+import {Inject} from "@angular/core";
+import {ROUTER_DIRECTIVES} from '@angular/router';
+import {CORE_DIRECTIVES} from "@angular/common";
 
 import {QueryService} from '../query.service';
 import {ShortestPathComponent} from './shortestpath.component';
 
 @Component({
-  templateUrl: 'views/algos/algos.tpl.html',
-  directives: [ROUTER_DIRECTIVES, CORE_DIRECTIVES, ShortestPathComponent]
+  templateUrl: 'views/graph/graph.tpl.html',
+  directives: [CORE_DIRECTIVES, <any>ShortestPathComponent]
 })
 export class AlgosComponent {
+  constructor() {
+  }
 }

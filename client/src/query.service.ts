@@ -1,8 +1,8 @@
-import {Injectable} from 'angular2/core';
-import {Http} from "angular2/http";
-import {Response} from "angular2/http";
+import {Injectable} from '@angular/core';
+import {Http} from "@angular/http";
+import {Response} from "@angular/http";
+import {Inject} from "@angular/core";
 import {Observable} from "rxjs/Observable";
-import {Inject} from "angular2/core";
 
 declare var URI:any;
 

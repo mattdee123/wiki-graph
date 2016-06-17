@@ -1,6 +1,6 @@
-import {Component} from "angular2/core";
-import {CORE_DIRECTIVES} from "angular2/common";
-import {ElementRef} from "angular2/core";
+import {Component} from "@angular/core";
+import {CORE_DIRECTIVES} from "@angular/common";
+import {ElementRef} from "@angular/core";
 import {QueryService} from "../query.service";
 
 declare var $:any;

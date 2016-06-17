@@ -1,6 +1,6 @@
-import {Component, Inject} from 'angular2/core';
-import {ROUTER_DIRECTIVES, Location, RouteParams} from 'angular2/router';
-import {CORE_DIRECTIVES} from 'angular2/common';
+import {Component, Inject, OnInit} from '@angular/core';
+import {ROUTER_DIRECTIVES, RouteParams} from '@angular/router-deprecated';
+import {CORE_DIRECTIVES, Location} from '@angular/common';
 
 import {QueryService} from "../query.service";
 import {UrlencodePipe} from "../pipes";
@@ -9,23 +9,26 @@ import {UrlencodePipe} from "../pipes";
   selector: 'wg-shortest-path',
   templateUrl: 'views/algos/shortestpath.tpl.html',
   directives: [ROUTER_DIRECTIVES],
-  pipes: [UrlencodePipe]
+  pipes: [<any>UrlencodePipe]
 })
-export class ShortestPathComponent {
+export class ShortestPathComponent implements OnInit {
   private start:string;
   private end:string;
   private loading:boolean;
   private error:string;
-  private result: {
+  private result:{
     time: number;
     path: string[];
   };
 
   constructor(private queryService:QueryService,
               private location:Location,
-              private params:RouteParams) {
-    let start = params.get('shortestPathStart');
-    let end = params.get('shortestPathEnd');
+              private route:RouteParams) {
+  }
+
+  ngOnInit() {
+    let start = this.route.params['shortestPathStart'];
+    let end = this.route.params['shortestPathEnd'];
     if (start && end) {
       this.start = decodeURIComponent(start);
       this.end = decodeURIComponent(end);

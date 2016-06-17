@@ -1,6 +1,6 @@
-import {Component, Inject} from 'angular2/core';
-import {ROUTER_DIRECTIVES, Location, RouteParams} from 'angular2/router';
-import {CORE_DIRECTIVES} from 'angular2/common';
+import {Component, Inject} from '@angular/core';
+import {ROUTER_DIRECTIVES} from '@angular/router-deprecated';
+import {CORE_DIRECTIVES, Location} from '@angular/common';
 
 import {QueryService} from "../query.service";
 import {UrlencodePipe} from "../pipes";
@@ -8,7 +8,7 @@ import {UrlencodePipe} from "../pipes";
 @Component({
   templateUrl: 'views/links/links.tpl.html',
   directives: [ROUTER_DIRECTIVES, CORE_DIRECTIVES],
-  pipes: [UrlencodePipe]
+  pipes: [[UrlencodePipe]]
 })
 export class LinksComponent {
   private page:string;

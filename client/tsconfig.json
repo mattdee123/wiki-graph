@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "module": "system",
+    "moduleResolution": "node",
+    "target": "ES5",
+    "outDir": "../src/main/resources/static/js"
+  },
+  "exclude": [
+    "node_modules",
+    "typings"
+  ]
+}
